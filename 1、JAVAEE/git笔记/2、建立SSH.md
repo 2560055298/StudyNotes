@@ -10,9 +10,7 @@
 ls -al ~/.ssh
 ```
 
-![image-20201111075812765](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201111075812765.png)
-
-
+![image-20201130201903222](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130201903222.png)
 
 ## 2、如果需要：（删除已有）的怎么办？
 
@@ -32,27 +30,25 @@ ssh-keygen -t rsa -C 用户名
 
 ![image-20201107072648678](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201107072648678.png)
 
-
-
-![image-20201107073211471](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201107073211471.png)
+![image-20201130201922387](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130201922387.png)
 
 
 
 4、有了：公钥和私钥以后，需要把公钥（存放到GitHub）
 
-![image-20201111080251780](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201111080251780.png)
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130201936022.png" alt="image-20201130201936022" style="zoom:67%;" />
 
 ## 5、添加git remote (为远程库，建立别名)
 
-![image-20201107075214395](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201107075214395.png)
+![image-20201130201956779](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130201956779.png)
 
 
 
 ## 6、删除git -remote -v中的内容
 
-![image-20201107075412050](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201107075412050.png)
+![image-20201130202007281](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130202007281.png)
 
 ## 7、推送到远程仓库
 
-![image-20201107075720412](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201107075720412.png)
+![image-20201130202015870](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130202015870.png)
 
