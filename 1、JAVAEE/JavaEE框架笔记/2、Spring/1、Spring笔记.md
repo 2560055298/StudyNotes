@@ -1,0 +1,129 @@
+# 一、Spring框架（概述）和（XML的IOC配置）
+
+## ①、Spring的概述
+
+
+
+![image-20201130142809531](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130142809531.png)
+
+
+
+---
+
+## ②、Spring的（发展历程）
+
+![image-20201130142859553](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130142859553.png)
+
+
+
+## ③、Spring的优势
+
+~~~
+第一：方便解耦，简化开发
+第二：支持AOP
+第三：声明式事务的支持
+第四：方便程序的测试
+~~~
+
+
+
+## ④、Spring必知内容
+
+~~~
+Spring必须记住的点：
+	1、背景：
+	   Rod Johnson:创建了Spring Framework,  它是他是悉尼大学（音乐学）博士。
+	   他是一个在（保险、电子商务）和（金融行业）有着丰富经验的技术顾问。
+	   
+    2、目的：解决（企业级）（应用开发）的（复杂性）
+    3、功能：JavaBean 代替了EJB
+    4、范围：（任何的）Java应用
+    5、总结：Spring是一个（轻量级）（控制反转）和（面向切面AOP编程）容器框架
+~~~
+
+
+
+![image-20201129165204537](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201129165204537.png)
+
+---
+
+
+
+![image-20201130071221845](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130071221845.png)
+
+
+
+---
+
+
+
+![image-20201129170352333](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201129170352333.png)
+
+
+
+
+
+## ⑤、手动去官网下：Spring的jar包
+
+```
+总结如下：
+
+第一步：网址：spring.io
+第二步：点击进入Spring FrameWork, 点击GitHub猫
+第三步：下拉找到Access to Binaries (访问二进制文件 )
+第四步：下拉找到（库地址）
+第五步：依次找到 release -->> org -->> spring-framework -->> spring
+第六步：点击spring 复制地址
+第七步：（选版本）https://repo.spring.io/release/org/springframework/spring/ 
+第八步：选类型（集合文档）
+
+详细教程：https://www.cnblogs.com/yangzaikongzhongfei/p/14061279.html  （博客园）
+```
+
+
+
+## ⑥、Spring体系结构
+
+![image-20201130144910785](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130144910785.png)
+
+
+
+## ⑦、程序的（耦合）和（解耦）
+
+![image-20201130145004402](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130145004402.png)
+
+
+
+
+
+## ⑧、工厂模式解耦
+
+```
+通过（工厂）自己实现：Bean(里面是单例的)
+```
+
+![image-20201130145216224](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130145216224.png)
+
+
+
+
+
+
+
+# 二、Spring中（基于注解）和（IOC）的案例
+
+
+
+
+
+
+
+
+
+
+
+# 三、Spring中的（AOP）和（基于XML）以及（注解的AOP配置）
+
+
+
+# 四、Spring中的( JdbcTemplate)  和 （Spring事务控制）
