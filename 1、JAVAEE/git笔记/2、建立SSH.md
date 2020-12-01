@@ -28,7 +28,13 @@ rm -rvf .ssh
 ssh-keygen -t rsa -C 用户名
 ```
 
-![image-20201107072648678](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201107072648678.png)
+
+
+![image-20201130202525673](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130202525673.png)
+
+---
+
+
 
 ![image-20201130201922387](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130201922387.png)
 

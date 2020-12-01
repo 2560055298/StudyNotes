@@ -1,5 +1,7 @@
 
 
+
+
 # 1、将批量文件：添加到（远程仓库）
 
 ## ①、通过cd 命令，进入你将要：克隆到的位置
@@ -21,6 +23,16 @@ git clone 远程库https (或) ssh
 ## ③、拷贝本地文件：到本地库
 
 ![image-20201130192016069](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130192016069.png)
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130203033265.png" alt="image-20201130203033265" style="zoom:50%;" />
+
+---
+
+
+
+
 
 ![image-20201130194659650](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130194659650.png)
 
