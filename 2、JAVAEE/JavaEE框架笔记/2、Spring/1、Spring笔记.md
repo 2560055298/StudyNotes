@@ -237,22 +237,121 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 
 
+## ⑭、IOC：（带参）构造方法，直接注入时？
 
+- **带参构造方法：**
 
-# 二、Spring中（基于注解）和（IOC）的案例
+![image-20201202154811910](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202154811910.png)
 
-
-
-
-
-
-
+---
 
 
 
+- **通过（类型）注入：（Constructor argument type matching）**
 
-# 三、Spring中的（AOP）和（基于XML）以及（注解的AOP配置）
+![image-20201202155005793](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202155005793.png)
+
+---
+
+- **通过（索引）注入：（Constructor argument index）**
+
+![image-20201202155200947](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202155200947.png)
+
+---
+
+- **通过（名称）注入：（Constructor argument name）**
+
+  ![image-20201202155411871](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202155411871.png)
+
+---
+
+- 比较：走（无参）构造方法， 和走（有参）构造方法。  ==区别==
+
+  ![image-20201202160634585](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202160634585.png)
+
+  ---
+
+- **总结**
+
+~~~
+带参构造方法：初始化时，使用name 和 value比价好
+~~~
 
 
 
-# 四、Spring中的( JdbcTemplate)  和 （Spring事务控制）
+# 二、Spring的配置（几个标签的讲解）
+
+## ①、别名（alias）
+
+ <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202164620174.png" alt="image-20201202164620174" style="zoom:67%;" />
+
+## ②、可重用组件（bean）
+
+![image-20201202165906015](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202165906015.png)
+
+
+
+## ③、导入(import)
+
+![image-20201202170408529](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202170408529.png)
+
+
+
+# 三、DI（dependency Injection）
+
+## ①、DI是什么？
+
+~~~
+它是：IOC的实现方式，主要做将（IOC容器）中的对象， 注入到（需求的地方）
+~~~
+
+
+
+## ②、DI注入方式：有哪些？
+
+### ⑴、构造器注入
+
+- **第一种：**通过ref引入（其中：类没有继承关系时， 可以省略：区分constructor-arg）
+
+  ---
+
+  
+
+  <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202180325268.png" alt="image-20201202180325268" style="zoom: 50%;" />
+
+  ---
+
+  
+
+- 
+- 
+
+### ⑵、Set注入
+
+
+
+
+
+### ⑶、拓展方式注入
+
+
+
+
+
+# 、Spring中（基于注解）和（IOC）的案例
+
+
+
+
+
+
+
+
+
+
+
+# 、Spring中的（AOP）和（基于XML）以及（注解的AOP配置）
+
+
+
+# 、Spring中的( JdbcTemplate)  和 （Spring事务控制）
