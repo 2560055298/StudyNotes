@@ -213,7 +213,27 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 
 
-⑬
+## ⑬通过：利用Spring创建对象，体现IOC
+
+- **第一：创建：实体类**
+
+![image-20201202095802277](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202095802277.png)
+
+---
+
+- **第二：配置applicationContext.xml文件， 利用Spring的IOC（管理对象）**
+
+![image-20201202095955065](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202095955065.png)
+
+
+
+- **第三：通过获取bean对象， 体现（由Spring控制对象的：分配，注入）**
+
+![image-20201202101659707](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202101659707.png)
+
+~~~
+切记：加载配置文件时， 对象就已经创建出来了，并且放进（容器了）
+~~~
 
 
 
