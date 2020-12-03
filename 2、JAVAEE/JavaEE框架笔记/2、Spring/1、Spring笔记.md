@@ -302,7 +302,11 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 ## ①、DI是什么？
 
 ~~~
-它是：IOC的实现方式，主要做将（IOC容器）中的对象， 注入到（需求的地方）
+概念：
+	依赖：bean对象的创建（依赖于容器）
+	注入：bean对象中（所有的属性），由容器来注入
+地位：
+	它是：IOC的实现方式，主要做将（IOC容器）中的对象， 注入到（需求的地方）
 ~~~
 
 
@@ -321,18 +325,81 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
   ---
 
-  
-
-- 
-- 
-
-### ⑵、Set注入
 
 
 
+==注意：以下3种的类为：ExampleBean==
+
+---
+
+![image-20201203110516737](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203110516737.png)
+
+---
 
 
-### ⑶、拓展方式注入
+
+- **第二种：**type（属性）注入
+
+
+![image-20201203110212328](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203110212328.png)
+
+
+
+- 第三种：index（属性）注入
+
+![image-20201203110313037](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203110313037.png)
+
+
+
+- **第四种**：name（属性）注入  -->>>最常用
+
+![image-20201203110345367](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203110345367.png)
+
+
+
+### ⑵、Set注入的方法
+
+~~~
+set注入条件：
+	条件1：走（无参）构造方法
+	条件2：有(set方法)存在
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203112917433.png" alt="image-20201203112917433" style="zoom: 50%;" />
+
+---
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203112728446.png" alt="image-20201203112728446" style="zoom:67%;" />
+
+---
+
+### ⑶、set注入的：环境搭建
+
+---
+
+~~~
+第一步：创建实体类， 并生成set方法
+第二步：创建applicationnContext.xml, 将实体类配置为bean组件， 通过property标签，set注入
+第三步：在测试类中，通过ClassPathXmlApplicationContext("加载配置资源")获取组件
+~~~
+
+如图：
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203115701265.png" alt="image-20201203115701265" style="zoom: 50%;" />
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203115848778.png" alt="image-20201203115848778" style="zoom:50%;" />
+
+
+
+---
+
+
+
+### ⑷、拓展方式注入
+
+
 
 
 
