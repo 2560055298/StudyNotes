@@ -4,9 +4,51 @@
 
 
 
+
+
 # 1、第二章
 
-## ①、2-8
+## ①、知识点
+
+###  ⑴、Scanner类中的：next() 和 nextLine()方法解析
+
+- **首先**：我们先看看Scanner类的继承树，了解一下它
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203141213685.png" alt="image-20201203141213685" style="zoom: 80%;" />
+
+---
+
+
+
+- **其次：**我们看看它有的（方法）
+
+  ![image-20201203153805157](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203153805157.png)
+
+---
+
+
+
+==比较一下next() 和nextLine()== 
+
+- **执行：**next（）时
+
+![image-20201203183743926](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203183743926.png)
+
+---
+
+- **执行**：nextLine()时
+
+![image-20201203183136983](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203183136983.png)
+
+
+
+---
+
+
+
+## ②、第二章：习题
+
+### ⑴、2-8
 
 - **题目：**
 
@@ -60,7 +102,7 @@
 
 
 
-## ②、2-9
+### ⑵、2-9
 
 ~~~
 此处：只解第三题， 会第三题，前两题（必会）。
