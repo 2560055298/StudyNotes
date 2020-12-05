@@ -457,13 +457,158 @@ set注入条件：
 
 
 
-⑹⑺⑻
+### ⑹、Spring中的：装配方式有什么？
 
-# 、Spring中（基于注解）和（IOC）的案例
+~~~
+Spring有三种装配方式：
+	1、在xml中显示的配置
+	2、在java中显示的配置
+	3、隐式的自动装配bean
+~~~
+
+### ⑺、什么是：(隐式的)自动装配bean？
+
+~~~
+概念：
+	1、自动装配：是Spring满足bean依赖的（一种方式）
+	2、Spring会在上下文中（自动寻找）， 并自动给bean装配属性。
+~~~
+
+### ⑻、如何使用：自动装配？
+
+---
+
+- **通过autowired = byName (按bean的 Id匹配)**
+
+~~~
+能成功通过byName注入的条件：
+	1、bean标签的id要（唯一）
+	2、set+属性名， 其（属性名）要对应得上（类中属性名）， 编译器自动生成，无更改，那么对应得上
+~~~
+
+---
+
+![image-20201205154848912](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205154848912.png)
+
+---
+
+- **通过autowired=byType(按bean的class匹配)**
+
+~~~
+能成功通过byType注入的条件：
+	1、bean中的class="全限定路径" 是（唯一的）
+	2、bean中的class="全限定路径" 的类型， 要与（类注入的：属性的，类的类型一致）
+~~~
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205160603558.png" alt="image-20201205160603558" style="zoom:67%;" />
+
+---
 
 
 
 
+
+# 四、Spring中（基于注解）学习
+
+## ①、老师推荐的：做笔记的方法
+
+~~~
+可以在：Intellij中（直接编辑.md）文件
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205171228498.png" alt="image-20201205171228498" style="zoom: 50%;" />
+
+
+
+## ②、Spring注解：学习
+
+~~~
+注解分类
+	1、创建bean对象
+	2、依赖注入
+	3、设置（bean作用范围）
+	4、设置（生命周期）
+~~~
+
+### ⑴、创建bean对象
+
+~~~java
+他们的作用和XML配置文件中， 编写一个<bean>标签实现的（功能是一样的）
+       Component:
+         作用：用于把当前类对象（存入：spring的容器中）
+         属性：value：用于指定bean的id, 当不写时，它默认值是（当前类名）， 且字母改（小写）
+ 
+       Controller：一般用于（表现层）
+       Service：一般用于（业务层）
+       Repository: 一般用在（持久层）
+ 
+       以上：创建转交spring创建的组件。 非要（任意用）也是可以的
+~~~
+
+
+
+### ⑵、依赖注入
+
+~~~java
+他们的作用（就和）在xml配置文件中的（bean）标签中，写一个<property>标签是一样的
+ 
+    @ Autowired:（默认按照value进行匹配）
+          作用：自动按照（类型注入）。
+          只要容器中有（唯一的一个bean对象类型）和（要注入变量类型匹配）， 就可以注入成功
+          如果ioc容器中没有（任何一个bean的类型）和（注入的变量类型匹配）， 则报错
+          如果ioc容器中（有多个）类型匹配时：（若找不到一样的Object）一样报错
+ 
+          出现位置：
+               可以是（变量上面、方法上面）
+ 
+          细节：
+               在使用注解时， set方法（就不是：必须的了）
+ 
+      @ Qualifier
+           作用：在（Autowired的value查找的基础上）再按照（key名称）查找   
+                --->>>切记：不能单独使用(要先有：@Autowired)
+                
+            属性：value(用于指定bean的ID)
+ 
+       @ Resource
+            作用：直接按照bean的（id注入）。 （可独立）使用
+            属性：name(用于指定bean的id)
+ 
+       以上（三个）注入：
+            1、只能注入（其他bean类型）数据
+            2、无法注入（基本类型）和（String）类型
+            3、集合类型注入（只能通过）XML来（实现）
+ 
+        @ Value
+           作用：用于注入（基本类型）和（String）类型的数据
+           属性：
+               	value：用于指定数据值。它可以使用spring中是SpEL(也就是spring的el表达式)
+                SpEL的写法：${表达式}
+~~~
+
+
+
+
+
+### ⑶、设置（bean作用范围）
+
+~~~java
+ 使用：@Scope("")           
+ 	常用：singleton(默认) 、 prototype（多例）
+    作用：和bean标签中写一个scope属性是一样的
+~~~
+
+
+
+### ⑷、设置（生命周期）
+
+~~~java
+  1、@PostConstruct()   --->>> 用于指定（初始化方法）
+  2、@PreDestroy()      --->>> 用于指定（销毁方法）
+     --->>>作用：和bean标签中使用（init-method） 和 (destroy-method)作用一样的
+~~~
 
 
 
