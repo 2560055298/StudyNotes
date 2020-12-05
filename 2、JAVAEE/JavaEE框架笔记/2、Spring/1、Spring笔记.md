@@ -395,15 +395,69 @@ set注入条件：
 
 ---
 
+- 具体各种注入标签：
 
+>参阅官方文档：https://docs.spring.io/spring-framework/docs/5.1.19.RELEASE/spring-framework-reference/core.html#beans-null-element
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205103426576.png" alt="image-20201205103426576" style="zoom:67%;" />
+
+---
 
 ### ⑷、拓展方式注入
 
+> 官方文档都有：https://docs.spring.io/spring-framework/docs/5.1.19.RELEASE/spring-framework-reference/core.html#beans-c-namespace
+
+- **第一种：**XML Shortcut with the p-namespace（具有p-命名空间的XML快捷方式）代替（property）
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205110452810.png" alt="image-20201205110452810" style="zoom: 80%;" />
+
+---
+
+- **第二种：** XML Shortcut with the c-namespace（具有c-namespace的XML快捷方式）代替，构造方法
+
+![image-20201205111508890](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205111508890.png)
 
 
 
+### ⑸、bean对象作用于
+
+- 分类
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205113446646.png" alt="image-20201205113446646" style="zoom: 67%;" />
+
+---
+
+- #### The Singleton Scope（默认属性，可不写）
+
+---
+
+![image-20201205113845801](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205113845801.png)
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205113552323.png" alt="image-20201205113552323" style="zoom:50%;" />
+
+---
 
 
+
+- #### The Prototype Scope
+
+---
+
+![image-20201205113939978](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205113939978.png)
+
+---
+
+![image-20201205114010483](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205114010483.png)
+
+---
+
+
+
+⑹⑺⑻
 
 # 、Spring中（基于注解）和（IOC）的案例
 
