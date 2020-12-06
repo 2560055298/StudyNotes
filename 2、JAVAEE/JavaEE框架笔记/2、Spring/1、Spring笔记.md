@@ -1,5 +1,9 @@
 
 
+
+
+
+
 # 一、Spring框架（概述）和（XML的IOC配置）
 
 ## ①、Spring的概述
@@ -525,6 +529,20 @@ Spring有三种装配方式：
 ## ②、Spring注解：学习
 
 ~~~
+首先：导入jar包
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206102756313.png" alt="image-20201206102756313" style="zoom:67%;" />
+
+~~~
+其次：配置xml
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206080106234.png" alt="image-20201206080106234" style="zoom:67%;" />
+
+---
+
+~~~
 注解分类
 	1、创建bean对象
 	2、依赖注入
@@ -547,7 +565,17 @@ Spring有三种装配方式：
        以上：创建转交spring创建的组件。 非要（任意用）也是可以的
 ~~~
 
+---
 
+![image-20201206075529421](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206075529421.png)
+
+---
+
+==创建bean对象 + 注入：提前演示图==
+
+![image-20201206105843810](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206105843810.png)
+
+---
 
 ### ⑵、依赖注入
 
@@ -588,9 +616,19 @@ Spring有三种装配方式：
                 SpEL的写法：${表达式}
 ~~~
 
+---
 
+==1、Autowired找不到：注入类型时（直接报错）==
 
+![image-20201206094910067](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206094910067.png)
 
+---
+
+==2、Resource属于：javax.annotation包==
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206095528909.png" alt="image-20201206095528909" style="zoom: 80%;" />
+
+---
 
 ### ⑶、设置（bean作用范围）
 
@@ -608,6 +646,18 @@ Spring有三种装配方式：
   1、@PostConstruct()   --->>> 用于指定（初始化方法）
   2、@PreDestroy()      --->>> 用于指定（销毁方法）
      --->>>作用：和bean标签中使用（init-method） 和 (destroy-method)作用一样的
+~~~
+
+
+
+### ⑸、总结：xml和注解（优缺点）
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206111142607.png" alt="image-20201206111142607" style="zoom:67%;" />
+
+### ⑹、拓展：基于javaConfig配置，完全代替.xml配置
+
+~~~
+此配置：SpringBoot中（随处可见）  必须掌握
 ~~~
 
 
