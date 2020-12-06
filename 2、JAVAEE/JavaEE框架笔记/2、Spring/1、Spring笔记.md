@@ -622,6 +622,12 @@ Spring有三种装配方式：
 
 ![image-20201206094910067](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206094910067.png)
 
+~~~
+注意点：@Autowired有一个参数：Required
+~~~
+
+![image-20201206182355832](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206182355832.png)
+
 ---
 
 ==2、Resource属于：javax.annotation包==
@@ -656,15 +662,49 @@ Spring有三种装配方式：
 
 ### ⑹、拓展：基于javaConfig配置，完全代替.xml配置
 
-~~~
+~~~java
 此配置：SpringBoot中（随处可见）  必须掌握
+步骤：
+	1、导入jar包
+	2、配置：配置类AppConfig
+	3、使用：通过new AnnotationConfigApplicationContext(AppConfig.class);
 ~~~
 
+==1、导入jar包==
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206174917959.png" alt="image-20201206174917959" style="zoom:50%;" />
 
+---
 
+==2、配置AppConfig==
 
+![image-20201206175744072](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206175744072.png)
 
+---
+
+==3、使用AppConfig==
+
+~~~java
+看继承树：已知AnnotaionConfigApplicationContext（类）实现了 ApplicationContext（接口）
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206180607278.png" alt="image-20201206180607278" style="zoom:50%;" />
+
+~~~
+所以：new一个AnnotationConfigApplicationContext的：实例就好了， 那看看构造方法
+~~~
+
+![image-20201206181210915](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206181210915.png)
+
+---
+
+~~~
+最后：代码实现
+~~~
+
+![image-20201206181343025](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206181343025.png)
+
+---
 
 # 、Spring中的（AOP）和（基于XML）以及（注解的AOP配置）
 
