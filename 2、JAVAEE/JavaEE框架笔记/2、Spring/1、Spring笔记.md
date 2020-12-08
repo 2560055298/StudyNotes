@@ -706,7 +706,114 @@ Spring有三种装配方式：
 
 ---
 
-# 、Spring中的（AOP）和（基于XML）以及（注解的AOP配置）
+# 五、AOP
+
+## 1、什么是AOP？
+
+~~~
+AOP (Aspect Oriented Programming)意为:面向切面编程，
+	1、通过（预编译方式）和（运行期动态代理）实现（程序功能）的统一维护的一种技术。
+	2、AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容。
+	3、是（函数式编程）的一种（衍生范型）。
+	4、利用AOP可以对（业务逻辑）的（各个部分）进行（隔离），从而使得业务逻辑各部分之间的（耦合度     降低），提高程序的（可重用性），同时提高了（开发的效率）。
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208161608063.png" alt="image-20201208161608063" style="zoom:50%;" />
+
+
+
+## 2、AOP在Spring中的作用
+
+~~~java
+1、提供声明式事务
+2、允许用户自定义切面
+    (1)、横切关注点:跨越应用程序多个模块的方法或功能。即是，与我们业务逻辑无关的，但是我们需要			关注的部分，就是横切关注点。如日志，安全，缓存，事务等等...
+    (2)、切面(ASPECT)∶横切关注点被模块化的特殊对象。即，它是一个类。
+    (3)、通知(Advice) :切面必须要完成的工作。即，它是类中的一个方法。
+    (4)、目标(Target)︰被通知对象。
+    (5)、代理(Proxy) ︰向目标对象应用通知之后创建的对象。
+    (6)、切入点(PointCut):切面通知执行的“地点"的定义。
+    (7)、连接点(JointPoint) :与切入点匹配的执行点。
+~~~
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208162735228.png" alt="image-20201208162735228" style="zoom: 50%;" />
+
+----
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208162959151.png" alt="image-20201208162959151" style="zoom:50%;" />
+
+---
+
+## 3、使用Spring实现AOP
+
+~~~
+1、导入依赖包
+~~~
+
+![image-20201208165236243](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208165236243.png)
+
+~~~
+2、AOP实现方法
+~~~
+
+### ①、方法一
+
+~~~
+原生态：纯bean标签 + aop标签
+	1、创建：功能接口（记得导入：org.aspectj.aspectjweaver 依赖包）
+	2、创建：功能接口（实现类）
+	3、创建：通知类
+	4、配置：xml 切点，环绕
+	5、通过：加载配置文件，生成代理对象
+~~~
+
+#### ⑴、第一步：创建（功能接口）
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208180325683.png" alt="image-20201208180325683" style="zoom: 50%;" />
+
+---
+
+#### ⑵、写功能：接口实现类
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208180522184.png" alt="image-20201208180522184" style="zoom: 50%;" />
+
+----
+
+#### ⑶、创建：通知类
+
+----
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208181452229.png" alt="image-20201208181452229" style="zoom: 150%;" />
+
+---
+
+#### ⑷、配置：xml 切点，环绕
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208182530149.png" alt="image-20201208182530149" style="zoom:67%;" />
+
+----
+
+#### ⑸、加载配置文件，生成代理对象
+
+![image-20201208183054028](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208183054028.png)
+
+---
+
+
+
+②、
+
+
+
+③
 
 
 
