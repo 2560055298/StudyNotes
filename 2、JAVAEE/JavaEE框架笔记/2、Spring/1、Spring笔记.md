@@ -1,9 +1,3 @@
-
-
-
-
-
-
 # 一、Spring框架（概述）和（XML的IOC配置）
 
 ## ①、Spring的概述
@@ -732,7 +726,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
     (3)、通知(Advice) :切面必须要完成的工作。即，它是类中的一个方法。
     (4)、目标(Target)︰被通知对象。
     (5)、代理(Proxy) ︰向目标对象应用通知之后创建的对象。
-    (6)、切入点(PointCut):切面通知执行的“地点"的定义。
+    (6)、切入点(PointCut):切面通知执行的"地点"的定义。
     (7)、连接点(JointPoint) :与切入点匹配的执行点。
 ~~~
 
@@ -758,7 +752,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 2、AOP实现方法
 ~~~
 
-### ①、方法一
+### ①、方法一(使用AOP的接口实现)
 
 ~~~
 原生态：纯bean标签 + aop标签
@@ -793,11 +787,15 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 ---
 
+![image-20201209074109440](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201209074109440.png)
+
+---
+
 #### ⑷、配置：xml 切点，环绕
 
 ---
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201208182530149.png" alt="image-20201208182530149" style="zoom:67%;" />
+![image-20201209080215111](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201209080215111.png)
 
 ----
 
