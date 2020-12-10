@@ -702,7 +702,7 @@ Spring有三种装配方式：
 
 # 五、AOP
 
-## 1、什么是AOP？
+## 5.1、什么是AOP？
 
 ~~~
 AOP (Aspect Oriented Programming)意为:面向切面编程，
@@ -716,7 +716,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 
 
-## 2、AOP在Spring中的作用
+## 5.2、AOP在Spring中的作用
 
 ~~~java
 1、提供声明式事务
@@ -740,7 +740,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 ---
 
-## 3、使用Spring实现AOP
+## 5.3、使用Spring实现AOP
 
 ~~~
 1、导入依赖包
@@ -752,7 +752,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 2、AOP实现方法
 ~~~
 
-### ①、方法一(使用AOP的接口实现)
+### 5.3.1、方法一(使用AOP的接口实现)
 
 ~~~
 原生态：纯bean标签 + aop标签
@@ -807,11 +807,23 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 
 
-②、
+### 5.3.2、自定义类：实现（AOP）
+
+~~~java
+1、导入maven的依赖（不导入，会报错）：
+	<dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+2、创建：功能接口
+3、创建：目标类，实现接口
+4、创建：切面（是1个类， 容纳需要切入，目标类的，方法集合）
+5、在applicationContext.xml中配置(切面)
+    
+~~~
 
 
-
-③
 
 
 
