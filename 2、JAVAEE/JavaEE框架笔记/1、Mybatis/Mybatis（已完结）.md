@@ -44,6 +44,167 @@
 
 
 
+## 1.4、Mybatis的配置
+
+~~~
+第一步：导入jar包
+第二步：配置SqlMapConfig.xml文件
+第三步：写domain层（也称为pojo层）
+第四步：写dao层接口（也称为mapper层）
+第五步：写dao.xml（也称为mapper.xml）
+第六步：测试
+~~~
+
+- 1、导入jar包
+
+![image-20201211174229061](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201211174229061.png)
+
+---
+
+- 2、配置mybatis-config.xml文件 （外部引入）DataSource
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <properties resource="jdbcConfig.properties"/>
+
+    <!--配置日志-->
+    <settings >
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+
+    <!-- 配置别名-->
+    <typeAliases>
+        <package name="com.itheima.domain" />
+    </typeAliases>
+
+
+    <!--配置mysql环境-->
+    <environments default="mysql">
+        <environment id="mysql">
+                <transactionManager type="JDBC"/>
+                <dataSource type="POOLED">
+                    <property name="driver" value="${driver}"/>
+                    <property name="url" value="${url}"/>
+                    <property name="username" value="${username}"/>
+                    <property name="password" value="${password}"/>
+                </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <package name="com.itheima.dao" />
+    </mappers>
+
+</configuration>
+~~~
+
+~~~
+jdbcConfig.properties文件名
+
+driver=com.mysql.cj.jdbc.Driver
+url=jdbc:mysql://localhost:3306/eesy_mybatis?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=true
+username=root
+password=123456
+~~~
+
+- 3、pojo层：实体类
+- 4、mapper层：mapper接口
+
+~~~java
+package com.itheima.dao;
+
+import com.itheima.domain.User;
+
+import java.util.List;
+
+/**
+ * 用户的持久层接口
+ */
+public interface IUserDao {
+    /**
+     * 1、查询所有用户信息 + 各个用户（拥有的账户）信息
+     * @return
+     */
+    List<User> selAll();
+
+
+    /**
+     * 2、通过id：查询某个人
+     */
+    User selOneById(int id);
+}
+
+~~~
+
+- 5、mapper.xml
+
+~~~xml
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itheima.dao.IUserDao">
+
+    <!--1、查询所有用户信息 + 各个用户（拥有的账户）信息-->
+    <resultMap id="myUser" type="user">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="birthday" column="birthday"/>
+        <result property="sex" column="sex"/>
+        <result property="address" column="address"/>
+
+        <collection property="accounts"  ofType="account">
+            <id property="id" column="aid" />
+            <result property="uid" column="uid" />
+            <result property="money" column="money" />
+        </collection>
+
+    </resultMap>
+
+    <select id="selAll" resultMap="myUser">
+        select u.*, a.id aid, a.uid, a.money from user u
+        left outer join account a
+        on u.id = a.uid
+    </select>
+
+
+    <!--通过id查询：某个人-->
+    <select id="selOneById" parameterType="int" resultType="user">
+        select * from user where id = #{0}
+    </select>
+
+</mapper>
+~~~
+
+- 6、测试
+
+~~~java
+ 		//1、加载mybatis配置资源
+        InputStream is = Resources.getResourceAsStream("SqlMapConfig.xml");
+
+        //2、通过构建者模式：创建SqlSessionFactory工厂对象
+        SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
+
+        //3、通过工厂：创建SqlSession对象
+        SqlSession session = factory.openSession(true);
+
+        //4、通过SqlSession对象：获取代理对象
+        IUserDao mapper = session.getMapper(IUserDao.class);
+
+        mapper.selAll();
+~~~
+
+
+
+
+
 # 2、Mybatis的动态Sql
 
 ## 2.1、if标签

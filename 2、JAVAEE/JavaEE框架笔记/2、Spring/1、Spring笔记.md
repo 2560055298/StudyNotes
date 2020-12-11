@@ -1,6 +1,14 @@
-# 一、Spring框架（概述）和（XML的IOC配置）
+~~~java
+学而不思则罔，思而不学则殆                                               ---孔子
+~~~
 
-## ①、Spring的概述
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201211150119950.png" alt="image-20201211150119950" style="zoom: 67%;" />
+
+---
+
+# 1、Spring框架（概述）和（XML的IOC配置）
+
+## 1.1、Spring的概述
 
 
 
@@ -10,13 +18,13 @@
 
 ---
 
-## ②、Spring的（发展历程）
+## 1.2、Spring的（发展历程）
 
 ![image-20201130142859553](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130142859553.png)
 
 
 
-## ③、Spring的优点
+## 1.3、Spring的优点
 
 		- Spring是一个（开源、免费）的框架。 或者称之为（容器）
 		- Spring是一个（轻量级）、非入侵式的框架 （引入：不会影响你的项目）
@@ -29,7 +37,7 @@
 
 
 
-## ④、Spring必知内容
+## 1.4、Spring必知内容
 
 ~~~
 Spring必须记住的点：
@@ -65,7 +73,7 @@ Spring必须记住的点：
 
 
 
-## ⑤、gitHub下载：Spring的jar包
+## 1.5、gitHub下载：Spring的jar包
 
 ```
 总结如下：
@@ -87,7 +95,7 @@ Spring必须记住的点：
 
 
 
-## ⑥、Spring官网下载：spring框架jar包
+## 1.6、Spring官网下载：spring框架jar包
 
 ~~~
 第一步：进入官网spring.io
@@ -102,7 +110,7 @@ Spring必须记住的点：
 
 
 
-## ⑦、通过maven导入jar包
+## 1.7、通过maven导入jar包
 
 ~~~
 第一步：百度 maven spring
@@ -112,7 +120,7 @@ Spring必须记住的点：
 
 
 
-## ⑧、Spring体系结构
+## 1.8、Spring体系结构
 
 ![image-20201130144910785](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201130144910785.png)
 
@@ -120,7 +128,7 @@ Spring必须记住的点：
 
 
 
-## ⑨、拓展
+## 1.9、拓展
 
 
 
@@ -153,7 +161,7 @@ Spring必须记住的点：
 
 
 
-## ⑩、IOC（Inversion Of Control）的本质
+## 1.10、IOC（Inversion Of Control）的本质
 
 ~~~
 第一：反转（new对象的操作， 转交给Spring负责）， 以前是（程序员）自己创建
@@ -182,7 +190,7 @@ IOC实际上：依赖对象的方式， 进行了反转。
 
 
 
-## ⑪什么是耦合？如何实现解耦？
+## 1.11什么是耦合？如何实现解耦？
 
 
 
@@ -202,7 +210,7 @@ IOC实际上：依赖对象的方式， 进行了反转。
 
 
 
-## ⑫如何去实现：IOC？
+## 1.12如何去实现：IOC？
 
 ~~~
 可以使用（XML配置），也可以使用（注解），新版本的Spring也可以零配置实现IoC。
@@ -211,7 +219,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 
 
-## ⑬通过：利用Spring创建对象，体现IOC
+## 1.13通过：利用Spring创建对象，体现IOC
 
 - **第一：创建：实体类**
 
@@ -235,7 +243,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 
 
-## ⑭、IOC：（带参）构造方法，直接注入时？
+## 1.14、IOC：（带参）构造方法，直接注入时？
 
 - **带参构造方法：**
 
@@ -277,27 +285,27 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 
 
-# 二、Spring的配置（几个标签的讲解）
+# 2、Spring的配置（几个标签的讲解）
 
-## ①、别名（alias）
+## 2.1、别名（alias）
 
  <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202164620174.png" alt="image-20201202164620174" style="zoom:67%;" />
 
-## ②、可重用组件（bean）
+## 2.2、可重用组件（bean）
 
 ![image-20201202165906015](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202165906015.png)
 
 
 
-## ③、导入(import)
+## 2.3、导入(import)
 
 ![image-20201202170408529](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture3/image-20201202170408529.png)
 
 
 
-# 三、DI（dependency Injection）
+# 3、DI（dependency Injection）
 
-## ①、DI是什么？
+## 3.1、DI是什么？
 
 ~~~
 概念：
@@ -309,9 +317,9 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 
 
-## ②、DI注入方式：有哪些？
+## 3.2、DI注入方式：有哪些？
 
-### ⑴、构造器注入
+### 3.2.1、构造器注入
 
 - **第一种：**通过ref引入（其中：类没有继承关系时， 可以省略：区分constructor-arg）
 
@@ -355,7 +363,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 
 
-### ⑵、Set注入的方法
+### 3.2.2、Set注入的方法
 
 ~~~
 set注入条件：
@@ -373,7 +381,7 @@ set注入条件：
 
 ---
 
-### ⑶、set注入的：环境搭建
+### 3.2.3、set注入的：环境搭建
 
 ---
 
@@ -403,7 +411,7 @@ set注入条件：
 
 ---
 
-### ⑷、拓展方式注入
+### 3.2.4、拓展方式注入
 
 > 官方文档都有：https://docs.spring.io/spring-framework/docs/5.1.19.RELEASE/spring-framework-reference/core.html#beans-c-namespace
 
@@ -419,7 +427,7 @@ set注入条件：
 
 
 
-### ⑸、bean对象作用于
+### 3.2.5、bean对象作用于
 
 - 分类
 
@@ -455,7 +463,7 @@ set注入条件：
 
 
 
-### ⑹、Spring中的：装配方式有什么？
+### 3.2.6、Spring中的：装配方式有什么？
 
 ~~~
 Spring有三种装配方式：
@@ -464,7 +472,7 @@ Spring有三种装配方式：
 	3、隐式的自动装配bean
 ~~~
 
-### ⑺、什么是：(隐式的)自动装配bean？
+### 3.2.7、什么是：(隐式的)自动装配bean？
 
 ~~~
 概念：
@@ -472,7 +480,7 @@ Spring有三种装配方式：
 	2、Spring会在上下文中（自动寻找）， 并自动给bean装配属性。
 ~~~
 
-### ⑻、如何使用：自动装配？
+### 3.2.8、如何使用：自动装配？
 
 ---
 
@@ -508,9 +516,9 @@ Spring有三种装配方式：
 
 
 
-# 四、Spring中（基于注解）学习
+# 4、Spring中（基于注解）学习
 
-## ①、老师推荐的：做笔记的方法
+## 4.1、老师推荐的：做笔记的方法
 
 ~~~
 可以在：Intellij中（直接编辑.md）文件
@@ -520,7 +528,7 @@ Spring有三种装配方式：
 
 
 
-## ②、Spring注解：学习
+## 4.2、Spring注解：学习
 
 ~~~
 首先：导入jar包
@@ -544,7 +552,7 @@ Spring有三种装配方式：
 	4、设置（生命周期）
 ~~~
 
-### ⑴、创建bean对象
+### 4.2.1、创建bean对象
 
 ~~~java
 他们的作用和XML配置文件中， 编写一个<bean>标签实现的（功能是一样的）
@@ -571,7 +579,7 @@ Spring有三种装配方式：
 
 ---
 
-### ⑵、依赖注入
+### 4.2.2、依赖注入
 
 ~~~java
 他们的作用（就和）在xml配置文件中的（bean）标签中，写一个<property>标签是一样的
@@ -630,7 +638,7 @@ Spring有三种装配方式：
 
 ---
 
-### ⑶、设置（bean作用范围）
+### 4.2.3、设置（bean作用范围）
 
 ~~~java
  使用：@Scope("")           
@@ -640,7 +648,7 @@ Spring有三种装配方式：
 
 
 
-### ⑷、设置（生命周期）
+### 4.2.4、设置（生命周期）
 
 ~~~java
   1、@PostConstruct()   --->>> 用于指定（初始化方法）
@@ -650,11 +658,11 @@ Spring有三种装配方式：
 
 
 
-### ⑸、总结：xml和注解（优缺点）
+### 4.2.5、总结：xml和注解（优缺点）
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201206111142607.png" alt="image-20201206111142607" style="zoom:67%;" />
 
-### ⑹、拓展：基于javaConfig配置，完全代替.xml配置
+### 4.2.6、拓展：基于javaConfig配置，完全代替.xml配置
 
 ~~~java
 此配置：SpringBoot中（随处可见）  必须掌握
@@ -700,7 +708,7 @@ Spring有三种装配方式：
 
 ---
 
-# 五、AOP
+# 5、AOP
 
 ## 5.1、什么是AOP？
 
@@ -807,7 +815,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 
 
-### 5.3.2、自定义类：实现（AOP）
+### 5.3.2、方法二：（自定义类）实现（AOP） 首推
 
 ~~~java
 1、导入maven的依赖（不导入，会报错）：
@@ -820,11 +828,58 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 3、创建：目标类，实现接口
 4、创建：切面（是1个类， 容纳需要切入，目标类的，方法集合）
 5、在applicationContext.xml中配置(切面)
-    
 ~~~
 
+![image-20201211073325578](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201211073325578.png)
+
+
+
+### 5.3.3、方法三：注解实现（AOP）
+
+~~~
+实现步骤：
+	1、切面类上添加：@Aspect     --->>> 表示是：切面类
+	2、通知方法上：加@Before("切入点表达式")、@After("同上")、 @Around("同上")
+	3、xml配置：bean管理 （以及） 自动注解代理<aop:autoProxy/>  它有两个参数如下
+			expose-proxy = ""      为是否暴露当前代理对象为ThreadLocal模式。
+			proxy-target-class=""  使用代理方式：false JDK动态代理， true：cjlib
+~~~
+
+==代码图如下：==
+
+- 切面类
+
+![image-20201211161239548](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201211161239548.png)
+
+---
+
+- .xml内容
+
+![image-20201211161503804](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201211161503804.png)
+
+---
+
+
+
+# 6、Spring整合Mybatis
+
+~~~
+步骤：
+	1、导入jar包
+	2、编写:配置文件
+	3、测试
+~~~
+
+## 6.1、导入jar包
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201211165344709.png" alt="image-20201211165344709" style="zoom: 50%;" />
+
+![image-20201211170706593](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201211170706593.png)
+
+---
 
 
 
 
-# 、Spring中的( JdbcTemplate)  和 （Spring事务控制）
+
+# #、Spring中的( JdbcTemplate)  和 （Spring事务控制）
