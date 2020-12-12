@@ -866,8 +866,17 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 ~~~
 步骤：
 	1、导入jar包
-	2、编写:配置文件
-	3、测试
+	2、创建pojo层
+    3、创建mapper层：mapper接口， mapper.xml, mapper实现类
+    	其中：mapper实现类，创建SqlSession属性，通过（依赖注入）注入值，调用getMapper()
+    	
+	4、编写:mybatis-Config配置文件、spring-dao.xml配置文件、applicationContext.xml
+		1、dataSource交由Spring管理：Spring的依赖类（DriverManagerDataSource）
+		2、SqlSessionFactory交由Spring管理：Spring的依赖类（SqlSessionFactoryBean）
+		3、SqlSession交由Spring管理：Spring的依赖类（SqlSessionTemplate）
+		4、mapper接口的实现类：也交由Spring管理
+
+	5、通过ApplicationContext.xml获取Spring管理的：mapper实现类对象
 ~~~
 
 ## 6.1、导入jar包
@@ -878,8 +887,38 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 ---
 
+## 6.2、创建pojo层
 
+## 6.3、创建Mapper接口层（接口、xml、实现类）
 
+- **1、Mapper接口**
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212212338317.png" alt="image-20201212212338317" style="zoom: 67%;" />
+
+- **2、Mapper.xml**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212212422739.png" alt="image-20201212212422739" style="zoom:50%;" />
+
+- **3、Mapper实现类**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212212721200.png" alt="image-20201212212721200" style="zoom:50%;" />
+
+## 6.4、创建三种配置文件（并配置好）
+
+- **1、mybatis-config.xml（其实Spring可以安全代替），但是整合它（保留它也行的）**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212212923044.png" alt="image-20201212212923044" style="zoom:50%;" />
+
+- **2、spring-dao.xml**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212214052831.png" alt="image-20201212214052831" style="zoom: 50%;" />
+
+- **3、applicationContext.xml**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212214235675.png" alt="image-20201212214235675" style="zoom: 50%;" />
+
+## 6.5、通过ApplicationContext加载配置文件调用
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212214347374.png" alt="image-20201212214347374" style="zoom: 67%;" />
 
 # #、Spring中的( JdbcTemplate)  和 （Spring事务控制）

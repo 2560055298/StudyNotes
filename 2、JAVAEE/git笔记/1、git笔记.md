@@ -65,3 +65,40 @@ cp -r 复制目录./ ./
 ~~~
 
 >其中最后的：./ 代表当前目录     
+
+
+
+
+
+# 3、查看：GIT 查看/修改用户名和邮箱地址
+
+## 3.1、用户名、邮箱作用
+
+~~~
+用户名和邮箱地址的作用
+
+用户名和邮箱地址是本地git客户端的一个变量，不随git库而改变。
+
+每次commit都会用用户名和邮箱纪录。
+
+github的contributions统计就是按邮箱来统计的。
+~~~
+
+## 3.2、查看：用户名（和）邮箱
+
+~~~java
+git config user.name         查看用户名
+  
+git config user.email        查看邮箱
+~~~
+
+
+
+## 3.3、修改用户名和邮箱地址：
+
+~~~java
+git config --global user.name "username"
+
+git config --global user.email "email"
+~~~
+
