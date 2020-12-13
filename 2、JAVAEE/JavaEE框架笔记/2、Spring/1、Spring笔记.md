@@ -861,7 +861,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 
 
-# 6、Spring整合Mybatis
+# 6、Spring整合Mybatis（原理方法）
 
 ~~~
 步骤：
@@ -921,4 +921,57 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201212214347374.png" alt="image-20201212214347374" style="zoom: 67%;" />
 
-# #、Spring中的( JdbcTemplate)  和 （Spring事务控制）
+
+
+# 7、Spring整合Mybatis(改进方法)
+
+~~~
+此改进方法：（官方文档）mybatis-spring
+
+	主要是Mapper中需要（SqlSession）自己写set方法
+	转换为（继承SqlSessionDaoSupport）不用写set方法，直接调用（该继承类）获取SqlSession
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201213093350940.png" alt="image-20201213093350940" style="zoom: 150%;" />
+
+
+
+# 8、Spring事务管理
+
+## 8.1、什么是事务(Transaction)?
+
+~~~
+一句话概括：它是sql语句的集合， 是一个整体， 它很干脆：要么做，要么不做。
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201213100151863.png" alt="image-20201213100151863" style="zoom: 67%;" />
+
+---
+
+## 8.2、事物的：四大特性（讲解）
+
+~~~
+1、原子性(Atomicity)
+	1、整个事务中的所有操作，要么全部完成，要么全部不完成，不可能停滞在中间某个环节。
+	2、事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有        执行过一样。
+	比如：12306买票， 选择+付款（是一个整体）， 哪个环节出现错误，都会回滚RollBack
+	
+2、一致性(Consistency)
+	1、一个事务可以封装状态改变（除非它是一个只读的）。
+	2、事务必须始终保持系统处于一致的状态，不管并发事务有多少。
+	比如：12306买票，如果12306只提供100张票，不管多少个人同时买，或同时退，100张票不会变成            101张，也不会变成99张，票的总数（自始至终）是不会变的，这叫一致性。
+	
+	
+3、隔离性(Isolation)
+	1、隔离状态执行事务，使它们好像是系统在给定时间内执行的唯一操作。
+	2、如果有两个事务，运行在相同的时间内，执行相同的功能，事务的隔离性将确保每一事务在系统中认		 为只有该事务在使用系统。
+	3、这种属性有时称为串行化，为了防止事务操作间的混淆，必须串行化或序列化请求，使得在同一时间		 仅有一个请求用于同一数据。
+	比如：12306买票, 多个人同时买（同一张票），只有（最先付款成功的人）获得（这张票），其他人          都会（被隔离）在外，显示（付款失败），此票已卖。
+	
+4、持久性(Durability)
+	1、在事务完成以后，该事务对数据库所作的更改便持久的保存在数据库之中，并不会被回滚。
+	比如：12306买票，当（选择+付款）这个总体（成功完成）， 那么该（操作信息）会被写入数据库
+	     也就是（这张表：已出售的信息）写入了数据库， 中途不会被（回滚），因为此事务已完成。
+	     有人可能会疑问：退票呢？ 退票是另一个（事务的开启了）， 退票前，购票信息已写入了的。
+~~~
+
