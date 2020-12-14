@@ -874,7 +874,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 		1、dataSource交由Spring管理：Spring的依赖类（DriverManagerDataSource）
 		2、SqlSessionFactory交由Spring管理：Spring的依赖类（SqlSessionFactoryBean）
 		3、SqlSession交由Spring管理：Spring的依赖类（SqlSessionTemplate）
-		4、mapper接口的实现类：也交由Spring管理
+		4、mapper接口的实现类：也交由Spring管理（这个：建议写在Spring的主xml中）
 
 	5、通过ApplicationContext.xml获取Spring管理的：mapper实现类对象
 ~~~
