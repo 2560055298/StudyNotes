@@ -975,3 +975,24 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 	     有人可能会疑问：退票呢？ 退票是另一个（事务的开启了）， 退票前，购票信息已写入了的。
 ~~~
 
+## 8.3、事务管理
+
+~~~
+（事务管理）分为两类：
+	1、编程式事务：需要在类中写代码，比如以前的（try catch）去管理事务：commit 和rollback
+		在Spring中，推荐使用（编程式事务）
+	2、声明式事务：Spring中配置xml即可，实现事务管理
+ 
+ 注意：切记，参考官方文档
+~~~
+
+
+
+#### 8.3.1、声明式事务实现
+
+~~~
+整合mybatis的基础上（看6知识点）：利用AOP实现（事务的切入）
+~~~
+
+![image-20201215080235177](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201215080235177.png)
+
