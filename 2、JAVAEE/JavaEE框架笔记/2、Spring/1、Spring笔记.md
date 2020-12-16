@@ -994,5 +994,15 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 整合mybatis的基础上（看6知识点）：利用AOP实现（事务的切入）
 ~~~
 
-![image-20201215080235177](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201215080235177.png)
+- **AOP事务织入（最核心的地方）**
+
+![image-20201216141055232](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201216141055232.png)
+
+
+
+- **mybatis整体整合的图（做参考：防止忘记需要整合哪些内容）**
+
+![image-20201216140225330](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201216140225330.png)
+
+
 
