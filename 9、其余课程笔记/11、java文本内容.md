@@ -23,17 +23,17 @@ password=123456
 # 2、log4j.properties
 
 ~~~
-log4j.rootCategory=INFO, CONSOLE ,LOGFILE
+log4j.rootLogger=DEBUG,console,logFile
 
-log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
-log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
-log4j.appender.CONSOLE.layout.ConversionPattern=%m %n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%C %d{yyyy-MM-dd HH:mm:ss} %m %n
 
-log4j.appender.LOGFILE=org.apache.log4j.FileAppender
-log4j.appender.LOGFILE.File=E:/my.log
-log4j.appender.LOGFILE.Append=true
-log4j.appender.LOGFILE.layout=org.apache.log4j.PatternLayout
-log4j.appender.LOGFILE.layout.ConversionPattern=%m %n
+log4j.appender.logFile=org.apache.log4j.FileAppender
+log4j.appender.logFile.Append=true
+log4j.appender.logFile.File=log4j.log
+log4j.appender.logFile.layout=org.apache.log4j.PatternLayout
+log4j.appender.logFile.layout.ConversionPattern=%C %m %n
 ~~~
 
 
