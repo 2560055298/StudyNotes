@@ -39,3 +39,25 @@
 # 5、Intellij idea 报错：Error : java 不支持发行版本15
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201204180837284.png" alt="image-20201204180837284" style="zoom: 67%;" />
+
+
+
+# 6、IntelliJ查找所有类
+
+~~~
+ctrl + shift + alt + N
+~~~
+
+![image-20201218220708701](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201218220708701.png)
+
+
+
+
+
+# 7、IntlliJ：已知类，查找类视图
+
+~~~
+鼠标；放在已知类上， 然后（ctrl + T）
+~~~
+
+![image-20201218220745259](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201218220745259.png)

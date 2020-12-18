@@ -13,3 +13,11 @@
 # 三、配置PicGo关联（gitee仓库）
 
 ![image-20201203105601387](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201203105601387.png)
+
+
+
+
+
+# 四、提示：data.json挂了
+
+直接everything搜素， 然后删除掉，重新配置一次，图床即可。
