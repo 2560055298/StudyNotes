@@ -104,7 +104,8 @@ Spring必须记住的点：
 第四步：修改域名， 将版本改为（4.3.9）
 第五步：选择html
 第六步：找到 2.3. Usage scenarios 的 Distribution Zip Files （这个选项）
-第七步：进去找到http://repo.spring.io/release/org/springframework/spring 
+第七步：进去找到http://repo.spring.io/release/org/springframework/spring （下载地址）
+       文档地址：https://docs.spring.io/spring-framework/docs/4.3.24.RELEASE/
 第八步：选择版本，下载即可
 ~~~
 

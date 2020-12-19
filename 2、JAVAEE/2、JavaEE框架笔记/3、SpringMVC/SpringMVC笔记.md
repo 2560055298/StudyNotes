@@ -105,9 +105,7 @@
 
 # 3.3、写一个控制器：servlet
 
-
-
-
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219160733991.png" alt="image-20201219160733991" style="zoom: 50%;" />
 
 ## 3.4、写一个:显示页面
 
@@ -118,3 +116,26 @@
 ## 3.5、在web.xml配置servlet  (控制器)
 
 ![image-20201218194426067](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201218194426067.png)
+
+## 3.6、写一个主页用来给用户：提交表单
+
+![image-20201219161730260](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219161730260.png)
+
+## 3.7、配置tomcat
+
+![image-20201219161816123](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219161816123.png)
+
+### 3.8、访问页面
+
+![image-20201219162438009](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219162438009.png)
+
+> 注意参考自己的博客：servlet执行流程
+>
+> https://www.cnblogs.com/yangzaikongzhongfei/p/14159450.html
+
+
+
+
+
+
+
