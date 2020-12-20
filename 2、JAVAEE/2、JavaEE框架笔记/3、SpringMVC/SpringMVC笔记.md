@@ -1,4 +1,4 @@
-# 1、SpringMVC需要学习什么？
+1、SpringMVC需要学习什么？
 
 ~~~
 1、MVC是什么？
@@ -137,11 +137,145 @@
 
 # 4、什么是：SpringMVC?
 
-~~~
+## 4.1、Spring介绍
 
 ~~~
+一、概念：
+	Spring MVC是Spring Framework的一部分，是基于Java实现MVC的轻量级Web框架。
+
+二、为什么要学它（从它功能讲起）：
+	1、轻量级，简单易学
+	2、高效,基于请求响应的MVC框架
+    3、与Spring兼容性好，无缝结合
+    3、约定优于配置
+	4、功能强大：RESTful、数据验证、格式化、本地化、主题等
+	5、简洁灵活
+
+三、SpringMVC的核心：
+	Spring的web框架围绕DispatcherServlet [ 调度Servlet ] 设计。
+	
+四、官方文档：
+	1、老版本地址：(有图)
+		https://docs.spring.io/spring-framework/docs/4.3.24.RELEASE/spring-				framework-reference/
+		
+	2、新版本地址：就在spring的core的下面
+	
+五、重点看狂神老师的总结：
+	https://mp.weixin.qq.com/s/yuQqZzAsCefk9Jv_kbh_eA   
+~~~
 
 
 
+## 4.2、SpringMVC快速搭建
+
+### 4.2.1、看老师笔记：
+
+> 搭建流程 https://mp.weixin.qq.com/s/8ddT6FD0Y4f3XdbEz0aqpQ
+
+### 4.2.2、总结：SpringMVC实现流程
+
+> 原理分析 https://mp.weixin.qq.com/s/yuQqZzAsCefk9Jv_kbh_eA
+
+> ![image-20201220191526083](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220191526083.png)
+
+图为SpringMVC的一个较完整的流程图，实线表示SpringMVC框架提供的技术，不需要开发者实现，虚线表示需要开发者实现。
+
+**简要分析执行流程**
+
+1. DispatcherServlet表示前置控制器，是整个SpringMVC的控制中心。用户发出请求，DispatcherServlet接收请求并拦截请求。
+
+   我们假设请求的url为 : http://localhost:8080/SpringMVC/hello
+
+   
+
+   **如上url拆分成三部分：**
+
+   http://localhost:8080服务器域名
+
+   SpringMVC部署在服务器上的web站点
+
+   hello表示控制器
+
+   通过分析，如上url表示为：请求位于服务器localhost:8080上的SpringMVC站点的hello控制器。
+
+2. HandlerMapping为处理器映射。DispatcherServlet调用HandlerMapping,HandlerMapping根据请求url查找Handler。
+
+3. HandlerExecution表示具体的Handler,其主要作用是根据url查找控制器，如上url被查找控制器为：hello。
+
+4. HandlerExecution将解析后的信息传递给DispatcherServlet,如解析控制器映射等。
+
+5. HandlerAdapter表示处理器适配器，其按照特定的规则去执行Handler。
+
+6. Handler让具体的Controller执行。
+
+7. Controller将具体的执行信息返回给HandlerAdapter,如ModelAndView。
+
+8. HandlerAdapter将视图逻辑名或模型传递给DispatcherServlet。
+
+9. DispatcherServlet调用视图解析器(ViewResolver)来解析HandlerAdapter传递的逻辑视图名。
+
+10. 视图解析器将解析的逻辑视图名传给DispatcherServlet。
+
+11. DispatcherServlet根据视图解析器解析的视图结果，调用具体的视图。
+
+12. 最终视图呈现给用户。
 
 
+
+### 4.2.3、总结：搭建时易错点
+
+- **第一个：建立maven项目更好，而不是maven-web项目， 但是要注意：添加web**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220193719142.png" alt="image-20201220193719142" style="zoom:50%;" />
+
+- **第二个：添加web后，注意观察web是否（有小蓝点）**
+
+![image-20201220194738349](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220194738349.png)
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220194628800.png" alt="image-20201220194628800" style="zoom: 33%;" />
+
+---
+
+- **第三个：编译后，out中是否有lib包，没有报404**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220194922026.png" alt="image-20201220194922026" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220195136962.png" alt="image-20201220195136962" style="zoom: 50%;" />
+
+---
+
+- **第四个：出现500的情况，可能是target没有生成。**
+
+~~~
+解决办法：重新建项目。
+~~~
+
+
+
+- **第五个：pox.xml画了横线**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220195528957.png" alt="image-20201220195528957" style="zoom: 50%;" />
+
+---
+
+
+
+- **虚拟项目名修改**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220195658261.png" alt="image-20201220195658261" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220195731968.png" alt="image-20201220195731968" style="zoom: 33%;" />
+
+---
+
+- **用 / 不拦截.jsp的原因***
+
+  ![image-20201220202340579](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220202340579.png)
+
+---
