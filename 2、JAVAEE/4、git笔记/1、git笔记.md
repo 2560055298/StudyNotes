@@ -98,7 +98,8 @@ git config user.email        查看邮箱
 
 ~~~java
 git config --global user.name "username"
-
+    
+    
 git config --global user.email "email"
 ~~~
 
