@@ -596,9 +596,171 @@ int main()
 
 
 
-# 5、问题：联系方式
+# 5、第三天：在开发板上，显示BMP图像
+
+~~~~
+温馨提示：第三天内容，还没整合好，只是提前放上来。  2020年12月23日23:19:11留
+~~~~
+
+## 5.1、mmap()学习
+
+~~~
+一、头文件
+       #include <sys/mman.h>
+       
+二、形式
+void *mmap(void *addr, size_t length, int prot, int flags,int fd, off_t offset);
+
+三、功能：
+	用于把（1个文件）或（设备）映射到内存，以使得像操作普通内存一样， 操作文件或设备
+
+四、参数
+	1、addr： 一般直接给NULL, 让操作系统自动分配（防止：直接指定错误）
+	
+ 	2、length: 要映射的内存长度， 以字节为单位。
+ 			   开发板屏幕分辩率为：800*480, 一个点4个字节， 总共800*4*480个字节
+ 	3、prot: (protected简写)表示保护权限.
+ 			 与打开文件时的标志，保持一致PROT_READ|PROT_WRITE
+ 			 
+	4、flags： 映射标志， 一般为MAP_SHARED   (表示：实时修改刷新)
+    
+    5、fd： 文件描述符
+    
+    6、offset: 一般为0， 表示从文件或设备开始位置映射
+    
+五、返回值
+	1、成功： 返回一个可用的（内存地址）这段内存就是（屏幕的“显存”）
+	2、失败：返回MAP_FAILED	
+~~~
+
+> 百度百科：https://baike.baidu.com/item/mmap/1322217
+>
+> c语言中文网：http://c.biancheng.net/cpp/html/138.html
+
+## 5.2、munmap（解除内存映射）
+
+~~~
+一、头文件
+       #include<unistd.h>
+	   #include<sys/mman.h>
+       
+二、形式
+int munmap(void *start,size_t length);
+
+三、功能：
+	munmap()用来取消参数start所指的映射内存起始地址，参数length则是欲取消的内存大小。当进程	 结束或利用exec相关函数来执行其他程序时，映射内存会自动解除，但关闭对应的文件描述符时不会解	除映射。
+	
+四、返回值
+	成功：成功解除映射返回0
+	失败：返回－1，错误原因存于errno中错误代码EINVAL参数 start或length 不合法。
+~~~
+
+> 百度百科：https://baike.baidu.com/item/munmap/4568227
+
+
+
+## 5.3、剖析老师代码
+
+### 5.3.1、主函数（入口）
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223195827098.png" alt="image-20201223195827098" style="zoom: 33%;" />
+
+---
+
+### 5.3.2、打开（显示屏幕）lcd_open()函数
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223195939776.png" alt="image-20201223195939776" style="zoom:33%;" />
+
+---
+
+**"dev/fb0" 是什么？**
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223200319579.png" alt="image-20201223200319579" style="zoom: 50%;" />
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223200932985.png" alt="image-20201223200932985" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223201803900.png" alt="image-20201223201803900" style="zoom: 50%;" />
+
+---
+
+> 引用博客：
+>
+> https://blog.csdn.net/maopig/article/details/7195048
+>
+> https://www.jianshu.com/p/da150554e19c
+
+
+
+### 5.3.3、color：左移定色
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223204450768.png" alt="image-20201223204450768" style="zoom:50%;" />
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223204129882.png" alt="image-20201223204129882" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223205152096.png" alt="image-20201223205152096" style="zoom: 67%;" />
+
+---
+
+### 5.3.4、设置背景色：lcd_draw_background(int color)
+
+![image-20201223210921675](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223210921675.png)
+
+---
+
+
+
+
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223213456142.png" alt="image-20201223213456142" style="zoom: 25%;" />
+
+![image-20201223213358454](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223213358454.png)
+
+
+
+### 5.3.5、显示位图：lcd_draw_bmp24("板子上的BMP图片路径")
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223222138017.png" alt="image-20201223222138017" style="zoom:67%;" />
+
+![image-20201223222152849](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223222152849.png)
+
+
+
+
+
+
+
+### 5.3.6、存在两个问题需要：请教老师
+
+~~~
+问题一：
+	在（5.2.4中）设置背景色的：指定行列像素点赋值，为什么传参：x == 列， y == 行
+	常规思维，应该是x == 行， y == 列， 但是显示却（有误）
+	
+问题二：
+	老师说的：5角星的问题还是，没有理解，为什么会出现。
+~~~
+
+![image-20201223232417671](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223232417671.png)
+
+
+
+
+
+# 6、问题：联系方式
 
 ```java
 若有问题:请联系qq2560055298 											---老洋
 ```
+
+
 
