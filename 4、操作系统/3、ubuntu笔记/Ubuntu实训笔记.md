@@ -19,7 +19,7 @@ OS：Linux (ubuntu)
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201221192107057.png" alt="image-20201221192107057" style="zoom: 67%;" />
 
-# 3、第一天
+# 3、第一天：linux命令
 
 ## 3.1、设置共享文件夹
 
@@ -193,14 +193,6 @@ ls -l ：除文件名称外，亦将文件型态、权限、拥有者、文件�
 
 
 
-
-
-
-
-
-
-
-
 # 4、第二天（Linux文件，写入到（粤嵌板子上））
 
 ## 4.1、连接板子
@@ -259,6 +251,8 @@ ls -l ：除文件名称外，亦将文件型态、权限、拥有者、文件�
 ---
 
 - 板子上（执行文件）
+
+![image-20201223102559143](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223102559143.png)
 
 
 
@@ -371,7 +365,9 @@ int open(const char* pathname, int flags);
 	失败：-1
 ~~~
 
-
+> 参考博客：
+>
+> https://blog.csdn.net/qq_35733751/article/details/80709783?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.control
 
 ### 4.4.5、perror()
 
@@ -412,7 +408,7 @@ int open(const char* pathname, int flags);
 第一步：在linux把文件写好
     #include <stdio.h>
     #include <fcntl.h>			//open（"路径", 没有引号） 的头文件
-    #include <unistd.h>		//close(fd) 关闭
+    #include <unistd.h>			//close(fd) 关闭
     #include <stdlib.h>
 
     //以只读方式， 打开文件
@@ -495,9 +491,9 @@ int open(const char* pathname, int flags);
 ## 4.8、实战：嵌入BMP图片， 读取相关信息
 
 ~~~
-#include <stdio.h>		
+#include <stdio.h>		//移动光标 （头文件）
 #include <fcntl.h>		//open()：打开文件（头文件）
-#include <unistd.h>		//close()、lseek()：关闭文件、移动光标 （头文件）
+#include <unistd.h>		//close()、lseek()：关闭文件(头文件)
 #include <stdlib.h>		//mallo()、eixt()：分配、释放资源和退出（头文件）
 
 int main()
@@ -515,14 +511,14 @@ int main()
     lseek(fd, 0x2, SEEK_SET);	    //从文件头0偏移开始：偏移0x2 (十进制：2个字节)
     read(fd, &size, 4);
 
-    // 读宽和高
+    // 读宽和高（宽的像素， 高的像素）
     int width, height;						
     lseek(fd, 0x12, SEEK_SET);		//从文件头0偏移开始：偏移0x12 (十进制：18个字节)
     read(fd, &width, 4);       
     read(fd, &height, 4);
 
-    // 读色深
-    short bpp;
+    // 读色深（也叫：位深度）
+    short bpp;					   //注意short占2个字节， 读几个字节，就几个字节存
     lseek(fd, 0x1c, SEEK_SET);     //从文件头0偏移开始：偏移0x1c(十进制：28个字节)
     read(fd, &bpp, 2);
 
@@ -560,17 +556,19 @@ int main()
 
 - **第一步：在linux中写好代码，生成可执行文件**
 
+![image-20201223075509124](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223075509124.png)
 
 
 
+- **第二步：在secureCRL, 进行发送
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223080243556.png" alt="image-20201223080243556" style="zoom:50%;" />
 
 
 
-- **第二步：在secureCRL, 进行发送， 并运行**
+- **第三步：运行**
 
-
-
-
+![image-20201223080734986](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223080734986.png)
 
 ## 4.9、实战：需要注意的一些地方
 
@@ -592,16 +590,15 @@ int main()
 
 ---
 
+### 4.9.3、当位图深度，改为int出现的问题
+
+![image-20201223101351972](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223101351972.png)
 
 
 
-
-
-
-
-
-## 7、问题：联系方式
+# 5、问题：联系方式
 
 ```java
 若有问题:请联系qq2560055298 											---老洋
 ```
+
