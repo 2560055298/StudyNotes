@@ -19,6 +19,14 @@ OS：Linux (ubuntu)
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201221192107057.png" alt="image-20201221192107057" style="zoom: 67%;" />
 
+---
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201224231142727.png" alt="image-20201224231142727" style="zoom: 67%;" />
+
+---
+
 # 3、第一天：linux命令
 
 ## 3.1、设置共享文件夹
@@ -599,7 +607,7 @@ int main()
 # 5、第三天：在开发板上，显示BMP图像
 
 ~~~~
-温馨提示：第三天内容，还没整合好，只是提前放上来。  2020年12月23日23:19:11留
+做出来一些更新：剖析了chmod和/mnt 以及/dev   2020年12月24日23:53:31 
 ~~~~
 
 ## 5.1、mmap()学习
@@ -737,8 +745,6 @@ int munmap(void *start,size_t length);
 
 
 
-
-
 ### 5.3.6、存在两个问题需要：请教老师
 
 ~~~
@@ -756,7 +762,286 @@ int munmap(void *start,size_t length);
 
 
 
-# 6、问题：联系方式
+# 6、总结：前3天，一些模糊知识点
+
+## 6.1、 /mnt/hgfs 和 /dev/fb0
+
+~~~
+一、/mnt的作用：
+	是被系统管理员使用，（手动挂载）一些（临时媒体设备）的目录。
+	
+二、/mnt/hgfs/的作用：
+	用VMware安装Linux虚拟机后，/mnt/hgfs/目录是一个和Windows的共享目录
+    hgfs全称(Host Guest File System）主机-客户机 文件系统
+
+三、/dev的作用：
+	1、/dev（不是存放）设备的（驱动程序），而是作为（访问外部设备文件）的（接口）。
+	2、例如：我们的U盘，插入linux系统后，用fdisk -l查看分区，显示文件为/dev/sda1。
+	则我们可以将u盘挂载到/mnt/usb1下mount/dev/sda1/mnt/usb1 即可。
+	
+四、/dev/fb0的作用：
+   1、fb是（framebuffer帧缓冲）的缩写。
+   2、帧缓冲（framebuffer）是Linux系统为显示设备提供的一个接口。
+   3、framebuffer机制模仿显卡的功能，将显卡抽象化，对framebuffer（读、写）可直接操作显存。
+   4、framebuffer是显卡的一个映像，将其映射到进程空间后，就可以直接读写操作，
+      （写操作）会（直接反映）在屏幕上。
+   5、framebuffer是一个字符设备，主设备号是29，对应于/dev/fb%d设备文件。
+    （数字代表次设备号）  0 =  /dev/fb0  第一个fb设备
+
+五、挂载、挂载点、卸载
+	1、前置知识：
+		根文件系统之外的其他文件要想能够被访问,都必须通过“关联”至根文件系统上的某个目录来实现
+	2、挂载：
+		根文件系统外通过关联至根文件系统上的某个目录来实现访问
+	3、卸载：
+		解除此关联关系的过程称之为
+	4、挂载点(mount_point):
+		用于(作为另一个文件系统)的访问入口
+		当事先存在；应该使用未被或不会被其它进程使用到的目录；
+		挂载点下原有的文件将会被隐藏；
+		
+六、linux为什要：/dev下的设备，为什么要挂载到/mnt或其它目录，才允许访问，直接访问/dev不行吗？
+		（挂载）mount了才能读取内容，而（直接访问）只能读(设备信息)
+		好比看碟，你访问dev相当于直接拿碟片用眼看最多你能看出来是个CD或DVD
+		但插到光驱里读就能看到电影
+~~~
+
+## 6.2、chmod u+x 可执行文件名（剖析）
+
+### 6.2.1、为什要使用：chmod  u+x 
+
+![image-20201224221018601](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201224221018601.png)
+
+---
+
+### 6.2.2、执行chmode u+x 可执行文件名，便可运行。
+
+![image-20201224221408439](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201224221408439.png)
+
+### 6.2.3、那么为什么能运行呢？
+
+~~~
+先补充点前置知识：
+	1、所有者：哪个（用户）创建了该（文件或目录），（哪个）就是该（文件或目录的）所有者。
+	
+	2、所在组:
+		linux规定：每个用户，必须有（所在组）
+		可以把它理解为（家庭），（用户）是它的（一分子）， （没有谁）（凭空出现在这个世界）。
+	
+	3、其他组：
+		除文件的（所有者）和（所在组）的用户外，系统的（其他用户）都是（文件的其他组）。
+~~~
+
+![image-20201224234001790](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201224234001790.png)
+
+---
+
+![image-20201224235220411](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201224235220411.png)
+
+---
+
+# 7、第四天、在板子任意位置，显示内容
+
+~~~
+未完成（总结），先附（老师）代码，星期五晚上总结。
+~~~
+
+~~~
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <string.h>
+
+int fd_lcd = -1;  // 屏幕文件描述符
+int *addr = NULL; // 显存首地址
+
+// 函数声明
+
+// 屏幕初始化
+void lcd_open();
+// 设置背景颜色
+void lcd_draw_background(int color);
+// 绘制位图
+void lcd_draw_bmp24(const char *filename, int x, int y);
+// 在指定位置绘制指定颜色的像素点
+void lcd_draw_point(int x, int y, int color);
+
+//画UI界面
+void lcd_draw_ui();
+
+// 释放资源
+void lcd_close();
+
+int main()
+{
+    // 屏幕初始化
+    lcd_open();
+    // 操作映射内存
+    int color;                             // 定义一个颜色变量
+    char red = 0X0;                        // 红色分量
+    char green = 0XFF;                     // 绿色分量
+    char blue = 0X0;                       // 蓝色分量
+    color = red << 16 | green << 8 | blue; // 通过位运算把三个分量组成一个像素点
+    // 设置背景颜色
+    lcd_draw_background(color);
+    // 显示位图
+    lcd_draw_bmp24("/china/test.bmp", 100, 0);
+
+    // 释放资源
+    lcd_close();
+
+    return 0;
+}
+
+void lcd_open()
+{
+    // 打开显示屏幕
+    fd_lcd = open("/dev/fb0", O_RDWR);
+    if (fd_lcd == -1)
+    {
+        perror("open fb error");
+        exit(1);
+    }
+
+    
+    // 映射到内存
+    addr = mmap(NULL, 800 * 4 * 480, PROT_READ | PROT_WRITE, MAP_SHARED, fd_lcd, 0);
+
+
+    if (addr == MAP_FAILED)
+    {
+        perror("map error");
+        exit(1);
+    }
+}
+
+
+// 在指定位置绘制指定颜色的像素点(x传入的是：列，  y传入的是行)
+void lcd_draw_point(int x, int y, int color)
+{
+    if (x >= 0 && x < 800 && y >= 0 && y < 480)
+        *(addr + 800 * y + x) = color;
+
+    // if (x >= 0 && x < 480 && y >= 0 && y < 880)
+    //     *(addr + 800 * x + y) = color;
+}
+
+
+
+
+// 设置背景颜色
+void lcd_draw_background(int color)
+{
+    int i, j;
+    for (i = 0; i < 480; ++i) // i表示行
+    {
+        for (j = 0; j < 800; ++j) // j表示列
+        {
+            lcd_draw_point(j, i, color); // 给指定行列的像素点赋值
+            //lcd_draw_point(i, j, color); // 给指定行列的像素点赋值
+        }
+    }
+}
+
+
+
+void lcd_close()
+{
+    // 解除映射
+    munmap(addr, 800 * 4 * 480);
+    // 关闭文件
+    close(fd_lcd);
+}
+
+void lcd_draw_bmp24(const char *filename, int x, int y)
+{
+    // 以只读的方式打开位图文件
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1)
+    {
+        perror("open error");
+        exit(1);
+    }
+    // 读位图的基本信息：大小，宽，高，色深，像素数组
+    // 读大小(图片的大小=头部大小(54)+像素数组大小， 像素数组大小=一行的字节数*行数， 一行的字节数=宽*色深/8+填充字节数)
+    int size;
+    lseek(fd, 0x2, SEEK_SET);
+    read(fd, &size, 4);
+
+    // 读宽和高
+    int width, height;
+    lseek(fd, 0x12, SEEK_SET);
+    read(fd, &width, 4);
+    read(fd, &height, 4);
+
+    // 读色深
+    short bpp;
+    lseek(fd, 0x1c, SEEK_SET);
+    read(fd, &bpp, 2);
+
+    printf("%d, %d, %d, %d \n", size, width, height, bpp);
+
+    // 读像素数组
+    char *pix_array = malloc(size - 54); // 分配空间，用来存放像素数组
+    lseek(fd, 0x36, SEEK_SET);
+    read(fd, pix_array, size - 54);
+
+    // 显示图片
+    int color;
+    char r, g, b;
+    int i, j;
+    char* p = pix_array;      //注释掉
+
+    //计算一行的：字节数
+    int line_bytes = width * bpp / 8;
+
+    //确定需要：在一行后面追加的（字节数）
+    int padd_bytes = (line_bytes % 4 == 0) ? 0 : (4 - line_bytes % 4);
+    
+    for (i = height-1; i >=0; i--)
+    {
+        for (j = 0; j < width; ++j)
+        {
+            b = *p++;
+            g = *p++;
+            r = *p++;
+
+            color = r << 16 | g << 8 | b;
+            lcd_draw_point(j+x, i+y, color);    //注意这里：也需要更改，绘制
+        }
+
+        //地址递增，满足一行是4的整数倍
+        p += padd_bytes;
+    }
+
+
+
+    // 关闭文件
+    free(pix_array);
+    close(fd);
+}
+
+
+
+//画UI界面
+void lcd_draw_ui(){
+    
+}
+~~~
+
+
+
+
+
+
+
+
+
+
+
+# 8、问题：联系方式
 
 ```java
 若有问题:请联系qq2560055298 											---老洋
