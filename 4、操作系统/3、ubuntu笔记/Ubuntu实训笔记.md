@@ -607,7 +607,7 @@ int main()
 # 5、第三天：在开发板上，显示BMP图像
 
 ~~~~
-做出来一些更新：剖析了chmod和/mnt 以及/dev   2020年12月24日23:53:31 
+已更新（2020年12月25日08:03:43）
 ~~~~
 
 ## 5.1、mmap()学习
@@ -667,19 +667,196 @@ int munmap(void *start,size_t length);
 
 
 
-## 5.3、剖析老师代码
+## 5.3、先上老师代码（为什么不写自己的？）因为有一个问题
 
-### 5.3.1、主函数（入口）
+~~~c
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223195827098.png" alt="image-20201223195827098" style="zoom: 33%;" />
+int fd_lcd = -1;  // 屏幕文件描述符
+int *addr = NULL; // 显存首地址
 
----
+// 函数声明
 
-### 5.3.2、打开（显示屏幕）lcd_open()函数
+// 屏幕初始化
+void lcd_open();
+// 设置背景颜色
+void lcd_draw_background(int color);
+// 绘制位图
+void lcd_draw_bmp24(const char *filename);
+// 在指定位置绘制指定颜色的像素点
+void lcd_draw_point(int x, int y, int color);
+
+//画UI界面
+void lcd_draw_ui();
+
+// 释放资源
+void lcd_close();
+
+int main()
+{
+    // 屏幕初始化
+    lcd_open();
+    // 操作映射内存
+    int color;                             // 定义一个颜色变量
+    char red = 0X0;                        // 红色分量
+    char green = 0XFF;                     // 绿色分量
+    char blue = 0X0;                       // 蓝色分量
+    color = red << 16 | green << 8 | blue; // 通过位运算把三个分量组成一个像素点
+    // 设置背景颜色
+    lcd_draw_background(color);
+    // 显示位图
+    lcd_draw_bmp24("tu3.bmp");
+
+    // 释放资源
+    lcd_close();
+
+    return 0;
+}
+
+void lcd_open()
+{
+    // 打开显示屏幕
+    fd_lcd = open("/dev/fb0", O_RDWR);
+    if (fd_lcd == -1)
+    {
+        perror("open fb error");
+        exit(1);
+    }
+
+    
+    // 映射到内存
+    addr = mmap(NULL, 800 * 4 * 480, PROT_READ | PROT_WRITE, MAP_SHARED, fd_lcd, 0);
+
+
+    if (addr == MAP_FAILED)
+    {
+        perror("map error");
+        exit(1);
+    }
+}
+
+
+// 在指定位置绘制指定颜色的像素点(x传入的是：列，  y传入的是行)
+void lcd_draw_point(int x, int y, int color)
+{
+    if (x >= 0 && x < 800 && y >= 0 && y < 480) //老师写的：x为列， y为行
+        *(addr + 800 * y + x) = color;      
+
+    // if (x >= 0 && x < 480 && y >= 0 && y < 880)      //我写的：x为行, y为列
+    //     *(addr + 800 * x + y) = color;
+}
 
 
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223195939776.png" alt="image-20201223195939776" style="zoom:33%;" />
+
+// 设置背景颜色
+void lcd_draw_background(int color)
+{
+    int i, j;
+    for (i = 0; i < 480; ++i) // i表示行
+    {
+        for (j = 0; j < 800; ++j) // j表示列
+        {
+            lcd_draw_point(j, i, color); //老师写的：给指定行列的像素点赋值（j为行，i为列传参）
+
+            //lcd_draw_point(i, j, color); // 我写的：（i为行，j为列传参）
+        }
+    }
+}
+
+
+
+void lcd_close()
+{
+    // 解除映射
+    munmap(addr, 800 * 4 * 480);
+    // 关闭文件
+    close(fd_lcd);
+}
+
+void lcd_draw_bmp24(const char *filename)
+{
+    // 以只读的方式打开位图文件
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1)
+    {
+        perror("open error");
+        exit(1);
+    }
+    // 读位图的基本信息：大小，宽，高，色深，像素数组
+    // 读大小(图片的大小=头部大小(54)+像素数组大小， 像素数组大小=一行的字节数*行数， 一行的字节数=宽*色深/8+填充字节数)
+    int size;
+    lseek(fd, 0x2, SEEK_SET);
+    read(fd, &size, 4);
+
+    // 读宽和高
+    int width, height;
+    lseek(fd, 0x12, SEEK_SET);
+    read(fd, &width, 4);
+    read(fd, &height, 4);
+
+    // 读色深
+    short bpp;
+    lseek(fd, 0x1c, SEEK_SET);
+    read(fd, &bpp, 2);
+
+    printf("%d, %d, %d, %d \n", size, width, height, bpp);
+
+    // 读像素数组
+    char *pix_array = malloc(size - 54); // 分配空间，用来存放像素数组
+    lseek(fd, 0x36, SEEK_SET);
+    read(fd, pix_array, size - 54);
+
+    // 显示图片
+    int color;
+    char r, g, b;
+    int i, j;
+    char* p = pix_array;      //注释掉
+
+    //计算一行的：字节数
+    int line_bytes = width * bpp / 8;
+
+    //确定需要：在一行后面追加的（字节数）
+    int padd_bytes = (line_bytes % 4 == 0) ? 0 : (4 - line_bytes % 4);
+    
+    for (i = height-1; i >=0; i--)
+    {
+        for (j = 0; j < width; ++j)
+        {
+            b = *p++;
+            g = *p++;
+            r = *p++;
+
+            color = r << 16 | g << 8 | b;
+            lcd_draw_point(j, i, color);    //老师写的：j为行，i为列
+
+            //lcd_draw_point(i, j, color);  //我写的：i做为行, j做为列
+        }
+
+        //地址递增，满足一行是4的整数倍
+        p += padd_bytes;
+    }
+
+
+
+    // 关闭文件
+    free(pix_array);
+    close(fd);
+}
+
+~~~
+
+
+
+## 5.4、剖析老师代码
+
+### 5.4.1、主函数（入口）, 进行屏幕初始化
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201225113244872.png" alt="image-20201225113244872" style="zoom: 33%;" />
 
 ---
 
@@ -703,7 +880,7 @@ int munmap(void *start,size_t length);
 
 
 
-### 5.3.3、color：左移定色
+### 5.4.2、color：左移定色
 
 ---
 
@@ -717,50 +894,25 @@ int munmap(void *start,size_t length);
 
 ---
 
-### 5.3.4、设置背景色：lcd_draw_background(int color)
+### 5.4.4、设置背景色：lcd_draw_background(int color)
 
-![image-20201223210921675](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223210921675.png)
+![image-20201225074656958](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201225074656958.png)
+
+
 
 ---
 
+### 5.5.5、显示图片
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201225080147761.png" alt="image-20201225080147761" style="zoom: 33%;" />
 
+---
 
+### 5.4.6、结果展示
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201225074050628.png" alt="image-20201225074050628" style="zoom: 50%;" />
 
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223213456142.png" alt="image-20201223213456142" style="zoom: 25%;" />
-
-![image-20201223213358454](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223213358454.png)
-
-
-
-### 5.3.5、显示位图：lcd_draw_bmp24("板子上的BMP图片路径")
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223222138017.png" alt="image-20201223222138017" style="zoom:67%;" />
-
-![image-20201223222152849](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223222152849.png)
-
-
-
-
-
-### 5.3.6、存在两个问题需要：请教老师
-
-~~~
-问题一：
-	在（5.2.4中）设置背景色的：指定行列像素点赋值，为什么传参：x == 列， y == 行
-	常规思维，应该是x == 行， y == 列， 但是显示却（有误）
-	
-问题二：
-	老师说的：5角星的问题还是，没有理解，为什么会出现。
-~~~
-
-![image-20201223232417671](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20201223232417671.png)
-
-
-
-
+---
 
 # 6、总结：前3天，一些模糊知识点
 
