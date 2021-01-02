@@ -1,10 +1,10 @@
-1、SpringMVC需要学习什么？
+# 1、SpringMVC需要学习什么？
 
 ~~~
 1、MVC是什么？
 2、SpringMVC是什么？
 3、SpringMVC的执行流程
-4、
+4、RestFul风格
 ~~~
 
 
@@ -280,10 +280,6 @@
 
 ---
 
-
-
-
-
 ## 4.3、注解搭建：
 
 - **第一步：**创建maven项目， 添加web功能
@@ -339,7 +335,7 @@
         <servlet-name>springmvc</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-</web-app>xm
+</web-app>
 ~~~
 
 
@@ -363,4 +359,30 @@
 - 具体看 (狂神老师) 博客：
 
 > https://mp.weixin.qq.com/s/8ddT6FD0Y4f3XdbEz0aqpQ
+
+
+
+## 4.4、组件注解回顾
+
+~~~
+@Conponent			   任意层
+@Controller			   对应controller层
+@Service			   对应service层
+@Repository            对应dao层
+
+注意：四者都可以混用
+~~~
+
+
+
+
+
+# 5、RestFul风格
+
+### 5.1、英文意思
+
+~~~
+REST -- REpresentational State Transfer
+首先，之所以晦涩是因为前面主语被去掉了，全称是 Resource Representational State Transfer：通俗来讲就是：资源在网络中以某种表现形式进行状态转移。分解开来
+~~~
 
