@@ -1,3 +1,7 @@
+~~~
+立志做一名优秀的开源社区程序员。					---老洋
+~~~
+
 # 主题：doget()、doPost()、service（）关系
 
 ## 1、首先：先明白Servlet体系结构
@@ -39,7 +43,7 @@
 
   - **拥有的方法**
 
-  ![image-20201219101006059](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219101006059.png)
+  ![image-20210102075552895](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102075552895.png)
 
   - **doGet方法（）**
 
@@ -55,9 +59,9 @@
 
   - **service方法（）有两个**
 
-  ![image-20201219114340497](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219114340497.png)
+  ![image-20210102081155077](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102081155077.png)
 
-<span style='color:black;background:PaleTurquoise;font-size:18px;font-family:微软雅黑;'>第一个：HttpServlet自己创建的Projected修饰的service()</span>
+<span style='color:black;background:PaleTurquoise;font-size:18px;font-family:微软雅黑;'>第一个：HttpServlet自己创建的protected修饰的service()</span>
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219114650852.png" alt="image-20201219114650852" style="zoom: 50%;" />
 
@@ -103,3 +107,10 @@
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201219154859098.png" alt="image-20201219154859098" style="zoom: 200%;" />
 
+
+
+## 4、问题：联系方式
+
+~~~
+若有问题:请联系qq2560055298 						---老洋
+~~~

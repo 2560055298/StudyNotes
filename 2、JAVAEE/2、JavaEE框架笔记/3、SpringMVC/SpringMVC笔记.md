@@ -279,3 +279,88 @@
   ![image-20201220202340579](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201220202340579.png)
 
 ---
+
+
+
+
+
+## 4.3、注解搭建：
+
+- **第一步：**创建maven项目， 添加web功能
+- **第二步：**配置pom.xml（不过滤静态资源）
+
+~~~xml
+<build>
+   <resources>
+       <resource>
+           <directory>src/main/java</directory>
+           <includes>
+               <include>**/*.properties</include>
+               <include>**/*.xml</include>
+           </includes>
+           <filtering>false</filtering>
+       </resource>
+       <resource>
+           <directory>src/main/resources</directory>
+           <includes>
+               <include>**/*.properties</include>
+               <include>**/*.xml</include>
+           </includes>
+           <filtering>false</filtering>
+       </resource>
+   </resources>
+</build>
+~~~
+
+- **第三步：**到artifact中导入（相关jar包）
+- **第四步：**配置web.xml（DispatcherServlet）
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springmvc-servlet.xml</param-value>
+        </init-param>
+        
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>xm
+~~~
+
+
+
+- **第五步：**写一个springmvc-servlet.xml, （处理器：映射器、适配器）用注解驱动完成。
+
+  ​               需要写的是：==**扫描注解、不过滤静态资源（非必须）、注解驱动、视图解析器**==
+
+![image-20210102190913193](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102190913193.png)
+
+- **第六步：**写一个控制器， 并且使用注解
+
+![image-20210102191444966](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102191444966.png)
+
+- **第七步：**写一个显示页面
+
+![image-20210102191615190](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102191615190.png)
+
+- **第八步**：如果需要（拓展），可以自己写一个（起始：用户访问页面）
+
+- 具体看 (狂神老师) 博客：
+
+> https://mp.weixin.qq.com/s/8ddT6FD0Y4f3XdbEz0aqpQ
+
