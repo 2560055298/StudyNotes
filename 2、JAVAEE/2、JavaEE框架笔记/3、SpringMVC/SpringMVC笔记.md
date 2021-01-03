@@ -379,10 +379,162 @@
 
 # 5、RestFul风格
 
-### 5.1、英文意思
+## 5.1、概念
 
 ~~~
-REST -- REpresentational State Transfer
-首先，之所以晦涩是因为前面主语被去掉了，全称是 Resource Representational State Transfer：通俗来讲就是：资源在网络中以某种表现形式进行状态转移。分解开来
+1、RESTFul (全称是 Resource Representational State Transfer)
+
+2、Restful就是一个（资源定位）及（资源操作）的风格。
+
+3、不是标准（也不是）协议，只是一种风格。（比如：写码，喜欢加空格，看起来更易阅读）
 ~~~
 
+## 5.2、功能
+
+~~~
+1、将资源（抽象化）：互联网所有的事物都可以被抽象为资源
+2、资源操作：使用POST、DELETE、PUT、GET，使用不同方法对资源进行操作。url的表示转换了
+3、使用RESTful操作资源 ：
+	     可以通过不同的（请求方式）来（实现不同）的效果！ 如POST和PUT相同参数，跳转不同页面
+	     就像（多态一样）
+		（而不是）像之前的（修改参数值，实现不同效果）
+~~~
+
+### 5.3、有什么用？
+
+~~~
+1、url变得：更安全
+2、url变得：更简短
+~~~
+
+
+
+## 5.4、举个例子
+
+~~~
+1、http://127.0.0.1/item/1 查询,GET
+
+2、http://127.0.0.1/item 新增,POST         
+
+3、http://127.0.0.1/item 更新,PUT
+
+4、http://127.0.0.1/item/1 删除,DELETE
+
+可以看到：2和3（参数一样）的， 但是（提交方式）不一样， 实现了不同的功能。
+~~~
+
+
+
+
+
+## 5.5、总结：
+
+~~~
+我觉得：最有它最有用的，
+就是仅仅通过(请求方式POST、GET)等方式的修改
+（相同的url）可以做到在(同一页面或其他页面)显示内容不一样
+~~~
+
+- 如下代码
+
+~~~java
+@Controller
+public class RestFul {
+    @GetMapping("/yyy/{a}/{b}")			//get方式提交
+    public String getSubmit(@PathVariable int a, @PathVariable int b, Model model){
+        int result = a + b;
+        model.addAttribute("info", "get提交：杭州欢迎你" + result);
+        return "showPage";
+    }
+
+    @PostMapping("/yyy/{a}/{b}")		//post方式提交
+    public String postSubmit(@PathVariable int a, @PathVariable int b, Model model){
+        int result = a + b;
+
+        model.addAttribute("info", "post提交：北京欢迎你" + result);
+
+        return "showPage";
+    }
+}
+~~~
+
+> 注意品读老师博客
+>
+> https://mp.weixin.qq.com/s/3EtyzJohOVGz62nEYLhKHg
+
+
+
+# 6、MVC（转发）和（重定向）
+
+## 6.1、请求转发
+
+- 方式一：直接用HttpServletRequest
+
+~~~
+注意：此种方法，不需要返回值，故（不需要注释：视图解析器）， 因为没有return 不会走视图解析器
+
+代码如下：
+~~~
+
+~~~java
+  //测试：（原始）请求转发 （不推荐）
+    @GetMapping("/yyy/yang")
+    public void forwardURL(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("info", "我是直接：请求转发");
+        req.getRequestDispatcher("/WEB-INF/jsp/skip.jsp").forward(req, resp);
+    }
+~~~
+
+
+
+- 方式二：通过return " forward:路径 "  实现
+
+~~~
+此种方法用到了：return, 需要（注释视图解析器）
+
+代码如下：
+~~~
+
+~~~java
+    //测试：（mvc版）请求转发（推荐1）
+    //因为用到了（返回值），所以（需要注释：视图解析器），因为（返回值）会走视图解析器
+    @RequestMapping("yyy/yang1")
+    public String forwardURL1(){
+        return "/WEB-INF/jsp/skip.jsp";
+    }
+	
+	//测试：（mvc版）请求转发（推荐2）
+    @RequestMapping("yyy/yang2")
+    public String forwardURL2(){
+        return "forward:/WEB-INF/jsp/skip.jsp";
+    }
+~~~
+
+
+
+## 6.2、重定向
+
+- 通过使用：return "redirect: 路径"实现
+
+~~~java
+    @RequestMapping("yyy/yang3")
+    public String redirectURL(){
+        return "redirect:/login.jsp";
+    }
+~~~
+
+
+
+## 6.3、一些注意问题
+
+- **第一个问题：**（关于冒号后面的：/）
+
+~~~
+forward: 、 redirct: 后面的/是表示绝对路径， 写（相对路径）可以不带
+~~~
+
+
+
+- **第二个问题**：（为什么重定向）无法访问WEB-INF下的内容？
+
+![image-20210103115650774](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210103115650774.png)
