@@ -538,3 +538,69 @@ forward: 、 redirct: 后面的/是表示绝对路径， 写（相对路径）�
 - **第二个问题**：（为什么重定向）无法访问WEB-INF下的内容？
 
 ![image-20210103115650774](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210103115650774.png)
+
+
+
+# 7、MVC（注解时）传参（和）显示
+
+## 7.1、传参方式（三种，自动填充）
+
+~~~java
+@Controller
+@RequestMapping("/user")
+public class ShowView {
+    //1、名称固定时
+    //http://localhost:8080/laoyang/user/u1?name=121212
+    @GetMapping("/u1")
+    public String inputShow(String name, Model model){
+        model.addAttribute("info", name);
+        return "skip";
+    }
+
+    //2、名称（不固定）
+    //http://localhost:8080/laoyang/user/u2?username=老洋未来能改变世界
+    @GetMapping("/u2")
+    public String inputShow2(@RequestParam("username") String name, Model model){
+        model.addAttribute("info", name);
+        return "skip";
+    }
+
+    //3、传参：对象(需要set方法，才能填充进去)
+    //http://localhost:8080/laoyang/user/u3?               username=laoyang&password=1234&sex=man
+    @GetMapping("/u3")
+    public String inputShow3(User user, Model model){
+        model.addAttribute("info", user);
+        return "skip";
+    }
+
+}
+~~~
+
+## 7.2、注意：三个模型的关系
+
+~~~java
+1、ModelAndView
+2、ModelMap
+3、Model
+三者都有：填充数据的（方法），并且这个方法，返回的Model会被视图解析器，进行解析
+		并由DispatcherServlet（将解析数据）填充到：显示页面中，展示
+~~~
+
+
+
+![image-20210103153822807](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210103153822807.png)
+
+![image-20210103153649582](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210103153649582.png)
+
+![image-20210103153520590](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210103153520590.png)
+
+> （传参）参考老师博客：
+>
+> https://mp.weixin.qq.com/s/1d_PAk2IIp-WWX2eBbU3aw
+
+
+
+
+
+# 8、Web项目：乱码问题
+
