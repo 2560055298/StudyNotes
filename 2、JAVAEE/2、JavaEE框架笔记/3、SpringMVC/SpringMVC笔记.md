@@ -766,3 +766,60 @@ class MyRequest extends HttpServletRequestWrapper {
 
 
 
+# 9、Json
+
+## 9.1、Json的介绍
+
+~~~
+一、概念
+	1、JSON(JavaScript Object Notation, JS 对象标记) 
+	2、是一种（轻量级）的（数据交换格式），目前使用特别广泛。
+	3、采用（完全独立）于（编程语言）的（文本格式）来（存储）和（表示数据）
+
+二、表现形式
+	1、在 JavaScript 语言中，一切都是对象。
+	2、任何JavaScript 支持的类型都可以通过 JSON 来表示，例如字符串、数字、对象、数组等。
+	3、语法格式（后端要提供的字符串， 要满足前端js的对象形式）		
+			花括号保存对象
+			方括号保存数组
+			属性键值对，数据由逗号分隔
+			{"name": "QinJiang"} 对象
+~~~
+
+
+
+## 9.2、Json字符串和js对象互转
+
+~~~javascript
+    <script>
+        //1、将字符串， 转换为js对象
+        var obj1 = JSON.parse('{"str": "剑客白丁, 痴迷练剑"}')
+        console.log(obj1)
+
+        //2、将js对象， 转换为java字符串（注意：这个字符串，适用于任何语言）
+        var str = JSON.stringify(obj1)
+        console.log(str)
+
+        //3、直接创建一个js对象， 通过JSON转为字符串
+        var obj2 = {
+            'name' : '剑客白丁',
+             sex:'Man'
+        }
+        //打印该对象
+        console.log(obj2)
+
+        //js对象转为的字符串，并打印
+        str2 = JSON.stringify(obj2)
+        console.log(str2)
+    </script>
+~~~
+
+
+
+## 9.3、Json与js的关系
+
+~~~
+JSON 是 JavaScript 对象的（字符串表示法）
+它使用文本表示一个 JS 对象的信息，本质是一个（字符串）。
+~~~
+
