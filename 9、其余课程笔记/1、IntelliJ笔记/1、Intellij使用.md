@@ -61,3 +61,11 @@ ctrl + shift + alt + N
 ~~~
 
 ![image-20201218220745259](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture5/image-20201218220745259.png)
+
+
+
+
+
+# 8、intellij更新应用程序服务器上的应用程序
+
+> https://blog.csdn.net/weixin_44537669/article/details/112778056

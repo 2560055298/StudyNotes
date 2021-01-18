@@ -161,7 +161,7 @@
 	2、新版本地址：就在spring的core的下面
 	
 五、重点看狂神老师的总结：
-	https://mp.weixin.qq.com/s/yuQqZzAsCefk9Jv_kbh_eA   
+	https://mp.weixin.qq.com/s/yuQqZzAsCefk9Jv_kbh_eA  
 ~~~
 
 
@@ -793,7 +793,7 @@ class MyRequest extends HttpServletRequestWrapper {
 ~~~javascript
     <script>
         //1、将字符串， 转换为js对象
-        var obj1 = JSON.parse('{"str": "剑客白丁, 痴迷练剑"}')
+        var obj1 = JSON.parse('{"str": "剑客白丁, 痴迷练剑"}')	//花括号是对象
         console.log(obj1)
 
         //2、将js对象， 转换为java字符串（注意：这个字符串，适用于任何语言）
@@ -822,6 +822,20 @@ class MyRequest extends HttpServletRequestWrapper {
 JSON 是 JavaScript 对象的（字符串表示法）
 它使用文本表示一个 JS 对象的信息，本质是一个（字符串）。
 ~~~
+
+- json(菜鸟教程)
+
+> https://www.runoob.com/js/js-json.html
+>
+> https://www.runoob.com/json/json-tutorial.html
+
+
+
+- js数据类型
+
+>https://www.runoob.com/json/json-tutorial.html
+
+
 
 
 
