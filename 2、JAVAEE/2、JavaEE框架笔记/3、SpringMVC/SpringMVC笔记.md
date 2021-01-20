@@ -854,13 +854,114 @@ JSON 是 JavaScript 对象的（字符串表示法）
 ~~~
 Jackson应该是目前比较好的json解析工具了
 
-当然工具不止这一个，比如还有阿里巴巴的 fastjson 等等。
+Jackson被称为“ Java JSON库”或“ Java的最佳JSON解析器”。或简称为“ JSON for Java”。
 
-我们这里使用Jackson，使用它需要导入它的jar包；
+不仅如此，Jackson还提供了一套用于Java（和JVM平台）的数据处理工具，包括旗舰级流JSON解析器/生成器库，匹配的数据绑定库（与JSON之间的POJO）和附加的数据格式模块。处理以Avro， BSON， CBOR， CSV， Smile， （Java）属性， Protobuf， XML 或YAML编码的数据 ；甚至还有大量的数据格式模块，以支持广泛使用的数据类型的数据类型，例如 Guava， Joda， PCollections 等等。
+
+实际的核心组件位于他们自己的项目下-包括三个核心程序包（流，数据绑定，注释）；数据格式库；数据类型库；JAX-RS提供者；以及其他各种扩展模块集–该项目是将所有部分链接在一起的中心枢纽。
+
 ~~~
+
+> 看狂神笔记：
+>
+> https://mp.weixin.qq.com/s/RAqRKZJqsJ78HRrJg71R1g
+
+
+
+- 使用方法
+
+~~~java
+1、导入jar包：
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.1</version>
+        </dependency>
+    </dependencies>
+    
+    
+2、创建一个new ObjectMapping() 对象， 调用 String writeValueAsString(Object obj)方法
+
+3、注意一下：
+	3.1、不适用跳转路径，直接嵌入HTTP响应内容（@RestController）
+	3.2、编码问题：
+		RequestMapping(produces={"application/json;charset=utf-8", ""}) 单方法
+		springmvc.xml中（统一处理乱码）
+~~~
+
+- **统一处理乱码**
+
+~~~xml
+<mvc:annotation-driven>
+   <mvc:message-converters register-defaults="true">
+       <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+           <constructor-arg value="UTF-8"/>
+       </bean>
+       <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+           <property name="objectMapper">
+               <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                   <property name="failOnEmptyBeans" value="false"/>
+               </bean>
+           </property>
+       </bean>
+   </mvc:message-converters>
+</mvc:annotation-driven>
+~~~
+
+- **jackson：关键代码演示**
+
+![image-20210120100303317](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210120100303317.png)
+
+- **@RestController 代替（重复书写）@ResponseBody**
+
+~~~
+1、@Responsebody注解表示该方法的返回的结果直接写入 HTTP 响应正文中，一般在异步获取数据时使用；
+
+2、在使用@RequestMapping后，返回值通常解析为跳转路径，加上@Responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP 响应正文中。例如，异步获取json数据，加上@Responsebody注解后，就会直接返回json数据。
+
+3、@RequestBody注解则是将 HTTP 求正文插入方法中，使用适合的HttpMessageConverter将请求体写入某个对象。
+~~~
+
+> 引用博客：
+>
+> https://guobinhit.blog.csdn.net/article/details/59620858
+
+
+
+- **注意：Jackson不使用（时间戳，显示时间）**
+
+~~~java
+//创建Jackson核心对象
+ObjectMapper mapper = new ObjectMapper();
+
+//设置：不显示时间戳
+mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+~~~
+
+
+
+- **设置：时间格式**
+
+![image-20210120113117035](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210120113117035.png)
 
 
 
 
 
 ## 10.2、fastjson
+
+- 概念
+
+~~~
+1、fastjson.jar是阿里开发的一款专门用于Java开发的包
+~~~
+
+- 作用
+
+~~~
+1、可以方便的实现json对象与JavaBean对象的转换，
+2、实现JavaBean对象与json字符串的转换，
+3、实现json对象与json字符串的转换。
+4、实现json的转换方法很多，最后的实现结果都是一样的。
+~~~
+
