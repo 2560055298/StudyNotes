@@ -870,79 +870,82 @@ Jackson被称为“ Java JSON库”或“ Java的最佳JSON解析器”。或简
 
 - 使用方法
 
-~~~java
-1、导入jar包：
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.12.1</version>
-        </dependency>
-    </dependencies>
+  - 1、导入jar包
+
+  ~~~xml
+  <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.12.1</version>
+  </dependency>
+  ~~~
+
+  
+
+  - 2、给控制器（设置：不跳转路径）内容直接嵌入HTTP
+
+  ~~~
+  (类上)使用：@RestController 代替（@ResponseBody）
+  
+      1、@ResponseBody注解表示该方法的返回的结果直接写入 HTTP 响应正文中，一般在异步获取数	据时使用；
+  
+  	2、在使用@RequestMapping后，返回值通常解析为跳转路径，加上@Responsebody后返回结果不	会被解析为跳转路径，而是直接写入HTTP 响应正文中。例如，异步获取json数据，加上		       	 @Responsebody注解后，就会直接返回json数据。
+  
+  	3、@RequestBody注解则是将 HTTP 求正文插入方法中，使用适合的HttpMessageConverter将	请求体写入某个对象。
+  ~~~
+
+  
+
+  - 3、创建一个new ObjectMapping() 对象
+
+  ~~~
+  Object mapper = new ObjectMapping()       //可以来操作转换
+  
+  String str = mappper.writeValueAsString(Object obj)	//将java对象转为json字符串
+  ~~~
+
+  
+
+  - 4、例子
+
+    ![image-20210121084736839](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210121084736839.png)
+
     
-    
-2、创建一个new ObjectMapping() 对象， 调用 String writeValueAsString(Object obj)方法
 
-3、注意一下：
-	3.1、不适用跳转路径，直接嵌入HTTP响应内容（@RestController）
-	3.2、编码问题：
-		RequestMapping(produces={"application/json;charset=utf-8", ""}) 单方法
-		springmvc.xml中（统一处理乱码）
-~~~
+  
 
-- **统一处理乱码**
+- 实现（过程中）可能（出现）的问题
 
-~~~xml
-<mvc:annotation-driven>
-   <mvc:message-converters register-defaults="true">
-       <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-           <constructor-arg value="UTF-8"/>
-       </bean>
-       <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-           <property name="objectMapper">
-               <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
-                   <property name="failOnEmptyBeans" value="false"/>
-               </bean>
-           </property>
-       </bean>
-   </mvc:message-converters>
-</mvc:annotation-driven>
-~~~
+  - 显示页面（乱码）：springmvc.xml 中添加（统一解决）
 
-- **jackson：关键代码演示**
+  ~~~xml
+  <mvc:annotation-driven>
+     <mvc:message-converters register-defaults="true">
+         <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+             <constructor-arg value="UTF-8"/>
+         </bean>
+         <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+             <property name="objectMapper">
+                 <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                     <property name="failOnEmptyBeans" value="false"/>
+                 </bean>
+             </property>
+         </bean>
+     </mvc:message-converters>
+  </mvc:annotation-driven>
+  ~~~
 
-![image-20210120100303317](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210120100303317.png)
+  
 
-- **@RestController 代替（重复书写）@ResponseBody**
+  - 时间格式（无法理解）：解决方法
 
-~~~
-1、@Responsebody注解表示该方法的返回的结果直接写入 HTTP 响应正文中，一般在异步获取数据时使用；
+  ![image-20210121085148539](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210121085148539.png)
 
-2、在使用@RequestMapping后，返回值通常解析为跳转路径，加上@Responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP 响应正文中。例如，异步获取json数据，加上@Responsebody注解后，就会直接返回json数据。
-
-3、@RequestBody注解则是将 HTTP 求正文插入方法中，使用适合的HttpMessageConverter将请求体写入某个对象。
-~~~
+  
 
 > 引用博客：
 >
 > https://guobinhit.blog.csdn.net/article/details/59620858
-
-
-
-- **注意：Jackson不使用（时间戳，显示时间）**
-
-~~~java
-//创建Jackson核心对象
-ObjectMapper mapper = new ObjectMapper();
-
-//设置：不显示时间戳
-mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-~~~
-
-
-
-- **设置：时间格式**
-
-![image-20210120113117035](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210120113117035.png)
 
 
 
@@ -964,4 +967,34 @@ mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 3、实现json对象与json字符串的转换。
 4、实现json的转换方法很多，最后的实现结果都是一样的。
 ~~~
+
+- 使用方法
+
+  - 1、导入jar包
+
+  ~~~xml
+  <dependency>
+              <groupId>com.alibaba</groupId>
+              <artifactId>fastjson</artifactId>
+              <version>1.2.75</version>
+  </dependency>
+  ~~~
+
+  - 2、调用方法
+
+  ~~~java
+  //1、（java对象）转（JSON字符串）
+  String s1 = JSON.toJSONString(user1);
+  
+  //2、（JSON字符串）转（java对象）
+  User u1 = JSON.parseObject(s1, User.class);
+  
+  //3、（java对象）转(Json对象)
+  JSONObject json1 = (JSONObject)JSON.toJSON(u1);
+  
+  //4、（Json对象）转（java对象）
+  User u2 = JSON.toJavaObject(json1, User.class);
+  ~~~
+
+  
 
