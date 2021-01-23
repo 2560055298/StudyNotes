@@ -346,6 +346,19 @@
 
 ![image-20210102190913193](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102190913193.png)
 
+> <mvc:default-servlet-handler>讲解博客：
+>
+> https://blog.csdn.net/abc997995674/article/details/80513203
+
+~~~
+<mvc:annotation-driven>注解驱动的作用：
+	代替了底层的：HandlerMapping 和 HandlerAdapter
+~~~
+
+
+
+
+
 - **第六步：**写一个控制器， 并且使用注解
 
 ![image-20210102191444966](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102191444966.png)

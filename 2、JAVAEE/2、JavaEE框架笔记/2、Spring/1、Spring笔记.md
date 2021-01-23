@@ -515,8 +515,6 @@ Spring有三种装配方式：
 
 
 
-
-
 # 4、Spring中（基于注解）学习
 
 ## 4.1、老师推荐的：做笔记的方法
@@ -526,6 +524,14 @@ Spring有三种装配方式：
 ~~~
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201205171228498.png" alt="image-20201205171228498" style="zoom: 50%;" />
+
+
+
+> @Autowired、@Qualifier：讲解博客
+>
+> https://blog.csdn.net/meism5/article/details/90446789?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161138770016780265483764%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=161138770016780265483764&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-90446789.pc_search_result_no_baidu_js&utm_term=Autowired&spm=1018.2226.3001.4187
+
+
 
 
 
