@@ -1011,5 +1011,9 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 ![image-20201216140225330](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201216140225330.png)
 
-
+> execution（）解释： execution表达式， *任意返回值类型 , com.yyy.mapper包名, .*类名， 
+>
+> .*(..)方法（所有参数）
+>
+> https://blog.csdn.net/weixin_38362455/article/details/81837174
 
