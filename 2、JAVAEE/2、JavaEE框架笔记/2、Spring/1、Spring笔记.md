@@ -939,7 +939,7 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 	转换为（继承SqlSessionDaoSupport）不用写set方法，直接调用（该继承类）获取SqlSession
 ~~~
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201213093350940.png" alt="image-20201213093350940" style="zoom: 150%;" />
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture4/image-20201213093350940.png" alt="image-20201213093350940"  />
 
 
 
@@ -1016,4 +1016,3 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 > .*(..)方法（所有参数）
 >
 > https://blog.csdn.net/weixin_38362455/article/details/81837174
-

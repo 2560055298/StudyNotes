@@ -167,79 +167,9 @@ maven的pom.xml配置如下
     </build>
 ~~~
 
-## 2.5、添加web支持，导入jar包
-
-- 添加web支持
-
-![image-20210126112252418](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210126112252418.png)
 
 
-
-- 导入jar包
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210126122537746.png" alt="image-20210126122537746" style="zoom:50%;" />
-
-
-
-## 2.6、配置web.xml
-
-~~~xml
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-         version="4.0">
-
-
-    <!--配置：前端分发器-->
-    <servlet>
-        <servlet-name>springmvc</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:applicationContext.xml</param-value>
-        </init-param>
-
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>springmvc</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
-
-    <!--设置：字符编码-->
-    <filter>
-        <filter-name>encoding</filter-name>
-        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>utf-8</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>encoding</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>encoding</filter-name>
-        <url-pattern>/</url-pattern>
-    </filter-mapping>
-
-    <!--设置session失效时间：15分钟-->
-    <session-config>
-        <session-timeout>15</session-timeout>
-    </session-config>
-
-</web-app>
-~~~
-
-
-
-## 2.7、各层结构：（名称）拟定
+## 2.5、各层结构：（名称）拟定
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210126142014822.png" alt="image-20210126142014822" style="zoom:50%;" />
 
@@ -276,10 +206,6 @@ xml文件名如下：
 
 </configuration>
 ~~~
-
-
-
-
 
 
 
@@ -611,8 +537,6 @@ public class BookServiceImpl implements BookService {
 </beans>
 ~~~
 
-
-
 ### ②、Spring整合mybatis
 
 > spring-dao.xml
@@ -723,11 +647,84 @@ public class BookServiceImpl implements BookService {
 </beans>
 ~~~
 
+> 利用junit测试：Model(持久层、业务层) 是否已经实现
+
+
+
+## 3.4、控制器、视图层
+
+### ①、添加web支持，导入jar包
+
+- 添加web支持
+
+![image-20210126112252418](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210126112252418.png)
+
+
+
+- 导入jar包
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210126122537746.png" alt="image-20210126122537746" style="zoom:50%;" />
+
+
+
+### ②、配置web.xml
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+
+    <!--配置：前端分发器-->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:applicationContext.xml</param-value>
+        </init-param>
+
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+    <!--设置：字符编码-->
+    <filter>
+        <filter-name>encoding</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--设置session失效时间：15分钟-->
+    <session-config>
+        <session-timeout>15</session-timeout>
+    </session-config>
+
+</web-app>
+~~~
+
+
+
 ### ④、spring整合视图层
 
 > spring-mvc.xml
 
-~~~xml
+~~~
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -759,11 +756,15 @@ public class BookServiceImpl implements BookService {
 </beans>
 ~~~
 
+> 运行tomcat看：是否能运行
+
+~~~~
+整理
+~~~~
 
 
-## 3.4、控制器、视图层
 
-### ①、查询全部书籍
+### ③、查询全部书籍
 
 > 控制层：查询全部书籍（方法1）
 
@@ -859,7 +860,6 @@ public class BookController {
                             <th>书籍名称</th>
                             <th>书籍数量</th>
                             <th>书籍详情</th>
-                            <th>操作</th>
                         </tr>
                     </thead>
 
@@ -883,7 +883,7 @@ public class BookController {
 
 ~~~
 
-### ②、BookController 控制器
+### ④、BookController 控制器
 
 > 控制层：添加书籍（方法2）
 
@@ -958,7 +958,7 @@ public class BookController {
 
 ~~~
 
-### ③、BookController 类编写
+### ⑤、BookController 类编写
 
 > 控制层：修改书籍（方法3）
 
@@ -1037,7 +1037,7 @@ public class BookController {
 
 
 
-### ④、BookController 类编写
+### ⑥、BookController 类编写
 
 > 控制层：删除书籍（方法4）
 
