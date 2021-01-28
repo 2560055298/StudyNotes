@@ -57,8 +57,7 @@ maven的pom.xml配置
 ~~~
 
 ~~~xml
- <dependencies>
-        <dependency>
+       <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
@@ -903,6 +902,7 @@ public class BookController {
         System.out.println("addBook(Books book) ->" + book);
         bookService.addBook(book);
 
+        //return "" 经过视图解析器，跳转页面；   return "redirect:/" 跳转的是控制器
         return "redirect:/book/allBook";
     }
 ~~~

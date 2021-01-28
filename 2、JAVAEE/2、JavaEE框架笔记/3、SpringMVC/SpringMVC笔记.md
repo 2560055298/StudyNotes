@@ -546,6 +546,10 @@ public class RestFul {
 forward: 、 redirct: 后面的/是表示绝对路径， 写（相对路径）可以不带
 ~~~
 
+==切记：二者的区别==
+
+![image-20210128104128035](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210128104128035.png)
+
 
 
 - **第二个问题**：（为什么重定向）无法访问WEB-INF下的内容？
