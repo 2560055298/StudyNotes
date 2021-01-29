@@ -2,7 +2,7 @@
 
 ~~~
 图书管理系统环境如下：
-    1、编译器：IDEA
+    1、编译器：IDEA 2020
     2、数据库：MySQL 8.0.22
     3、服务器：Tomcat   9
     4、项目管理：Maven 3.6
@@ -882,7 +882,7 @@ public class BookController {
 
 ~~~
 
-### ④、BookController 控制器
+### ④、添加书籍
 
 > 控制层：添加书籍（方法2）
 
@@ -958,7 +958,7 @@ public class BookController {
 
 ~~~
 
-### ⑤、BookController 类编写
+### ⑤、修改书籍
 
 > 控制层：修改书籍（方法3）
 
@@ -1037,7 +1037,7 @@ public class BookController {
 
 
 
-### ⑥、BookController 类编写
+### ⑥、删除书籍
 
 > 控制层：删除书籍（方法4）
 
@@ -1053,13 +1053,11 @@ public class BookController {
     }
 ~~~
 
-> 视图层：最尾（留出）
+> 视图层：最尾代码（留出）
 
 
 
-
-
-### ⑤、BookController 类编写
+### ⑤、通过名称查询书籍
 
 > 控制层：通过名称查询书籍（方法5）
 
@@ -1164,4 +1162,6 @@ public class BookController {
 </body>
 </html>
 ~~~
+
+
 

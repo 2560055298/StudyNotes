@@ -902,16 +902,18 @@ Jackson被称为“ Java JSON库”或“ Java的最佳JSON解析器”。或简
   - 2、给控制器（设置：不跳转路径）内容直接嵌入HTTP
 
   ~~~
-  (类上)使用：@RestController 代替（@ResponseBody）
+  (类上)使用：@RestController 代替（@ResponseBody、@Controller）
   
       1、@ResponseBody注解表示该方法的返回的结果直接写入 HTTP 响应正文中，一般在异步获取数	据时使用；
   
   	2、在使用@RequestMapping后，返回值通常解析为跳转路径，加上@Responsebody后返回结果不	会被解析为跳转路径，而是直接写入HTTP 响应正文中。例如，异步获取json数据，加上		       	 @Responsebody注解后，就会直接返回json数据。
   
   	3、@RequestBody注解则是将 HTTP 求正文插入方法中，使用适合的HttpMessageConverter将	请求体写入某个对象。
+  	
+  	4、@RestController会将返回值：自动转为json字符串
   ~~~
 
-  
+  <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210129170735768.png" alt="image-20210129170735768" style="zoom:50%;" />
 
   - 3、创建一个new ObjectMapping() 对象
 
@@ -1013,7 +1015,441 @@ Jackson被称为“ Java JSON库”或“ Java的最佳JSON解析器”。或简
   User u2 = JSON.toJavaObject(json1, User.class);
   ~~~
 
-  
 
+
+
+
+
+# 11、ajax
+
+## ①、ajax的概念
+
+~~~
+AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。
+
+AJAX 是一种在无需重新加载整个网页的情况下，能够更新部分网页的（技术）。
+
+Ajax （不是）一种新的（编程语言）而是（一种）用于创建更好更快以及交互性更强的Web应用程序的技术。
+
+jQuery是一个JavaScript函数库。
+~~~
+
+
+
+## ②、ajax：快速入门（用jquery）
+
+> 入门编码：流程图
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210129151207642.png" alt="image-20210129151207642" style="zoom:50%;" />
+
+> 首先：建立一个web工程，springmvc初始版本
+>
+> web.xml
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+
+    <!--1、配置：DispatcherServlet（控制器）-->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:applicationContext.xml</param-value>
+        </init-param>
+
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--2、配置：字符编码（过滤器）-->
+    <filter>
+        <filter-name>character</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>character</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!--3、配置Session失效时间-->
+    <session-config>
+        <session-timeout>15</session-timeout>
+    </session-config>
+</web-app>
+~~~
+
+> 其次：applicationContext.xml配置
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        https://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+         https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--1、配置注解驱动：代替（HandlerMapping、HandlerAdapter）-->
+    <mvc:annotation-driven/>
+
+    <!--2、配置默认处理器：不过滤静态资源-->
+    <mvc:default-servlet-handler/>
+
+    <!--3、配置：注解扫描controller层-->
+    <context:component-scan base-package="com.yyy.controller"/>
+
+    <!--4、配置：视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--5、@RestController：乱码解决-->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8"/>
+            </bean>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                        <property name="failOnEmptyBeans" value="false"/>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+</beans>
+~~~
+
+> 进而：写一个页面，应用（ajax） , 此处用的是index.jsp
+
+~~~jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+  <head>
+    <title>ajax快速入门</title>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+    <script>
+      function a(){
+        $.post({
+          url:"${pageContext.request.contextPath}/ajax/a2",
+          data:{"name":$("#context").val()},
+          success:function(data){
+              alert(data);
+          }
+        })
+      }
+
+    </script>
+
+  </head>
+  <body>
+      用户名：<input type="text" id="context" onblur="a()">
+  </body>
+</html>
+
+~~~
+
+> 写一个对应的：控制器AjaxController
+
+~~~java
+/**
+ * Author: 老洋
+ * Date:  2021/1/29 10:32
+ */
+package com.yyy.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@RequestMapping("/ajax")
+@RestController
+public class AjaxController {
+    @RequestMapping("/a2")
+    public void a2(String name, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("utf-8");
+        if(!name.isEmpty()){
+            response.getWriter().print("true");         //print底层调用的是：write
+            response.getWriter().write("您好");
+        }else{
+            response.getWriter().print("false");
+        }
+    }
+}
+~~~
+
+> 以上便，完成了（ajax快速入门）， 注意用的是（jquery），封装了ajax， 所以到下载jquery库
+
+
+
+## ③、实战一（list集合显示）
+
+~~~
+思路：
+	1、先写一个controller，然后创建一个list<User>集合， 返回集合内容
+	2、页面创建一个（点击事件）， 用ajax接收（后端数据），实现局部刷新，将list显示到（表格中）
+~~~
+
+> pojo类：User
+
+~~~java
+/**
+ * Author: 老洋
+ * Date:  2021/1/29 15:15
+ */
+package com.yyy.pojo;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * 用户类
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+    private String userName;
+    private int userAge;
+    private String userSex;
+}
+~~~
+
+> controller类：AjaxController
+
+~~~java
+/**
+ * Author: 老洋
+ * Date:  2021/1/29 10:32
+ */
+package com.yyy.controller;
+
+import com.yyy.pojo.User;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+@RequestMapping("/ajax")
+@RestController
+public class AjaxController {
+    @RequestMapping("/a1")
+    public List<User> a1(){
+        List<User> list = new ArrayList<>();
+
+        list.add(new User("前端诗颖", 1, "女"));
+        list.add(new User("后端老洋", 2, "男"));
+        list.add(new User("运维老洋", 2, "男"));
+
+        return list;
+    }
+}
+~~~
+
+> 前端页面test.jsp：注意需要导入jquery（jquery封装了ajax）
+
+~~~jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+
+<head>
+    <title>显示数据页面</title>
+    <script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        $(function (){
+            $("#btn").click(function (){
+                $.post("${pageContext.request.contextPath}/ajax/a1", function (data){
+                    let temp = "";
+
+                    for(let i = 0; i < data.length; i++){
+                        temp +=
+                            "<tr>" +
+                                    "<td>" + data[i].userName + "</td>" +
+                                    "<td>" + data[i].userAge + "</td>"  +
+                                    "<td>" + data[i].userSex + "</td>"  +
+                            "</tr>"
+                    }
+                    $("#context").html(temp);
+                })
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <input type="button" id="btn" value="请求数据">
+    <table>
+        <thead>
+            <tr>
+                <th>用户名称</th>
+                <th>用户年龄</th>
+                <th>用户性别</th>
+            </tr>
+        </thead>
+
+        <tbody id="context">
+
+        </tbody>
+    </table>
+</body>
+</html>
+~~~
+
+
+
+## ④、实现二（用户名、密码）异步显示
+
+~~~
+思路(Web项目下：SpringMVC框架)
+	1、首先需要写一个：页面有input框（用户名、密码）， 当光标离开，onblur时，调用js函数
+	2、js函数实现，ajax，将input框内容，传到控制器， 控制器分发到Model，业务层、持久层查询
+	3、判断后，返回结果，利用@RestController，自动转为json字符串。
+	4、前端，通过ajax的function(data)接收到数据（展示）
+~~~
+
+> 效果图：提前展示
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210129173020615.png" alt="image-20210129173020615" style="zoom:50%;" />
+
+---
+
+> 首先：写一个（页面）test1.jsp
+
+~~~~jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>显示用户名密码</title>
+    <script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        function a1(){
+            $.post({
+                url:"${pageContext.request.contextPath}/ajax/a2",
+                data:{"userName":$("#userName").val()},
+                success:function (data){
+                    if(data.toString() === "OK"){
+                        $("#span1").css("color","green")
+                    }else{
+                        $("#span1").css("color","red")
+                    }
+                    $("#span1").html(data)
+                }
+            });
+        }
+
+        function a2(){
+            $.post({
+                url:"${pageContext.request.contextPath}/ajax/a2",
+                data:{"password":$("#password").val()},
+                success:function (data){
+                    if(data.toString() === "OK"){
+                        $("#span2").css("color", "green")
+                    }else{
+                        $("#span2").css("color", "red")
+                    }
+
+                    $("#span2").html(data);
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+
+用户名：<input type="text" id="userName" onblur="a1()">
+<span id="span1"></span><br/>
+
+密码：<input type="text" id="password" onblur="a2()">
+<span id="span2"></span><br/>
+
+</body>
+</html>
+
+~~~~
+
+> 其次：写一个controller (AjaxController)
+
+~~~java
+/**
+ * Author: 老洋
+ * Date:  2021/1/29 10:32
+ */
+package com.yyy.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RequestMapping("/ajax")
+@RestController
+public class AjaxController {
+    @RequestMapping("/a2")
+    public String a2(String userName, String password){
+        String msg = "";
+
+        if(userName != null){       //先看是否为空，为空则（不做任何处理）
+            if(userName.equals("root")){
+                msg = "OK";
+            }else{
+                msg = "用户名有误";
+            }
+        }
+
+        if(password != null){       //先看是否为空，为空则（不做任何处理）
+            if(password.equals("123456")){
+                msg = "OK";
+            }else{
+                msg = "密码有误";
+            }
+        }
+
+        return msg;     //由于@RestController注解，将msg转成json格式返回
+    }
+
+}
+~~~
+
+> ajax狂神笔记：(可参考)    
+>
+> 自己对自己说的话：别人的总归是别人的，只有自己脑子有东西才是自己的
+>
+> https://mp.weixin.qq.com/s/tB4YX4H59wYS6rxaO3K2_g
 
 
