@@ -1836,3 +1836,335 @@ public class TestController {
 > 狂神博客：
 >
 > https://mp.weixin.qq.com/s/NWJoYiirbkSDz6x01Jji3g
+
+
+
+# 13、文件上传与下载
+
+> 前提：满足是SpringMVC配置好的web项目
+
+## ①、文件上传
+
+~~~
+步骤：
+	1、导入：jar包
+	2、xml中配置：（IOC导入的jar包）
+	3、写一个：上传页面
+	4、配置controller
+~~~
+
+> 第一步：导入jar包 (上传、下载 jar一样)
+
+~~~xml
+	  <!--文件上传-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+        <!--servlet-api导入高版本的-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+~~~
+
+> 第二步：配置xml
+
+~~~xml
+    <!--文件上传配置-->
+    <bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 请求的编码格式，必须和jSP的pageEncoding属性一致，以便正确读取表单的内容，默认为ISO-8859-1 -->
+        <property name="defaultEncoding" value="utf-8"/>
+        <!-- 上传文件大小上限，单位为字节（10485760=10M） -->
+        <property name="maxUploadSize" value="10485760"/>
+        <property name="maxInMemorySize" value="40960"/>
+    </bean>
+~~~
+
+> 配置：控制器（两种方法）
+
+- **方法一 (代码：较为复杂)**
+
+~~~java
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+
+@Controller
+public class FileController {
+   //@RequestParam("file") 将name=file控件得到的文件封装成CommonsMultipartFile 对象
+   //批量上传CommonsMultipartFile则为数组即可
+   @RequestMapping("/upload")
+   public String fileUpload(@RequestParam("file") CommonsMultipartFile file , HttpServletRequest request) throws IOException {
+
+       //获取文件名 : file.getOriginalFilename();
+       String uploadFileName = file.getOriginalFilename();
+
+       //如果文件名为空，直接回到首页！
+       if ("".equals(uploadFileName)){
+           return "redirect:/index.jsp";
+      }
+       System.out.println("上传文件名 : "+uploadFileName);
+
+       //上传路径保存设置
+       String path = request.getServletContext().getRealPath("/upload");
+       //如果路径不存在，创建一个
+       File realPath = new File(path);
+       if (!realPath.exists()){
+           realPath.mkdir();
+      }
+       System.out.println("上传文件保存地址："+realPath);
+
+       InputStream is = file.getInputStream(); //文件输入流
+       OutputStream os = new FileOutputStream(new File(realPath,uploadFileName)); //文件输出流
+
+       //读取写出
+       int len=0;
+       byte[] buffer = new byte[1024];
+       while ((len=is.read(buffer))!=-1){
+           os.write(buffer,0,len);
+           os.flush();
+      }
+       os.close();
+       is.close();
+       return "redirect:/index.jsp";
+  }
+}
+~~~
+
+- **方法二(代码相对简单)**
+
+~~~java
+/*
+* 采用file.Transto 来保存上传的文件
+*/
+@RequestMapping("/upload2")
+public String  fileUpload2(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request) throws IOException {
+
+   //上传路径保存设置
+   String path = request.getServletContext().getRealPath("/upload");
+   File realPath = new File(path);
+   if (!realPath.exists()){
+       realPath.mkdir();
+  }
+   //上传文件地址
+   System.out.println("上传文件保存地址："+realPath);
+
+   //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
+   file.transferTo(new File(realPath +"/"+ file.getOriginalFilename()));
+
+   return "redirect:/index.jsp";
+}
+~~~
+
+## ②、文件下载
+
+~~~
+步骤：
+	1、导入jar包
+	2、下载页面
+	3、controller控制器
+~~~
+
+> 第一步：导入jar包（上传、下载一致）
+
+~~~xml
+	  <!--文件上传-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+        <!--servlet-api导入高版本的-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+~~~
+
+> 第二步：下载页面 index.jsp
+
+~~~jsp
+<a href="/download">点击下载</a>
+~~~
+
+> 第三步：控制器
+
+~~~java
+@RequestMapping(value="/download")
+public String downloads(HttpServletResponse response ,HttpServletRequest request) throws Exception{
+   //要下载的图片地址
+   String  path = request.getServletContext().getRealPath("/upload");
+   String  fileName = "基础语法.jpg";
+
+   //1、设置response 响应头
+   response.reset(); //设置页面不缓存,清空buffer
+   response.setCharacterEncoding("UTF-8"); //字符编码
+   response.setContentType("multipart/form-data"); //二进制传输数据
+   //设置响应头
+   response.setHeader("Content-Disposition",
+           "attachment;fileName="+URLEncoder.encode(fileName, "UTF-8"));
+
+   File file = new File(path,fileName);
+   //2、 读取文件--输入流
+   InputStream input=new FileInputStream(file);
+   //3、 写出文件--输出流
+   OutputStream out = response.getOutputStream();
+
+   byte[] buff =new byte[1024];
+   int index=0;
+   //4、执行 写出操作
+   while((index= input.read(buff))!= -1){
+       out.write(buff, 0, index);
+       out.flush();
+  }
+   out.close();
+   input.close();
+   return null;
+}
+~~~
+
+## ③、参考博客
+
+> 狂神博客：
+>
+> https://mp.weixin.qq.com/s/NWJoYiirbkSDz6x01Jji3g
+
+
+
+
+
+# 14、总结：SpringMVC配置
+
+## ①、添加web支持
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210130214755930.png" alt="image-20210130214755930" style="zoom:50%;" />
+
+> 试一试：tomcat能不能到index.jsp运行
+
+## ②、导入依赖：添加jar包
+
+~~~xml
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+    </dependencies>
+~~~
+
+> 将包导入：web
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210130215449835.png" alt="image-20210130215449835" style="zoom: 67%;" />
+
+> 导入包后：再试一试tomcat的index.jsp能不能访问到
+
+## ③、配置web.xml
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!--1、配置：DispatcherServlet（处理级别/）-->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:applicationContext.xml</param-value>
+        </init-param>
+
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+    <!--2、配置：字符编码过滤器（过滤级别/*）-->
+    <filter>
+        <filter-name>character</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>character</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>
+~~~
+
+## ④、配置applicationContext.mxl
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+         https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--1、配置：注解驱动（代替HandlerMapping、HandlerAdapter）-->
+    <mvc:annotation-driven/>
+
+    <!--
+        2、配置：静态资源使用（默认servlet处理）
+                不配置：静态资源就找不到，因为会直接当成是（控制器）的url处理
+                配置以后，先url找不到，然后找默认的servlet处理
+    -->
+    <mvc:default-servlet-handler/>
+
+    <!--3、配置：扫描（控制层）注解-->
+    <context:component-scan base-package="com.yyy.controller"/>
+
+    <!--4、配置：视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>
+~~~
+
