@@ -1453,3 +1453,386 @@ public class AjaxController {
 > https://mp.weixin.qq.com/s/tB4YX4H59wYS6rxaO3K2_g
 
 
+
+# 12、SpringMVC的拦截器
+
+## ①、概念
+
+
+
+~~~
+一、什么是拦截器？
+	1、只会拦截（访问控制器）的请求
+	2、拦截器是AOP思想的（具体应用）
+	
+二、什么是过滤器？
+	 1、是servlet规范的一部分
+	 2、在url-pattern中配置了/*之后，可以对所有要访问的资源进行拦截
+~~~
+
+## ②、快速入门
+
+> 第一步：构建一个SpringMVC能跑起来的项目
+
+> 第二步：实现HandlerInterceptor 接口
+
+~~~java
+/**
+ * Author: 老洋
+ * Date:  2021/1/30 10:37
+ */
+package com.yyy.config;
+
+
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 拦截器：类似于切面（写通知）
+ */
+public class MyInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //返回false： 会将控制器拦截在此处（只显示，我是前置通知）
+        //返回true:   则会向下执行
+        System.out.println("-----------我是前置通知-------------");
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        System.out.println("-----------我是后置通知-------------");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        System.out.println("-----------我是结束通知-------------");
+    }
+}
+~~~
+
+> 配置applicationContext.xml（拦截器）
+
+```xml
+<!--6、设置：拦截器HandlerInterceptor-->
+<mvc:interceptors>
+    <mvc:interceptor>
+        <mvc:mapping path="/**"/>
+        <bean class="com.yyy.config.MyInterceptor"/>
+    </mvc:interceptor>
+</mvc:interceptors>
+```
+
+## ③、实战（用户名登录）
+
+> 实现需求是什么？
+
+~~~
+需求：
+	一、从主页面选择：登录方式（密码登录、人脸识别）
+	二、用（springmvc拦截器）对登录（拦截）
+      		1、密码登录（放行）
+            2、人脸识别登录（session存在）放行
+            3、人脸识别登录（session不存在） 拦截， 跳转（登录页面）
+    三、成功登录，将记录session, 人脸识别入口，可直接访问（成功登录页面）。
+    四、登录成功页面，有（存在）注销功能按钮。
+~~~
+
+> 第一步：构建出一个SpringMVC框架（能跑起来）的maven项目
+
+> 第二步：构建一个主页index.jsp（存在，密码登录、人脸识别）2种登录方式
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210130180236500.png" alt="image-20210130180236500" style="zoom:50%;" />
+
+~~~jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+  <head>
+    <title>访问主页</title>
+  </head>
+
+  <body>
+    <h1>登录方式：选择页面</h1><hr/>
+
+     <a href="${pageContext.request.contextPath}/passwordToLogin">密码登录入口</a>
+     <a href="${pageContext.request.contextPath}/faceRecognitionEntry">人脸识别入口</a>
+  </body>
+</html>
+~~~
+
+> 第三步：构建基本（页面框架）
+
+~~~
+页面如下：
+	1、index.jsp（主页面）
+	2、login.jsp (密码登录界面)
+	3、success.jsp (成功登录页面)
+~~~
+
+![image-20210130173949119](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210130173949119.png)
+
+
+
+> 第四步：编写login.jsp登录页面
+
+~~~jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>登录页面</title>
+
+    <style>
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>登录页面</h1><hr/>
+
+    <a class="button" href="${pageContext.request.contextPath}/index.jsp">重新选择（登录方式）<a>
+    <hr>
+    <form action="${pageContext.request.contextPath}/getLoginInfo" method="post">
+        用户名：<input type="text" name="username" required="required"><br/>
+        密码：<input type="text" name="password" required="required"><br/>
+        <input type="submit" value="提交按钮">
+    </form>
+</body>
+</html>
+
+~~~
+
+> 第五步：编写pojo层（用户类User）存放（账号、密码）
+
+~~~
+/**
+ * Author: 老洋
+ * Date:  2021/1/30 16:23
+ */
+package com.yyy.pojo;
+
+
+/**
+ * 存放用户：用户名、密码的类
+ */
+public class User {
+    private String username;
+    private String password;
+
+    public User() {
+
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+}
+~~~
+
+> 第六步：创建一个config层（拦截器）LoginInterceptor.class
+
+~~~
+实现该下功能：
+			1、密码登录（放行）
+            2、人脸识别登录（session存在）放行
+            3、人脸识别登录（session不存在） 拦截， 跳转（登录页面）
+~~~
+
+~~~~java
+/**
+ * Author: 老洋
+ * Date:  2021/1/30 16:09
+ */
+package com.yyy.config;
+
+
+import com.yyy.pojo.User;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * 登录：拦截器
+ *      1、访问：密码登录入口， 放行操作
+ *      2、访问：人脸识别入口， session存在， 放行操作
+ *      3、访问：访问（人脸入口）session不存在，跳转到（密码登录页面）
+ */
+public class LoginInterceptor implements HandlerInterceptor {
+    //只使用第一个：（前置通知），第一重拦截 （注释因为，用配置文件改写：实现了！！！！）
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //通过获取：访问路径，如果是访问（密码登录入口）直接放行
+//        String requestURI = request.getRequestURI();
+//        String passwordEntryString = "/test/passwordToLogin";
+//        String getLoginInfoString = "/test/getLoginInfo";
+//        String logOutString = "/test/logOut";
+//
+//        System.out.println(requestURI);
+//
+//        if(requestURI.equals(passwordEntryString) || requestURI.equals(getLoginInfoString) || requestURI.equals(logOutString)){
+//            return true;        //放行
+//        }
+
+        //获取session值，若存在放行
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        System.out.println(user);
+        if(user != null){
+            return true;
+        }
+
+        //访问（人脸入口）session不存在，跳转到（密码登录页面）
+        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+        return false;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+
+    }
+}
+~~~~
+
+> 第七步：配置拦截器
+
+~~~xml
+    <!--5、配置：拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--设置：拦截所有-->
+            <mvc:mapping path="/**"/>
+            <bean class="com.yyy.config.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+~~~
+
+> 第八步：编写控制器(javaController)
+
+~~~java
+/**
+ * Author: 老洋
+ * Date:  2021/1/30 16:02
+ */
+package com.yyy.controller;
+
+import com.yyy.pojo.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+@Controller
+public class TestController {
+    //密码登录入口
+    @RequestMapping("/passwordToLogin")
+    public String passwordToLogin(){
+        return "login";
+    }
+
+    //获取登录信息
+    @RequestMapping("/getLoginInfo")
+    public String getLoginInfo(HttpServletRequest request, String username, String password){
+        User user = new User(username, password);
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+
+        return "success";
+    }
+
+    //人脸识别入口
+    @RequestMapping("/faceRecognitionEntry")
+    public String faceRecognitionEntry(){
+        return "success";
+    }
+
+    //注销登录
+    @RequestMapping("/logOut")
+    public String logOut(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.invalidate();
+
+        return "login";
+    }
+}
+~~~
+
+> 第九步：拦截器（添加不拦截的servlet）
+
+~~~xml
+    <!--5、配置：拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--设置：拦截所有-->
+            <mvc:mapping path="/**"/>
+
+            <!--将一些：servlet除外-->
+            <mvc:exclude-mapping path="/passwordToLogin"/> <!--密码登录（不拦截）-->
+            <mvc:exclude-mapping path="/getLoginInfo"/> <!--密码表单提交（不拦截）-->
+            <mvc:exclude-mapping path="/logOut"/>       <!--注销（不拦截）-->
+
+            <bean class="com.yyy.config.LoginInterceptor"/>
+
+        </mvc:interceptor>
+    </mvc:interceptors>
+~~~
+
+> 第十步：编写成功页面
+
+~~~jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>登录成功页面</title>
+</head>
+<body>
+    <h1>登录成功</h1><hr/>
+    <span>祝贺您：${user.username}</span>
+    <hr/>
+    <a class="button" href="${pageContext.request.contextPath}/logOut">注销登录</a>
+    <a class="button" href="${pageContext.request.contextPath}/index.jsp">回到主页面</a>
+</body>
+</html>
+~~~
+
+## ④、参考博客
+
+> 狂神博客：
+>
+> https://mp.weixin.qq.com/s/NWJoYiirbkSDz6x01Jji3g
