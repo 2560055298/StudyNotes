@@ -1016,3 +1016,64 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 > .*(..)方法（所有参数）
 >
 > https://blog.csdn.net/weixin_38362455/article/details/81837174
+
+
+
+# 9、狂神笔记链接（仅参考）
+
+> 首推官网
+> https://docs.spring.io/spring-framework/docs/5.3.4-SNAPSHOT/reference/html/core.html#spring-core
+
+
+
+> 1、概述及IOC理论推导
+>
+> https://mp.weixin.qq.com/s/VM6INdNB_hNfXCMq3UZgTQ
+
+
+
+> 2、快速上手Spring
+>
+> https://mp.weixin.qq.com/s/Sa39ulmHpNFJ9u48rwCG7A
+
+
+
+> 3、依赖注入（DI）
+>
+> https://mp.weixin.qq.com/s/Nf-cYENenoZpXqDjv574ig
+
+
+
+> 4、自动装配
+>
+> https://mp.weixin.qq.com/s/kvp_3Uva1J2Q5ZVqCUzEsA
+
+
+
+> 5、使用注解开发
+>
+> https://mp.weixin.qq.com/s/dCeQwaQ-A97FiUxs7INlHw
+
+
+
+> 6、静态/动态代理模式
+>
+> https://mp.weixin.qq.com/s/McxiyucxAQYPSOaJSUCCRQ
+
+
+
+> 7、AOP就是这么简单
+>
+> https://mp.weixin.qq.com/s/zofgBRRrnEf17MiGZN8IJQ
+
+
+
+> 8、整合Mybatis
+>
+> https://mp.weixin.qq.com/s/gXFMNU83_7PqTkNZUgvigA
+
+
+
+> 9、声明式事务
+>
+> https://mp.weixin.qq.com/s/mYOBJdygHDcXPYBls7cxUA

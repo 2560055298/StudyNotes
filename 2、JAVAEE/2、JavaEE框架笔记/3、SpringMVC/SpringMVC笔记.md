@@ -2168,3 +2168,58 @@ public String downloads(HttpServletResponse response ,HttpServletRequest request
 </beans>
 ~~~
 
+
+
+# 15、狂神笔记链接（仅参考）
+
+> 首推官网:
+>
+> https://docs.spring.io/spring-framework/docs/5.3.4-SNAPSHOT/reference/html/web.html#spring-web
+
+
+
+> 1、什么是SpringMVC
+>
+> https://mp.weixin.qq.com/s/yuQqZzAsCefk9Jv_kbh_eA
+
+
+
+> 2、第一个MVC程序
+>
+> https://mp.weixin.qq.com/s/8ddT6FD0Y4f3XdbEz0aqpQ
+
+
+
+> 3、RestFul和控制器
+>
+> https://mp.weixin.qq.com/s/3EtyzJohOVGz62nEYLhKHg
+
+
+
+> 4、数据处理及跳转
+>
+> https://mp.weixin.qq.com/s/1d_PAk2IIp-WWX2eBbU3aw
+
+
+
+> 5、整合SSM框架
+>
+> https://mp.weixin.qq.com/s/SDxqGu_il3MUCTcN1EYrng
+
+
+
+> 6、Json交互处理
+>
+> https://mp.weixin.qq.com/s/RAqRKZJqsJ78HRrJg71R1g
+
+
+
+> 7、Ajax研究
+>
+> https://mp.weixin.qq.com/s/tB4YX4H59wYS6rxaO3K2_g
+
+
+
+> 8、拦截器+文件上传下载
+>
+> https://mp.weixin.qq.com/s/NWJoYiirbkSDz6x01Jji3g
