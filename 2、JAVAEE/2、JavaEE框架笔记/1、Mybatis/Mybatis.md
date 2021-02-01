@@ -219,11 +219,56 @@ public interface IUserDao {
 
 
 
-## 2.3、where标签
+## 2.3、set标签
+
+> 用于更新语句：update 表名 set 
+
+~~~xml
+<!--注意set是用的逗号隔开-->
+<update id="updateBlog" parameterType="map">
+  update blog
+     <set>
+         <if test="title != null">
+            title = #{title},
+         </if>
+         <if test="author != null">
+            author = #{author}
+         </if>
+     </set>
+  where id = #{id};
+</update>
+~~~
+
+
+
+## 2.4、choose标签
+
+~~~xml
+<select id="queryBlogChoose" parameterType="map" resultType="blog">
+  select * from blog
+   <where>
+       <choose>
+           <when test="title != null">
+                title = #{title}
+           </when>
+           <when test="author != null">
+              and author = #{author}
+           </when>
+           <otherwise>
+              and views = #{views}
+           </otherwise>
+       </choose>
+   </where>
+</select>
+~~~
+
+
+
+## 2.5、foreach标签
 
 ![image-20201106164831576](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201106164831576.png)
 
-## 2.4、sql和include标签
+## 2.6、sql和include标签
 
 ![image-20201106170422310](C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20201106170422310.png)
 
