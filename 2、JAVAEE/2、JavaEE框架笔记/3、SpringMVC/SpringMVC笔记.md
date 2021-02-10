@@ -355,10 +355,6 @@
 	代替了底层的：HandlerMapping 和 HandlerAdapter
 ~~~
 
-
-
-
-
 - **第六步：**写一个控制器， 并且使用注解
 
 ![image-20210102191444966](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210102191444966.png)
