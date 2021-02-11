@@ -168,7 +168,7 @@
 
 ![image-20210210233455855](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210210233455855.png)
 
-## 3.10、图像标签src
+## 3.10、图像标签img
 
 ~~~html
 <!DOCTYPE html>
@@ -557,7 +557,7 @@
                 value：提交后的值
                 name：分组名称（相同才能实现：单选）
             -->
-            <input type="radio" value="boy" name="sex">男
+            <input type="radio" value="boy" name="sex" checked>男
             <input type="radio" value="girl" name="sex">女
         </p>
     </form>
@@ -577,12 +577,235 @@
 <body>
     <form action="pictureWeb.html" method="get">
         <p>
-            <input type="checkbox" name="hobby" value="sleep"/>睡觉
+            <input type="checkbox" name="hobby" value="sleep" checked/>睡觉
             <input type="checkbox" name="hobby" value="sing"/>唱歌
             <input type="checkbox" name="hobby" value="chat"/>聊天
             <input type="checkbox" name="hobby" value="play"/>玩游戏
         </p>
     </form>
+</body>
+</html>
+~~~
+
+## 10.5、按钮提交
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单学习</title>
+</head>
+<body>
+    <form action="pictureWeb.html" method="get">
+        <p>
+            <!--普通按钮：点击不会提交-->
+            <input type="button" name="btn" value="普通按钮">
+            
+            <!--图片按钮：点击会提交-->
+            <input type="image" src="../resources/images/taobao.png"  value="图片跳转">
+
+            <!--重置按钮：点击不会提交-->
+            <input type="reset" value="重置">
+
+            <!--提交按钮：点击提交-->
+            <input type="submit" value="提交">
+        </p>
+
+    </form>
+</body>
+</html>
+~~~
+
+## 10.6、下拉框
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单学习</title>
+</head>
+<body>
+    <form action="pictureWeb.html" method="get">
+    
+        <p>
+            <!--下拉框-->
+            国家：
+            <select name="listName">
+                <option value="China" >中国</option>
+                <option value="America" >美国</option>
+                <option value="Korea">韩国</option>
+                <option value="Japan" selected>日本</option>
+            </select>
+        </p>
+        
+    </form>
+</body>
+</html>
+~~~
+
+## 10.7、文本域、文件域
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单学习</title>
+</head>
+<body>
+    <form action="pictureWeb.html" method="get">
+        <!--文本域:textarea-->
+        <p>
+
+            反馈信息：<textarea name="area" cols="30" rows="10"></textarea>
+        </p>
+
+        <!--文件域:input type="file"-->
+        <p>
+            <input type="file" name="files">
+        </p>
+    </form>
+</body>
+</html>
+~~~
+
+## 10.8、简单验证（和）滑块
+
+~~~
+1、邮件验证
+2、URL验证
+3、数字（变大、变小）
+4、滑块
+5、搜索框
+~~~
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单学习</title>
+</head>
+<body>
+    <form action="pictureWeb.html" method="get">
+        <!--邮件验证-->
+        <p>邮箱：
+            <input type="email" name="email">
+        </p>
+
+        <!--URL-->
+        <p>URL:
+            <input type="url" name="url">
+        </p>
+
+        <!--数字-->
+        <p>商品数量：
+            <input type="number" name="num" min="0" max="20" step="2">
+        </p>
+
+        <!--滑块-->
+        <p>音量：
+            <input type="range" name="voice" min="0" max="100" step="5">
+        </p>
+
+        <p>搜索框：
+            <input type="search" name="search">
+        </p>
+
+    </form>
+</body>
+</html>
+~~~
+
+## 10.9、表单的应用
+
+~~~
+1、只读：readonly
+2、隐藏：hidden
+3、点击标签：选中文本框 label
+4、禁用：disable
+~~~
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单学习</title>
+</head>
+<body>
+    <form action="pictureWeb.html" method="get">
+        <!--用户名：实现只读readonly-->
+        <p>
+            用户名：<input type="text" name="username" value="root" readonly>
+        </p>
+
+        <!--密码框：实现隐藏hidden-->
+        <p>
+            密码：<input type="password" name="password" hidden>
+        </p>
+
+        <!--点击标签：选中文本框-->
+        <label for="myInfo">点击进入文本框：</label>
+        <input type="text" id="myInfo" name="info">
+
+        <p>
+            <!--重置按钮：通过disable禁用-->
+            <input type="reset" value="重置" disabled>
+
+            <!--提交按钮：点击提交-->
+            <input type="submit" value="提交">
+        </p>
+
+    </form>
+</body>
+</html>
+~~~
+
+## 10.10、表单的初级验证
+
+~~~
+1、placeholder：文本框（内部，初始提示信息），点击后消失
+2、required：文本框（非空判断）
+3、pattern：正则表达式（搜索：常用正则表达式）
+~~~
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单学习</title>
+</head>
+<body>
+<form action="pictureWeb.html" method="get">
+
+    <!--文本框内（初始提示，点击消失）placeholder-->
+    <p>
+        用户名：<input type="text" name="username" placeholder="请输入用户名">
+    </p>
+
+    <!--文本框：非空required-->
+    <p>
+        密码：<input type="password" name="password" required>
+    </p>
+
+    <!--邮件验证：利用正则表达式-->
+    <p>邮箱：
+        <input type="email" name="email" pattern="/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/">
+    </p>
+
+    <p>
+        <!--重置按钮：点击不会提交-->
+        <input type="reset" value="重置" >
+
+        <!--提交按钮：点击提交-->
+        <input type="submit" value="提交">
+    </p>
+
+</form>
 </body>
 </html>
 ~~~
