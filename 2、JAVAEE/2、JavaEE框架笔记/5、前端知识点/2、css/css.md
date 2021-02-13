@@ -265,3 +265,445 @@
 
 
 ## 2.2、层次选择器
+
+### 2.2.1、后代选择器
+
+~~~css
+/*后代选择器：祖爷爷、爷爷、父亲、我*/
+body p{
+    background:#2efffd;
+}
+~~~
+
+### 2.2.2、子选择器
+
+~~~css
+/*子选择器：只有一代，如：爷爷、父亲*/
+body>p{
+    background: #c97bff;
+}
+~~~
+
+### 2.2.3、相邻兄弟选择器
+
+~~~css
+/*相邻兄弟选择器(同辈)：当前.class + p， （下一行）为（p）类型，才选中,否则无效*/
+.xiongdi + p{
+    background: palevioletred;
+}
+~~~
+
+### 2.2.4、通用选择器
+
+~~~css
+/*通用选择器（同辈）：当前行下面所有（相同标签的同辈）*/
+.xiongdi~p{
+    background: yellow;
+}
+~~~
+
+
+
+## 2.3、结构（伪类）选择器
+
+1、选择子元素：==（第一个、最后一个）==
+
+~~~css
+/*伪类选择器：ul p 中的（第一个）（子元素）*/
+ul p:first-child{
+    background: #c97bff;
+}
+
+ /*伪类选择器：ul p 中的（最后一个）（子元素）*/
+ul p:last-child{
+    background: #ff7090;
+}
+~~~
+
+2、通过==顺序选择==：父类元素中的（某个元素）
+
+~~~css
+ /*伪类选择器(按顺序)：先找到p的父类body，在通过父类的（子类中）顺序第2个元素（为p时选中），*/
+ p:nth-child(2){
+ 	background: yellow;
+ }
+~~~
+
+3、通过==类型选择==：父类元中的（某个元素）
+
+~~~css
+ /*伪类选择器(按类型)：先找到p的父类body, 再从body的（子类中）找到（p类型）的（第2个元素）*/
+ p:nth-of-type(2){
+ 	background: green;
+ }
+~~~
+
+4、==鼠标悬停==：让某个元素（样式改变）
+
+~~~css
+/*鼠标悬浮上：文字变色*/
+a:hover{
+    color: aquamarine;
+}
+~~~
+
+## 2.4、属性选择器（必会）
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>属性选择器</title>
+
+        <style>
+            .demo a{
+                color: #c97bff;
+                float: left;    /*左浮动：首先会自动切换为（块级元素），然后左浮动*/
+                display: block;
+                height: 50px;   /*若不是（块级元素）：设置宽、高是（无效的）*/
+                width: 50px;
+                border-radius: 10px;
+                background: beige;
+                text-align: center;
+                text-decoration: none;
+                margin-right: 5px;  /*外边距：右边推5px, 从第一个元素的（右边5px）起始*/
+                font: 20px/50px Arial;  /*50为：line-height属性是指文本行基线之间的距离，而不是字体的大小*/
+            }
+
+            /*1、a标签的属性：（存在）id属性的元素*/
+            a[id]{
+                background: yellow;
+            }
+
+            /* 2、a标签的属性：（存在）id=first的元素*/
+            a[id=first]{
+                background: #68ffdb;
+            }
+
+             /* 3、a标签的属性：class中(仅有）links item first的元素 */
+            a[class="links item first"]{
+                background: palevioletred;
+            }
+
+            /*4、a标签的属性：class中（存在）links的元素*/
+            a[class*= links]{
+                background: deepskyblue;
+            }
+
+            /*5、a标签的属性：存在href内容中（前缀为http)的元素*/
+            a[href^="http"]{
+                background: #3bffec;
+            }
+
+            /*6、a标签属性：存在href内容中（后缀为doc）的元素*/
+            a[href$=doc]{
+                background: cornflowerblue;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <p class="demo">
+            <a href="https://www.baidu.com" class="links item first" id="first">1</a>
+            <a href="https://www.yangzaikongzhongfei.com">2</a>
+            <a href="images/123.html" class="links item active" target="_blank" title="test">3</a>
+            <a href="images/123.png" class="links item">4</a>
+            <a href="images/123.png"class="links item">5</a>
+            <a href="abc" class="links item">6</a>
+            <a href="/a.pdf" class="links item">7</a>
+            <a href="/abc.pdf" class="links item">8</a>
+            <a href="abc.doc" class="links item">9</a>
+            <a href="abcde.doc" class="links item last">10</a>
+        </p>
+    </body>
+</html>
+~~~
+
+> 总结
+
+~~~
+（属性)选择器：支持正则表达式
+	1、属性名 = 属性值     （绝对等于：仅存在属性值）才选中
+	2、属性名 *= 属性值     (相对等于：包含属性值) 就选中
+	3、属性名 ^= 属性值     (以该：属性值为前缀)就选中
+	4、属性名 $= 属性值     (以该：属性值为后缀)就选中
+~~~
+
+
+
+# 3、美化网页
+
+## 3.1、为什么要美化页面？
+
+~~~
+原因：
+	1、传递信息，凸显主题
+	2、提高用户体验。
+~~~
+
+## 3.2、字体样式
+
+> span标签作用：突出重要的文字
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>美化网页</title>
+    <style>
+        /*span是：行内元素*/
+        span{
+            /*
+                oblique斜体:
+                bolder粗体:             (等价于)font-weight: 900;
+                25px字体大小：           (等价于)font-size:25px;
+                新宋体（字体）            (等价于)font-family: 新宋体;
+            */
+            font: oblique bolder 25px "新宋体";
+
+            /*字体颜色*/
+            color: aquamarine;
+            
+        }
+    </style>
+
+</head>
+
+    <body>
+        我在复习css, <span>剑客白丁</span>
+    </body>
+
+</html>
+~~~
+
+## 3.3、文本样式
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210213161902296.png" alt="image-20210213161902296" style="zoom: 67%;" />
+
+---
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>文本格式</title>
+
+        <style>
+            /*
+              1、文本颜色(3种)如下：
+                   color:#68ffdb;                   68为R, ff为G, db为B
+                   color:rgb(11, 22, 33);           11为R, 22为G, 33为B
+                   color: rgba(0, 0, 0, 0.2);       RGBA , A为透明度（0~1之间）
+            */
+            .title1{
+                color: #cdb534;
+            }
+
+            /*
+                2、文本的对齐方式（3种）
+                        text-align: left;        居左
+                        text-align: center;      居中
+                        text-align: right;       右边
+            */
+            .title1{
+                text-align: center;
+            }
+
+            /*3、首行缩进*/
+            .p1{
+                text-indent: 2em;  /*缩进：两个字*/
+            }
+
+            /*4、设置：行高*/
+            .p2{
+                background: aquamarine;
+                height: 40px;
+                line-height: 40px;      /*当 行高 == 高度， 默认是（正中水平轴显示）*/
+            }
+
+            /*
+                5、装饰（实例如下：）
+                    ①、去除a（超链接）的下滑线：
+                    ②、给p标签添加（上、中、下）划线
+                        上划线：text-decoration: overline;
+                        中划线：text-decoration: line-through;
+                        下划线：text-decoration: underline;
+            
+            */
+            .a1{
+                text-decoration: none;      /*去除下划线*/
+            }
+
+            .p3{
+                text-decoration: line-through;      /*添加：中划线*/
+            }
+
+            /*6、文本图片：水平对齐*/
+            img, span{
+                vertical-align: middle;         
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <p class="title1">孔子的三个接班人</p>
+        <p class="p1">颜回虽然是孔子内定的接班人，但因为死在孔子之前，没有接替老师传道，因此在《论语》中无法享受“颜子”这一 头衔。有子和曾子之所以可以称“子”，乃是因为他们在孔子死后，曾接替老师传道。</p>
+        <p class="p2">当一个大宗师的思想体系过于丰富的时候，从他的衣钵传人来接近他，或许是一个好办法。对于大圣先师孔子来说， 尤是如此。</p>
+        <p class="p3">翻过《论语》的人都知道孔子指定的衣钵传人是颜回。孔子什么都好，就是不肯轻易赞美人，尤其是比他年纪小的人 。只对颜回例外。除非孔子不开口，开口就说颜回的好话。师徒俩感情好着呢。</p>
+        <p>《史记·孔子世家》记载，孔子周游列国期间，路过匡地，遇到了危险。匡人对孔子发难，好险没要了孔子的命。逃 难过程中，有些弟子和老师走散了，其中就有颜回。颜回好不容易赶了上来，和老师会合。孔子见到颜回，激动得老泪纵横， 用颤抖的声音说：“我还以为再也见不到你了呢！”颜回赶紧双膝跪倒，流着泪和孔子说：“先生您还在，我颜回怎么敢死在 前头？”</p>
+
+        <a href="" class="a1">我有下滑线</a>
+
+        <p>
+            <img src="images/picture.png" alt="图片加载不出来哦！！">
+            <span>12312312312312</span>
+        </p>
+
+    </body>
+
+</html>
+~~~
+
+## 3.4、超链接伪类（和）阴影
+
+-  a:hover	==悬浮==
+- a:active     ==鼠标：按住（未释放的状态）==
+- text-shadow  ==添加：文本阴影==
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="UTF-8">
+            <title>超链接伪类</title>
+
+        <style>
+            a{
+                text-decoration: none;      /*去掉：下划线*/
+                color: #000000;
+            }
+
+            /*1、悬浮：字体变大、颜色更替*/
+            a:hover{
+                font-size: 18px;
+                color: #e0d363;
+            }
+
+            /*2、鼠标：按住（未释放的状态）*/
+            a:active{
+                color: crimson;
+            }
+
+            /*
+                3、添加：文本阴影
+                        ①、10px当前文字：x轴 + 10px
+                        ②、8px当前文字：y轴 + 8px
+                        ③、模糊的距离：越小越清晰
+                        ④、#68ffdb：阴影的颜色
+            */
+            .price{
+                text-shadow: 10px 8px 0px #68ffdb;
+            }
+        </style>
+
+
+    </head>
+
+    <body>
+            <img src="images/book.png" alt="人类简史书籍找不到">
+            
+            <p>
+                作者: <a href="">[以色列] 尤瓦尔·赫拉利</a>
+            </p>
+
+            <p class="price">
+                定价: <a href="">CNY 68.00</a>
+            </p>
+    </body>
+</html>
+~~~
+
+## 3.5、列表
+
+> li标签：修改（标识符） list-style:
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210213185525288.png" alt="image-20210213185525288" style="zoom: 67%;" />
+
+
+
+## 3.6、添加背景
+
+> background: red url("images/car.png") 100px 100px  no-repeat ;
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>添加背景</title>
+
+        <style>
+            /*标签：选择器*/
+            div{
+                width: 500px;
+                height: 300px;
+                border: 4px solid #f57f92;
+            }
+
+            /*1、（重复图片）平铺：x轴 和 y轴*/
+            .div1{
+                background:url("images/car.png");
+            }
+
+            /*2、（重复图片）平铺：x轴*/
+            .div2{
+                background:url("images/car.png") repeat-x;
+            }
+
+            /*3、（重复图片）平铺：y轴*/
+            .div3{
+                background: url("images/car.png") repeat-y;
+            }
+
+            /*4、实现
+                 ①、div背景颜色：red
+                 ②、背景图片：url("images/car.png")
+                 ③、图片在div中坐标：(100px, 100px)
+                 ④、不平铺：no-repeat
+            .div4{
+                background: red url("images/car.png") 100px 100px  no-repeat ;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="div1"></div>
+        <div class="div2"></div>
+        <div class="div3"></div>
+        <div class="div4"></div>
+    </body>
+</html>
+~~~
+
+## 3.7、渐变背景
+
+> 直接网上找：
+>
+> https://www.grabient.com/
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210213222637021.png" alt="image-20210213222637021" style="zoom:50%;" />
+
+
+
+~~~css
+body{
+    background-color: #FFDEE9;
+    background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
+}
+~~~
+
