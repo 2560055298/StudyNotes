@@ -707,3 +707,215 @@ body{
 }
 ~~~
 
+
+
+# 4、盒子模型
+
+![image-20210214100003307](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210214100003307.png)
+
+---
+
+## 4.1、border（边框学习）
+
+~~~css
+border: 1px dashed red;			/*虚线*/
+border: 1px solid red;			/*实线*/
+~~~
+
+## 4.2、外边距、内边距学习
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210214114936162.png" alt="image-20210214114936162" style="zoom: 67%;" />
+
+- 外边距：margin
+
+~~~css
+讲解：
+	margin: 0;    				上下、左右都为0
+    margin: 0 auto;				上下为0， 左右（平分）
+    margin: 1px 2px 3px 4px;	顺时针：上、右、下、左（1px, 2px, 3px, 4px）
+	margin-(top、left、right、bottom)  还有这种写法
+~~~
+
+- 内边距：padding==如（外边距）一致==
+
+~~~css
+padding没有auto这一说法
+~~~
+
+## 4.3、求一个盒子的大小？
+
+~~~css
+margin + border + padding + 内容大小
+~~~
+
+
+
+## 4.4、圆角边框border-redis
+
+~~~css
+img{
+  border-radius: 61px;            /*图片的：宽为122, border-radius = 宽/2 时为圆角*/
+}
+~~~
+
+## 4.5、盒子阴影
+
+> 注意：参照物的选取
+
+~~~css
+<style>
+    #div01{
+        width: 124px;
+        /*注意：移至中心，需要（块元素）有（宽），因为初始块元素，宽为（整个屏幕）*/
+        margin: 227px auto;			
+
+    }
+
+img{
+    	/*图片的：宽为122, border-radius = 宽/2 时为圆角*/
+        border-radius: 136px;           
+    	/*shadow要写在：参照物体需选择图片，不然会（出现）白框*/
+        box-shadow: 20px 10px 100px #0ad0be; 
+}
+</style>
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210214175756304.png" alt="image-20210214175756304" style="zoom:33%;" />
+
+## 4.6、行内元素、块元素
+
+### 4.6.1、行内元素
+
+- 概念
+
+> 行内元素：inline element
+>
+> 也叫内联元素、内嵌元素等，只能容纳文本或其他内联元素。
+>
+> 元素样式为display : inline的都是行内元素。
+
+- 特点
+
+~~~
+①、（行内元素）和（其他元素）都在一行上
+②、设置宽度width 无效，设置高度height 无效，可以通过line-height来设置。
+③、
+④、内联元素只能容纳文本或者其他内联元素
+对行内元素，需要注意如下
+~~~
+
+> 1、
+> 2、
+> 3、设置margin 只有左右margin有效，上下无效。
+> 4、设置padding只有左右padding有效，上下则无效。注意元素范围是增大了，但是对元素周围的内容是没影响的。
+
+
+
+### 4.6.3、行内元素：标签
+
+~~~
+例如：
+    a – 锚点
+    br – 换行
+    em – 强调
+    img – 图片
+    input – 输入框
+    label – 表格标签
+    span – 常用内联容器，定义文本内区块
+    strong – 粗体强调
+    textarea – 多行文本输入框
+~~~
+
+## 4.7、块元素
+
+### 4.7.1、概念
+
+> 1、block element (块元素) 每个块级元素默认占一行高度
+>
+> 2、一行内添加一个块级元素后，一般无法添加其他元素（float浮动后除外）
+>
+> 3、两个块级元素连续编辑时，会在页面（自动换行）显示。
+>
+> 4、块级元素：可以包含块级，也可以包含行级元素。
+>
+> 5、元素样式的display:block都是块级元素。
+
+
+
+### 4.7.2、inline元素的特点
+
+~~~
+①、总是在新行上开始；
+②、高度，行高以及外边距和内边距都可控制；
+③、宽度缺省是它的容器的100%，除非设定一个宽度。
+④、它可以容纳内联元素和其他块元素
+~~~
+
+
+
+### 4.7.3、块元素：标签
+
+~~~css
+div – 常用块级容易，也是CSS layout的主要标签
+h1~h6标题
+p – 段落
+form – 交互表单
+table – 表格
+ol – 有序表单
+ul – 无序列表
+dl – 定义列表
+hr – 水平分隔线
+menu – 菜单列表
+~~~
+
+## 4.8、行内元素、块元素对比
+
+==1、对比一==
+
+~~~css
+ div{
+                width: 200px;
+                height: 200px;
+                border: 2px dashed dodgerblue;
+            }
+
+            span{
+                width: 200px;
+                height: 200px;
+                border: 2px dashed dodgerblue;
+            }
+~~~
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210214185219118.png" alt="image-20210214185219118" style="zoom: 67%;" />
+
+---
+
+==2、切换（块与行）==
+
+~~~css
+ /*
+                display: inline;                设置变为：行内元素
+                display: block;                 设置变为：块元素
+                display: inline-block;          既为块内元素， 又是行内元素
+*/
+
+div{
+    width: 200px;
+    height: 200px;
+    border: 2px dashed dodgerblue;
+    display: inline-block;
+}
+
+span{
+    width: 200px;
+    height: 200px;
+    border: 2px dashed dodgerblue;
+    display: inline-block;          /*变为：既为块内元素， 又是行内元素*/
+}
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210214185742205.png" alt="image-20210214185742205" style="zoom: 50%;" />
+
+---
