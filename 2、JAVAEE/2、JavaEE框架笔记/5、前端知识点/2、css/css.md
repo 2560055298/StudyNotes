@@ -485,6 +485,8 @@ a:hover{
 
 ---
 
+> text-align运用在块级元素中，使其中的文本对齐。事实上这句话的意思是运用在块级元素中text-align会使其包含行内元素对齐。
+
 ~~~html
 <!DOCTYPE html>
 <html lang="en">
@@ -782,11 +784,31 @@ img{
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210214175756304.png" alt="image-20210214175756304" style="zoom:33%;" />
 
-## 4.6、行内元素、块元素
 
-### 4.6.1、行内元素
 
-- 概念
+---
+
+# 5、浮动
+
+## 5.1、标准文档流
+
+~~~
+1、（文档流）指的是元素（排版布局）过程中
+2、元素会默认自动从左往右，从上往下的流式排列方式。
+3、标准文档流包括：块级元素和行内元素。
+~~~
+
+![image-20210215110530608](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215110530608.png)
+
+
+
+
+
+## 5.2、行内元素、块元素
+
+### 5.2.1、行内元素
+
+- ==行内元素==（概念）
 
 > 行内元素：inline element
 >
@@ -794,24 +816,15 @@ img{
 >
 > 元素样式为display : inline的都是行内元素。
 
-- 特点
+- ==行内元素==（特点）
 
 ~~~
 ①、（行内元素）和（其他元素）都在一行上
 ②、设置宽度width 无效，设置高度height 无效，可以通过line-height来设置。
-③、
-④、内联元素只能容纳文本或者其他内联元素
-对行内元素，需要注意如下
+③、内联元素(只能容纳）（文本）或者其他（内联元素）
 ~~~
 
-> 1、
-> 2、
-> 3、设置margin 只有左右margin有效，上下无效。
-> 4、设置padding只有左右padding有效，上下则无效。注意元素范围是增大了，但是对元素周围的内容是没影响的。
-
-
-
-### 4.6.3、行内元素：标签
+- ==行内元素==(标签)
 
 ~~~
 例如：
@@ -826,34 +839,30 @@ img{
     textarea – 多行文本输入框
 ~~~
 
-## 4.7、块元素
+### 5.2.2、块元素
 
-### 4.7.1、概念
+- ==块元素==（概念）
 
 > 1、block element (块元素) 每个块级元素默认占一行高度
 >
-> 2、一行内添加一个块级元素后，一般无法添加其他元素（float浮动后除外）
+> 2、（一行内）添加一个块级元素后，一般（无法）添加其他元素（float浮动后除外）
 >
-> 3、两个块级元素连续编辑时，会在页面（自动换行）显示。
+> 3、（两个块级元素）连续编辑时，会在页面（自动换行）显示。
 >
 > 4、块级元素：可以包含块级，也可以包含行级元素。
 >
 > 5、元素样式的display:block都是块级元素。
 
-
-
-### 4.7.2、inline元素的特点
+- ==块元素==（特点）
 
 ~~~
 ①、总是在新行上开始；
 ②、高度，行高以及外边距和内边距都可控制；
 ③、宽度缺省是它的容器的100%，除非设定一个宽度。
-④、它可以容纳内联元素和其他块元素
+④、它（可以容纳）内联元素和其他块元素
 ~~~
 
-
-
-### 4.7.3、块元素：标签
+- ==块元素==：标签
 
 ~~~css
 div – 常用块级容易，也是CSS layout的主要标签
@@ -868,7 +877,7 @@ hr – 水平分隔线
 menu – 菜单列表
 ~~~
 
-## 4.8、行内元素、块元素对比
+### 5.2.3、比较（二者区别）
 
 ==1、对比一==
 
@@ -892,20 +901,21 @@ menu – 菜单列表
 
 ---
 
-==2、切换（块与行）==
+==2、行内元、块元素（互相切换）==
 
 ~~~css
  /*
                 display: inline;                设置变为：行内元素
                 display: block;                 设置变为：块元素
                 display: inline-block;          既为块内元素， 又是行内元素
+				display: none;					不显示，带码存在
 */
 
 div{
     width: 200px;
     height: 200px;
     border: 2px dashed dodgerblue;
-    display: inline-block;
+    display: inline-block;			 /*变为：既为块内元素， 又是行内元素*/
 }
 
 span{
@@ -918,4 +928,425 @@ span{
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210214185742205.png" alt="image-20210214185742205" style="zoom: 50%;" />
 
+~~~css
+ body{
+                margin: 0;
+            }
+
+            div{
+                width: 200px;
+                height: 200px;
+                border: 2px dashed dodgerblue;
+                display: inline-block;
+            }
+
+            span{
+                width: 200px;
+                height: 200px;
+                border: 2px dashed dodgerblue;
+                display: inline-block;          /*变为：既为块内元素， 又是行内元素*/
+                float: left;					/*进行：左浮动*/
+            }
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215093458191.png" alt="image-20210215093458191" style="zoom: 33%;" />
+
+## 5.3、脱离标准文档流的三种方法
+
+>   脱离标准文档流有三种方法：浮动、绝对定位、固定定位。
+
+
+
+## 5.4、display、float、clear
+
+> 首先：搞明白一点，浮动为了让（网页）保持（标准文档流，块元素自上而下， 行元素，自左到右）
+
+~~~css
+#father{
+   /*
+    display: inline;                设置变为：行内元素
+    display: block;                 设置变为：块元素
+    display: inline-block;          既为块内元素， 又是行内元素
+    display: none;					不显示，带码存在
+   */
+    border: 4px #000 solid;
+}
+
+.layer01{
+    border: 2px #68ffdb dashed;
+    display: inline-block;
+    float: left;
+}
+
+.layer02{
+    border: 2px #bff6f6 dashed;
+    display: inline-block;
+    float: left;
+}
+
+.layer03{
+    border: 2px #f57f92 dashed;
+    display: inline-block;
+    float: left;
+}
+
+.layer04{
+    border: 2px #FFDEE9 dashed;
+    /*拥有：
+        行内元素、块元素特性
+        在一行中排列， 是一个独立的块
+    */
+    display: inline-block;
+
+    /*左浮动，像气球一样，飘起来*/
+    float: left;
+
+    /*
+    	clear：right; 右侧不允许有（浮动元素），有则在（下一行）显示当前元素
+        clear:left;   左侧不允许有（浮动元素），有则在（下一行）显示当前元素
+        clear:both;	  左右两侧，都不允许
+        clear:none;	  有不有都行，按原样显示。
+    */
+    clear:both;
+}
+~~~
+
+==浮起来（不保证是）块元素时==
+
+![image-20210215120903665](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215120903665.png)
+
 ---
+
+==浮起来（保证是）块元素时==
+
+![](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215120746862.png)
+
+## 5.5、父级边框（塌陷问题）
+
+### 5.5.1、问题描述
+
+> 这是：违背了标准文档流，出现的问题
+
+![image-20210215122342269](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215122342269.png)
+
+---
+
+### 5.5.2、解决（父类）塌陷的方法
+
+- ==方法一==：增加（父元素）的（高度）
+
+> 用边框：把子元素（包裹起来）
+
+~~~css
+#father{
+    border: 4px #000 solid;
+    height: 500px;
+}
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215122827982.png" alt="image-20210215122827982" style="zoom: 33%;" />
+
+---
+
+==方法二==：网页最末端，添加一个（原生）div
+
+> div进行：若有左右浮动，则在（下一行）显示， 因为div没有浮动
+>
+> ​				所以(父级div)边框将（包裹它），它又是最末尾元素，所以就解决的了（父元素塌陷问题）
+
+~~~css
+<div class="clear"></div>
+
+.clear{
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+~~~
+
+==方法三==：overflow
+
+> overflow:hidden最简单的作用就是溢出隐藏
+>
+> overflow:内容会被修剪，但是浏览器会显示滚动条以便查看其余的内容。
+
+~~~
+#father{
+    border: 4px #000 solid;
+    overflow: hidden;
+}
+~~~
+
+==方法四==：通过给父类添加（伪类）  ==推荐这种！！！==
+
+> 通过伪类，达到（方法二）（添加div）的效果
+
+~~~css
+#father{
+    border: 4px #000 solid;
+}
+
+#father:after{
+    content: "";        /*空内容*/
+    display: block;     /*变成块， 相当于空div*/
+    clear: both;        /*左右若有浮动，再下一行显示*/
+}
+~~~
+
+### 5.5.3、（父类）塌陷总结
+
+- ==方法一：== 设置父类（高度）
+
+> 十分简单，但是（将高度写死）大于便需要修改
+
+
+
+-  ==方法二：== 增加空div 
+
+> 十分简单， 但是要改变html代码
+
+
+
+- ==方法三：== overflow
+
+> 用overflow: hidden时：多余则截断， 也是存在弊端的
+>
+> 用overflow: scroll时：出现滚动条（不美观）
+
+
+
+- ==方法四：==父类添加（伪类）（推荐）
+
+> 通过#father:after 伪类，实现只修改css，不改变html结构。模拟出div的效果（十分好）
+
+
+
+## 5.6、display和float对比
+
+- 相同点
+
+> 二者都可以：实现（行内元素） 转为（块元素）
+
+- 不同点
+
+> display： 不能浮动起来，所以不可以控制（方向）
+>
+> float：可以浮动起来，但是会出现（脱离标准文档流）， 出现（父级边框塌陷）问题
+
+
+
+
+
+# 6、定位
+
+## 6.1、相对定位：relative
+
+> 相对定位：
+>
+> ​		关键字：position : relative;
+>
+> ​		注意点：相对于（原来）的位置， 进行（指定偏移）， 相对定位（原来的位置：是保留的）只是    						没有显示出来。
+
+~~~css
+ #div01{
+     width: 300px;
+     height: 50px;
+     border: 2px dashed gold;
+     background-color: #f57f92;
+
+     /*相对定位：正数为排斥（远离）， 负数为（相吸）*/
+     position: relative;
+     
+     top: -20px;			/*负数：接近上*/
+     bottom: 40px;			/*整数：远离下*/
+     right:30px;			/*正数：远离右*/
+     left: 40px;			/*整数：远离左*/
+}
+~~~
+
+
+
+## 6.2、绝对定位：absolute
+
+> 1、绝对定位关键字：position: absolute;
+>
+> 2、绝对定位：
+>
+> ​				如果没有选取（父类作为：参考）， 则将：游览器作为（定位对象）
+>
+> ​			    如果选择父类作为参考（父类中加上：position:relative; ）让父类保持原状，进行（定位）
+>
+> ​				有父类的（绝对定位）， 不能超过其边框
+>
+> 3、绝对定位：不会保留之前的（位置）
+
+~~~css
+<div id="father">
+            <div id="div01"></div>
+</div>
+
+#father{
+    border: 3px solid #ff7090;
+    /*自己选取了（父类）， 不加这句，则默认选择（游览器）*/
+    position: relative;
+}
+
+#div01{
+    width: 300px;
+    height: 50px;
+    border: 2px dashed gold;
+    background-color: #f57f92;
+    /*开启：绝对定位*/
+    position: absolute;
+    right: 10px;
+}
+~~~
+
+
+
+## 6.3、固定定位fixed
+
+> 关键字：position: fixed;
+
+~~~css
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>固定定位</title>
+
+        <style>
+            body{
+                height: 1200px;
+            }
+
+            /*绝对定位div*/
+            #juedui{
+                width: 100px;
+                height: 100px;
+                background-color: #f57f92;
+                position: absolute;         /*绝对定位；父类（游览器）*/
+                right:0px;
+                bottom: 0px;
+            }
+
+            /*固定定位div*/
+            #guding{
+                width: 50px;
+                height: 50px;
+                background-color: #3bffec;
+
+                /*固定定位：关键字*/
+                position: fixed;
+                right: 0px;
+                bottom: 0px;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div id="juedui">
+            我是绝对定位
+        </div>
+
+        <div id="guding">
+            我是固定定位
+        </div>
+    </body>
+</html>
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215162611830.png" alt="image-20210215162611830" style="zoom: 50%;" />
+
+## 6.4、z-index、opacity
+
+> z-index：为图层（0为第一层）==图层需要（相对、绝对、固定）定位后才有效==
+>
+> opacity：透明度
+
+![image-20210215174640604](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210215174640604.png)
+
+
+
+> 实现b站：触摸视频（变暗），利用==图层实现==
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>图层</title>
+
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body>
+        <div id="father">
+            <img src="images/1.png" alt="">
+            <div id="son">这是图层的效果，你看到了吗？</div>
+        </div>
+    </body>
+</html>
+~~~
+
+~~~css
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#father{
+    width: 567px;
+    height: 292px;
+    /*开启相对定位：为子元素（绝对定位做准备）*/
+    position: relative;
+}
+
+img{
+    /*以（div）做为父元素， 进行绝对定位*/
+    position: absolute;
+    /*设置图层（层数）为：999*/
+    z-index: 999;
+}
+
+#son{
+    width: 566px;
+    height: 292px;
+    top: 0;
+    border: 1px solid #7d7c7c;
+    text-align: center;
+    line-height: 292px;
+    font-size: 25px;
+    color: #ffffff;
+
+    background: #404040;
+
+    /*以（div）做为父元素， 进行绝对定位*/
+    position: absolute;
+    /*设置图层（层数）为：666, 图层需要（相对、绝对、固定：定位后才有效）*/
+    z-index: 666;
+    /*设置：透明度为70%*/
+    opacity:0.7;
+}
+
+img:hover{
+    /*通过（触摸）伪类， 进行（修改图层：层数）*/
+    z-index: 555;
+}
+~~~
+
+
+
+# 7、动画
+
+~~~
+去搜css动画、js动画、canvas动画
+gitHub、码云、各种网站
+~~~
+
+
+
+
+
+# 8、总结
