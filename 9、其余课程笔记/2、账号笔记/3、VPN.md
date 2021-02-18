@@ -46,7 +46,7 @@
 
 ### 1.2.4、域名==解析==服务器
 
-> 将域名：解析为VPS服务器公网地址
+> 将域名：解析为VPS服务器公网地址, 填写后ping 域名  试试绑定好没有
 
 
 
@@ -191,11 +191,23 @@ docker run -dt --name trojan  --restart=always -v /config:/config -p 443:443 tro
 
 ### 1.2.13、==powerShell运行==
 
-> powerShell运行：config.json文件，打开SwitchyOmega，即可使用。
+> 修改：config.json文件（添加域名、和服务器密码）
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210217214728142.png" alt="image-20210217214728142" style="zoom: 50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210217214618350.png" alt="image-20210217214618350" style="zoom: 67%;" />
+
+---
+
+> powerShell运行：config.json文件，打开SwitchyOmega，即可使用。
+>
 > 可以：编写为cmd（或）bat脚本
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210217174315177.png" alt="image-20210217174315177" style="zoom:50%;" />
+
+
 
 > 打开：SwitchyOmega
 
@@ -241,4 +253,16 @@ docker run -dt --name trojan  --restart=always -v /config:/config -p 443:443 tro
 
 
 
+
+# 3、BBR加速（Google）
+
+> Vultr关于CentOS7安装BBR文档
+>
+> https://www.vultr.com/docs/how-to-deploy-google-bbr-on-centos-7
+
+
+
+> 一键安装脚本：gitHub
+>
+> https://github.com/chiakge/Linux-NetSpeed
 
