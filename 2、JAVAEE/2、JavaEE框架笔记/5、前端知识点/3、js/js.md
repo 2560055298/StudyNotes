@@ -254,6 +254,8 @@
 
 ~~~javascript
 <script>
+    'use strict' 		//严格检查模式
+
     let str1 = 'laoyang';		//单引号
 
     let str2 = "laoyang";	    //双引号
@@ -278,9 +280,91 @@
 
 ---
 
-### 3.1.4、模板字符串
+### 3.1.4、字符串（引用）
 
+> 引用方法 丶${变量名}丶
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210218230730197.png" alt="image-20210218230730197" style="zoom:50%;" />
+
+---
+
+### 3.1.5、字符串长度
+
+> 字符串长度：字符串名.length  (同java)
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210218231102814.png" alt="image-20210218231102814" style="zoom:50%;" />
+
+---
+
+
+
+### 3.1.6、字符串的可变性
+
+> 字符串：同java不可变
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210218231455672.png" alt="image-20210218231455672" style="zoom:50%;" />
+
+---
+
+### 3.1.7、大小写转换
+
+> 同java一样：调用相应方法， js称之为（函数）
+
+~~~javascript
+<script>
+    'use strict' 		//严格检查模式
+    
+    //String类型同java：不可变
+    let str = "laoyang";
+
+    //转换为：大写
+    console.log(str.toUpperCase());
+
+    //转换为：小写
+    console.log(str.toLowerCase());
+</script>
 ~~~
 
+
+
+### 3.1.8、获取下标索引
+
+> 同java一致
+
+~~~javascript
+    <script>
+        'use strict'          			  //严格检查模式
+
+        //String类型同java：不可变
+        let str = "laoyang";
+
+        //获取：下标索引
+        console.log(str.indexOf('o'));      //索引为：2
+
+    </script>
+~~~
+
+
+
+### 3.1.9、获取字串
+
+> 同java一致, [ )    包含（头），不包含（尾巴）
+
+~~~javascript
+<script>
+    'use strict'            //严格检查模式
+
+    //创建字符串
+    let str = "laoyang"
+
+    //获取子串：从下标1开始，到最后一个 [1, )
+    console.log(str.substring(1));          //输出：aoyan
+
+    //获取子符：从下标2开始到3， [2, 3)
+    console.log(str.substring(2, 3));       //输出：o
+
+</script>
 ~~~
 
