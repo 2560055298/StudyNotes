@@ -248,7 +248,7 @@
 
 
 
-## 3.1、字符串String
+## 3.1、字符串==String==
 
 ### 3.1.1、字符串(2种)
 
@@ -367,4 +367,462 @@
 
 </script>
 ~~~
+
+
+
+## 3.2、数组==Array==
+
+### 3.2.1、创建方式（2种）
+
+~~~javascript
+let array = [1, 3.14, 'hello', true];
+
+let array = new Array(1, 3.14, 'hello', true);
+~~~
+
+
+
+
+
+### 3.2.2、获取长度
+
+~~~javascript
+array.length;				//返回长度值, 同java 
+~~~
+
+
+
+### 3.2.3、扩容
+
+> array.length = 容量大小
+>
+> 注意：可以变大， 可以变小。
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219095844928.png" alt="image-20210219095844928" style="zoom:50%;" />
+
+---
+
+
+
+### 3.2.3、获取索引
+
+> array.indexOf()
+>
+> array.lastIndexOf()
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219100800671.png" alt="image-20210219100800671" style="zoom:50%;" />
+
+---
+
+### 3.2.4、slice()切片
+
+> 如同：（字符串）subString() 一样， 留（头部）， 不留（尾部）
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219101055246.png" alt="image-20210219101055246" style="zoom: 67%;" />
+
+---
+
+### 3.2.4、添加、删除元素
+
+~~~javascript
+测试数据：
+	let array = [1, 3.14, 'hello', true];
+
+数组尾部：
+    array.push()	//添加元素，  返回值为（数组长度）
+    array.pop()		//删除元素元素， 返回值为（删除元素：内容）
+
+数组头部：
+	array.unshift()	// 添加元素， 返回值为（数组长度）
+    array.shift()	//删除元素， 返回值为（删除元素：内容）
+~~~
+
+
+
+### 3.2.5、排序sort
+
+~~~javascript
+array.sort()
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219103034203.png" alt="image-20210219103034203" style="zoom: 67%;" />
+
+----
+
+
+
+### 3.2.6、翻转数组reverse
+
+~~~javascript
+array.reverse()
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219103224578.png" alt="image-20210219103224578" style="zoom:50%;" />
+
+---
+
+### 3.2.7、连接字符串concat
+
+~~~
+array.concat([]);
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219103604071.png" alt="image-20210219103604071" style="zoom:50%;" />
+
+---
+
+### 3.2.8、连接符join
+
+~~~javascript
+array.join("连接符");			//加入连接符， 返回的是（字符串）
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219103842899.png" alt="image-20210219103842899" style="zoom:50%;" />
+
+---
+
+
+
+### 3.2.9、多维数组
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219104107217.png" alt="image-20210219104107217" style="zoom:50%;" />
+
+---
+
+
+
+## 3.3、对象
+
+### 3.3.1、创建对象
+
+~~~
+语法：
+	var 对象名 = {
+		属性名:属性值,
+		属性名:属性值
+	}
+~~~
+
+~~~javascript
+<script>
+    //严格检查模式：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    var student = {
+        name:"baiding",
+        age:22,
+        score:100
+    }
+</script>
+~~~
+
+
+
+### 3.3.2、对象==属性赋值==
+
+> 对象名.属性名 = 新属性值
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219150256269.png" alt="image-20210219150256269" style="zoom:50%;" />
+
+---
+
+### 3.3.3、对象==添加==删除属性
+
+~~~
+语法：
+	添加属性：对象名.新属性名 = 新属性值
+	
+	删除属性：delete 对象名.属性值
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219151041042.png" alt="image-20210219151041042" style="zoom: 67%;" />
+
+---
+
+### 3.4.4、属性==在==对象中==判定==
+
+~~~javascript
+语法：
+	'属性名(字符串)' in 对象名              //属性名，也包含父类属性名， 如toString
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219151618949.png" alt="image-20210219151618949" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219152037671.png" alt="image-20210219152037671" style="zoom:50%;" />
+
+---
+
+### 3.4.5、==当前==对象属性判定
+
+~~~
+当前对象属性：仅仅是当前对象的属性， 不包含（父类）对象的属性
+
+判定方法：
+	对象.hasOwnProperty(‘属性名’)
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219152510470.png" alt="image-20210219152510470" style="zoom:50%;" />
+
+---
+
+### 3.4.6、注意点
+
+> 打印：对象不存在的（属性），不会报错， 只会显示undefined
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210219151750506.png" alt="image-20210219151750506" style="zoom:50%;" />
+
+---
+
+
+
+## 3.4、集合
+
+> ES6新特性：Map 和 Set
+
+- Map (有序集合)
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    //创建Map语法：new Map([[参数一key, value], [参数二key, value]])
+    let myMap = new Map([['tom', 21], ['jack', 19], ['toni', 23]]);
+
+    //查询：通过key获取value
+    console.log(myMap.get('tom'));
+
+    //添加：键值对
+    myMap.set('yang', 23);
+
+    //修改：键值对
+    myMap.set('yang', 456);
+
+    //删除：键值对
+    myMap.delete('yang');
+
+    //打印Map
+    console.log(myMap);
+
+</script>
+~~~
+
+
+
+- Set （无序集合）
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    //1、创建set语法：new Set([1, 'hello', 1, 2, 'hello']);      注意：唯一性， 仅会出现1个hello
+    let mySet = new Set([1, 'hello', 1, 2, 'hello']);
+
+    //2、查询：只能查询（某个元素）是否存在， 不能获取值
+    console.log(mySet.has(1));              //true
+
+    //3、添加
+    mySet.add(666);
+
+    //4、修改：（因为获取不到值， 所以无法修改）
+
+    //5、删除
+    mySet.delete(1);            //{"hello", 2, 666}     1被删除掉了
+
+</script>
+~~~
+
+
+
+## 3.5、iterator迭代器
+
+~~~
+Iterator 是 ES6 引入的一种新的遍历机制，迭代器有两个核心概念：
+
+迭代器是一个统一的接口，它的作用是使各种数据结构可被便捷的访问，它是通过一个键为Symbol.iterator 的方法来实现。
+
+迭代器是用于遍历数据结构元素的指针（如数据库中的游标）。
+~~~
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    //ES6的：新特性
+    let array = ["hello", 3.14, 2, true];
+    let ites = array[Symbol.iterator]();
+
+    //若用：alert() 弹窗则是 [Object, Object]
+    console.log(ites.next());       //{value: "hello", done: false}
+    console.log(ites.next());       //{value: 3.14, done: false}
+    console.log(ites.next());       //{value: 2, done: false}
+    console.log(ites.next());       //{value: true, done: false}
+
+</script>
+~~~
+
+
+
+
+
+
+
+# 4、流程控制
+
+> 选择、分支、循环：与Java无异
+
+## 4.1、选择、分支
+
+~~~javascript
+<script>
+    //严格检查模式：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    let sore = 55;		//作为分数
+
+    if(sore > 60){
+        console.log("及格了");
+    }else{
+        console.log("没有及格");
+    }
+
+</script>
+~~~
+
+> switch
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    let text;
+
+    switch (new Date().getDay()) {
+
+    case 6:
+    text = "今天是周六";		break;
+            
+    case 0:
+    text = "今天是周日";		break;
+            
+    default:
+    text = "期待周末~";
+    }
+
+    console.log(text);
+
+</script>
+~~~
+
+
+
+
+
+## 4.2、循环
+
+- while循环
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    let num = 1;
+
+    while(num < 10){
+    console.log(num++);
+    }
+
+</script>
+~~~
+
+- for循环
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    for(let num = 1; num < 10; num++){
+    console.log(num);
+    }
+
+</script>
+~~~
+
+
+
+## 4.3、遍历
+
+- for循环
+
+~~~java
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    let a = ['hello', 1, true, 'one'];
+
+    for(let i = 0; i < a.length; i++){
+   		 console.log(a[i]);
+    }
+
+</script>
+~~~
+
+
+
+- forEach
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    let a = ['hello', 1, true, 'one'];
+
+    //value是：数组元素值
+    a.forEach(function (value){
+ 	   console.log(value)
+    })
+
+</script>
+~~~
+
+
+
+- for(let index in / of array)		in遍历的是索引， of 遍历的是值   
+
+> Map、Set集合可以用该方法：遍历
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    let a = ['hello', 1, true, 'one'];
+
+    //遍历的是：下标索引
+    for(let index in a){
+        console.log(a[index])
+    }
+
+	//遍历值
+    for(let value of a){
+        console.log(value);
+    }
+
+</script>
+~~~
+
+
+
+# 5、函数
+
+`你呢`法
 

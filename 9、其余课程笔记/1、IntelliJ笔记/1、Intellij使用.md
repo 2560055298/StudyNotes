@@ -69,3 +69,13 @@ ctrl + shift + alt + N
 # 8、intellij更新应用程序服务器上的应用程序
 
 > https://blog.csdn.net/weixin_44537669/article/details/112778056
+
+
+
+
+
+# 9、激活IntelliJ
+
+> 补丁需要：最新版本， IntelliJ不用重新安装。
+>
+> https://tech.souyunku.com/?p=30970
