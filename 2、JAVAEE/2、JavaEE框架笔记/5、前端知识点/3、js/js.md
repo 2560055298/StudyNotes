@@ -824,5 +824,47 @@ Iterator 是 ES6 引入的一种新的遍历机制，迭代器有两个核心概
 
 # 5、函数
 
-`你呢`法
+## 5.1、函数的2种写法
+
+- 第一种：
+
+> function 函数名（参数）{ }
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    //返回：绝对值函数
+        function abs(num){
+            if(num > 0){
+            return num;
+            }else{
+            return -num;
+         }
+    }
+</script>
+~~~
+
+- 第二种
+
+> var fuc = function() { }
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    //返回：绝对值函数
+    var abs = function(num){
+    if(num > 0){
+       return num;
+     }else{
+       return -num;
+      }
+    }
+</script>
+~~~
+
+## 
 
