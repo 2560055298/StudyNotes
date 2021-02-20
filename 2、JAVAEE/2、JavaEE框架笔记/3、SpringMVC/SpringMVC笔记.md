@@ -805,6 +805,11 @@ class MyRequest extends HttpServletRequestWrapper {
 			方括号保存数组
 			属性键值对，数据由逗号分隔
 			{"name": "QinJiang"} 对象
+
+三、记住3句话
+	1、对象都用{}
+	2、数组都用[]
+	3、所有键值对都用key:value
 ~~~
 
 
@@ -812,36 +817,25 @@ class MyRequest extends HttpServletRequestWrapper {
 ## 9.2、Json字符串和js对象互转
 
 ~~~javascript
-    <script>
-        //1、将字符串， 转换为js对象
-        var obj1 = JSON.parse('{"str": "剑客白丁, 痴迷练剑"}')	//花括号是对象
-        console.log(obj1)
+<script>
+    //1、将JSON字符串， 转换为js对象
+    var obj1 = JSON.parse('{"str": "剑客白丁, 痴迷练剑"}')	//花括号是对象
+    console.log(obj1)
 
-        //2、将js对象， 转换为java字符串（注意：这个字符串，适用于任何语言）
-        var str = JSON.stringify(obj1)
-        console.log(str)
-
-        //3、直接创建一个js对象， 通过JSON转为字符串
-        var obj2 = {
-            'name' : '剑客白丁',
-             sex:'Man'
-        }
-        //打印该对象
-        console.log(obj2)
-
-        //js对象转为的字符串，并打印
-        str2 = JSON.stringify(obj2)
-        console.log(str2)
-    </script>
+    //2、将js对象， 转换为java字符串（注意：这个字符串，适用于任何语言）
+    var str = JSON.stringify(obj1);
+    console.log(str)
+</script>
 ~~~
 
 
 
 ## 9.3、Json与js的关系
 
-~~~
-JSON 是 JavaScript 对象的（字符串表示法）
-它使用文本表示一个 JS 对象的信息，本质是一个（字符串）。
+~~~javascript
+JSON 是 JavaScript 对象的（字符串表示法）, 使用文本表示一个 JS 对象的信息，是一个（字符串）。
+	var json = '{"str": "剑客白丁, 痴迷练剑"}'    //JSON对象
+    var obj = {str: "剑客白丁, 痴迷练剑"};		  //JavaScript对象
 ~~~
 
 - json(菜鸟教程)

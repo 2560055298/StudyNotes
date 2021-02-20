@@ -1147,9 +1147,9 @@ Iterator 是 ES6 引入的一种新的遍历机制，迭代器有两个核心概
 
 
 
-# 7、Date日期对象
+# 7、内部对象
 
-> 复习一下：类型
+## 7.1、对象类型==复习==
 
 ~~~javascript
 <script>
@@ -1167,6 +1167,10 @@ Iterator 是 ES6 引入的一种新的遍历机制，迭代器有两个核心概
 
 </script>
 ~~~
+
+
+
+## 7.2、Date日期对象
 
 > Date对象的：用法
 
@@ -1190,3 +1194,138 @@ Iterator 是 ES6 引入的一种新的遍历机制，迭代器有两个核心概
 </script>
 ~~~
 
+
+
+## 7.3、Json
+
+### 7.3.1、Json的介绍
+
+~~~
+一、概念
+	1、JSON(JavaScript Object Notation, JS 对象标记) 
+	2、是一种（轻量级）的（数据交换格式），目前使用特别广泛。
+	3、采用（完全独立）于（编程语言）的（文本格式）来（存储）和（表示数据）
+
+二、表现形式
+	1、在 JavaScript 语言中，一切都是对象。
+	2、任何JavaScript 支持的类型都可以通过 JSON 来表示，例如字符串、数字、对象、数组等。
+	3、语法格式（后端要提供的字符串， 要满足前端js的对象形式）		
+			花括号保存对象
+			方括号保存数组
+			属性键值对，数据由逗号分隔
+			{"name": "QinJiang"} 对象
+
+三、记住3句话
+	1、对象都用{}
+	2、数组都用[]
+	3、所有键值对都用key:value
+~~~
+
+
+
+### 7.3.2、Json字符串和js对象互转
+
+> JSON.stringify(obj1)    将js对象`转换为`Json对象
+>
+> JSON.parse('{"str": "剑客白丁, 痴迷练剑"}')   	将JSON字符串`转换为`js对象
+
+~~~javascript
+<script>
+    //1、将JSON字符串， 转换为js对象
+    var obj1 = JSON.parse('{"str": "剑客白丁, 痴迷练剑"}')	//花括号是对象
+    console.log(obj1)
+
+    //2、将js对象， 转换为java字符串（注意：这个字符串，适用于任何语言）
+    var str = JSON.stringify(obj1);
+    console.log(str)
+</script>
+~~~
+
+
+
+### 7.3.2、Json与Js对象的区别
+
+~~~javascript
+JSON 是 JavaScript 对象的（字符串表示法）, 使用文本表示一个 JS 对象的信息，是一个（字符串）。
+	var json = '{"str": "剑客白丁, 痴迷练剑"}'    //JSON对象
+    var obj = {str: "剑客白丁, 痴迷练剑"};		  //JavaScript对象
+~~~
+
+
+
+# 8、面向对象编程
+
+## 8.1、原型
+
+> 原型：`对象1.__proto__ = 对象2 `     在javascript中：（继承）的底层称为（原型）
+
+~~~javascript
+<script>
+    'use strict'       //严格检查模型
+
+    //创建一个对象：student
+    var student = {
+        run:function (){
+        console.log(this.name + "跑起来了");
+   	 }
+   }
+
+    //创建一个对象：yangzi
+    var yangzi = {
+    	name : "yangzi"
+    }
+
+    //（报错）Uncaught TypeError: yangzi.run is not a function
+    //yangzi.run();
+
+    //将对象yangzi：指向student作为原型
+    yangzi.__proto__ = student;
+
+    yangzi.run();       //运行结果：yangzi跑起来了
+
+</script>
+~~~
+
+## 8.2、class、extends
+
+> ES6：出现了class类定义， extends继承。  该继承操作与Java一致， 但是底层是（原型 __ proto __）
+
+~~~javascript
+<script>
+    //ES6：出现了class、extends与Java语法一致
+
+    //创建：Person类
+    class Person{
+        name;   //姓名
+        age;    //年龄
+
+        //构造方法
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+
+    var person = new Person("张三", 24);
+    console.log(person.age);        //打印结果：24
+
+    //创建：学生类Student，继承Person类
+    class Student extends Person{
+        sex;
+
+        constructor(name, age, sex) {
+            super(name, age);
+            this.sex = sex;
+        }
+    }
+
+    //创建：学生类对象
+    var student = new Student("剑客白丁", 24, "man");
+    console.log(student.name);          //打印结果：剑客白丁
+
+</script>
+~~~
+
+## 8.3、原型链
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210220215120008.png" alt="image-20210220215120008" style="zoom:50%;" />
