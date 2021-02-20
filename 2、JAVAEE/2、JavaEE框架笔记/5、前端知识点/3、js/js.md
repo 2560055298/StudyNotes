@@ -866,5 +866,327 @@ Iterator 是 ES6 引入的一种新的遍历机制，迭代器有两个核心概
 </script>
 ~~~
 
-## 
+
+
+## 5.2、函数使用的==注意点==
+
+> 函数调用时：传参超过（定义参数个数）不会报错
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210220100310217.png" alt="image-20210220100310217" style="zoom:50%;" />
+
+---
+
+
+
+## 5.3、函数参数：获取
+
+> 方法一：通过arguments
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    var abs = function(num){
+    //arguments 是一个类数组对象。代表传给一个function的参数列表。
+    //它会获取：所有传递参数， 如果已有形参，这样就出现了（形参多余）问题
+      
+    for(let i = 0; i < arguments.length; i++){
+    	console.log(arguments[i]);
+	}
+}
+</script>
+~~~
+
+> 方法二：function abs(x, y, ...paramName){}
+
+~~~javascript
+<script>
+    //严格（检查模式）：会直接显示（错误）， 比如不写var、let 关键字时
+    'use strict'
+
+    //ES6新特性：...参数名  （用来获取，形参外的其余参数， 封装成数组）
+    var abs = function(num, ...paramName){
+    
+        //paramName是一个数组
+        console.log(paramName);
+		
+        //遍历：paramName数组
+        for(let i = 0; i < paramName.length; i++){
+             console.log(paramName[i]);
+        }
+  }
+
+</script>
+~~~
+
+
+
+## 5.4、变量的：作用域
+
+### 5.4.1、var在for的问题
+
+> var关键字定义在：for(var i = 0; ) 会出现`for循环外能用i变量`的问题
+
+~~~javascript
+<script>
+    'use strict'            //严格检查：模式， 不写var 、let 关键字定义变量，会直接报错
+
+    //var关键字：在for内定义， 会超脱for, let则不会
+    for(var i = 0; i < 100; i++){
+        console.log(i);
+    }
+
+	console.log(i+1);         //会打印出：101
+
+
+    //let关键字：则避免了，var在for循环定义越界问题
+    for(let j = 0; j < 100; j++){
+        console.log(j);
+    }
+
+    console.log(j);     //报错：ReferenceError: j
+</script>
+~~~
+
+
+
+### 5.4.2、变量同名问题
+
+> 当：全局变量、局部变量同名时， 与Java相同， 局部覆盖（同名）
+
+
+
+### 5.4.3、window对象
+
+> Window 对象表示浏览器中打开的窗口
+>
+> 没有应用于 window 对象的公开标准，不过所有浏览器都支持该对象。
+
+~~~javascript
+<script>
+    'use strict'            //严格检查：模式， 当没有写var、let定义变量时， 会直接报错
+
+    //直接使用：全局变量
+    alert("我是alert");
+
+    //window是：alert全局变量的创建者
+    window.alert("alert是由我定义的，全局变量（函数）");
+
+    //将全局变量（函数）存起来
+    let myAlert = window.alert;
+
+    //改变：alert
+    window.alert = function(param){
+        console.log(`${param} 我已经改变了alert`);
+    }
+
+	alert("是吗？");           //打印结果：是吗？ 我已经改变了alert
+</script>
+~~~
+
+
+
+### 5.4.4、自定义全局变量
+
+> 方法：
+>
+> ​	var myVariable = {};
+>
+> ​	myVariable.one = "张三";
+
+~~~javascript
+<script>
+    'use strict'            //严格检查模式：当没有写var、let定义变量时，会直接报错
+
+    //定义：全局对象
+    var myVariable = {};
+
+    //添加：全局变量（函数）
+    myVariable.alert = function(num){
+        console.log(`这个数字是：${num}`);
+    }
+
+    //添加：全局变量
+    myVariable.name = "Your Name";
+
+    //调用：全局变量（函数）
+    myVariable.alert(10086);		// 这个数字是：10086
+
+    //调用：全局变量
+    console.log(myVariable.name);	//Your Name
+
+</script>
+~~~
+
+> 这样做的目的是：把自己的代码全部放入（自己定义）的唯一空间名字中，降低（全局命名）冲突问题
+
+
+
+### 5.4.5、常量const
+
+> ES6引入常量关键字：const
+
+~~~javascript
+<script>
+    'use strict'            	//严格检查模式：当没有写var、let定义变量时，会直接报错
+
+    //ES6（以前）：用大写代表常量， 君子协议（自行遵守）
+    //ES6（以后）：才由const关键字
+    const name = "张三";
+
+	//Attempt to assign to const or readonly variable（报错了）
+    name = "李白";           
+
+</script>
+~~~
+
+
+
+
+
+# 6、方法
+
+> 将函数：写在对象中，就成为了方法。
+
+## 6.1、方法：==定义模板==
+
+- 方法一：将方法`直接定义`在（对象中）
+
+~~~javascript
+<script>
+	'use strict'            //严格检查模式：当没有写var、let定义变量时，会直接报错
+
+    var myObject = {
+        name:"剑客白丁",
+        age:24,
+        hobby:function(hobby1, hobby2){
+        console.log(`我有两个爱好：${hobby1}, ${hobby2}`)
+    }
+
+}
+
+	myObject.hobby("sing", "skip");
+</script>
+~~~
+
+- 方法二：将`外部函数`引入`对象`变成（对象方法）
+
+~~~javascript
+<script>
+    'use strict'            //严格检查模式：当没有写var、let定义变量时，会直接报错
+
+    //定义在外部的：函数
+    var funcHobby = function(hobby1, hobby2){
+        console.log(`我有两个爱好：${hobby1}, ${hobby2}`);
+    }
+
+    var myObject = {
+        name:"剑客白丁",
+        age:24,
+        hobby:funcHobby		//引入外部函数， 将之变为方法
+    }
+
+	myObject.hobby("sing", "skip");
+
+</script>
+~~~
+
+
+
+## 6.2、this的指向
+
+> this指向当前对象：如果未在（自定义）对象内使用， 则指向的是（window）对象
+
+~~~javascript
+<script>
+    'use strict'            //严格检查模式：当没有写var、let定义变量时，会直接报错
+
+	//定义：函数
+    var funcAge = function(num){
+        console.log(num + this.age);
+	}
+
+    var myObject = {
+        age :23,
+        myAge:funcAge		//对象引入函数，变为（方法）
+    }
+
+    myObject.myAge(5);      //成功打印出：28 （因为this指向：myObject）
+
+	this.funcAge(5);        //NaN  （不是一个数，因为,this指向window）
+
+</script>
+~~~
+
+
+
+## 6.3、apply控制this指向
+
+> 语法：外部函数名.apply (指向对象名， [参数])       `当参数没有时：只写[]即可`
+
+~~~javascript
+<script>
+	'use strict'            //严格检查模式：当没有写var、let定义变量时，会直接报错
+
+    var funcAge = function(num){
+   	 	console.log(num + this.age);
+    }
+
+    var myObject = {
+        age :23,
+        myAge:funcAge
+    }
+
+	myObject.myAge(5);            //成功打印出：28 （因为this指向：myObject）
+
+	funcAge.apply(myObject, [5]); //成功打印出：28 (因为apply将this定位到myObject)
+
+</script>
+~~~
+
+
+
+# 7、Date日期对象
+
+> 复习一下：类型
+
+~~~javascript
+<script>
+	'use strict'        //严格检查：模式
+
+    //注意：打印出来对象类型（首字母小写了）
+    console.log(typeof 123)          //number
+    console.log(typeof 3.14)         //number
+    console.log(typeof true)         //boolean
+    console.log(typeof 'hello')      //string
+    console.log(typeof [])           //object
+    console.log(typeof {})           //object
+    console.log(typeof Math.abs)     //function
+    console.log(typeof undefined)    //undefined
+
+</script>
+~~~
+
+> Date对象的：用法
+
+~~~javascript
+<script>
+    'use strict'        //严格检查：模式
+
+    var date = new Date();
+    console.log(date);      //Sat Feb 20 2021 17:47:09 GMT+0800 (中国标准时间)
+    date.toDateString();    //"Sat Feb 20 2021"
+    date.getFullYear();     //年份：2021
+    date.getMonth();        //月份：1  (从0~11)
+    date.getDate();         //号数：20
+    date.getDay();          //星期：6
+    date.getHours();        //小时：17
+    date.getMinutes();      //分钟：47
+    date.getSeconds();      //秒：9
+    date.getTime();         //时间戳：1613814429958
+    date.toTimeString();    //"17:47:09 GMT+0800 (中国标准时间)"
+
+</script>
+~~~
 
