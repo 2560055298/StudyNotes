@@ -1329,3 +1329,207 @@ JSON 是 JavaScript 对象的（字符串表示法）, 使用文本表示一个 
 ## 8.3、原型链
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210220215120008.png" alt="image-20210220215120008" style="zoom:50%;" />
+
+# 9、操作BOM对象（==重点==）
+
+## 9.1、什么是BOM？
+
+> （BOM）Browser Object Model：浏览器对象模型，IE3.0与Netscape（网景） Navigator3.0浏览器的浏览器对象模型特性。
+
+---
+
+## 9.2、游览器介绍
+
+> JavaScript（和）游览器的关系是：JavaScript诞生就是为了在（游览器中）运行。
+
+`BOM游览器模型`
+
+- IE 6 ~ 11
+
+~~~
+Internet Explorer，是微软所开发的图形用户界面网页浏览器。自从1995年开始，内置在各个新版本的Windows操作系统，也是微软Windows操作系统的一个组成部分。 Internet Explorer曾是使用最广泛的网页浏览器，在2002年和2003年达到95%的使用率高峰。
+~~~
+
+- Edge
+
+~~~
+Microsoft Edge是一个由微软研发的浏览器，于2015年1月21日公布，2015年3月30日公开发布第一个预览版。该浏览器在Windows 10和Windows 10 Mobile中取代Internet Explorer成为默认浏览器，其中，Windows 10 Mobile中的IE已经被移除
+~~~
+
+- Chrome
+
+~~~
+Google Chrome是由Google开发的免费网页浏览器。Chrome是化学元素“铬”的英文名称，过去也用Chrome称呼浏览器的外框。Chrome相应的开放源代码计划名为Chromium，而Google Chrome本身是非自由软件，未开放全部源代码
+~~~
+
+- Safari
+
+~~~
+Safari 浏览器是苹果公司所开发，并内置于macOS、iOS与iPadOS的网页浏览器。Safari 浏览器在2003年1月7日首度发行测试版，并从Mac OS X Panther开始成为Mac OS X的默认浏览器，也是iOS和iPadOS内置的默认浏览器。
+~~~
+
+- FireFox
+
+~~~
+Mozilla Firefox，通称Firefox，中文也通称火狐，是一个自由及开源的网页浏览器，由Mozilla基金会及其子公司Mozilla公司开发。
+~~~
+
+
+
+`三方`
+
+- QQ游览器
+
+~~~
+QQ浏览器是一款采用（WebKit和Trident双引擎）的网页浏览器。此前，腾讯曾开发了腾讯Explorer和腾讯TT两款以Trident排版引擎为核心的浏览器，以及集成了WebKit引擎的QQ浏览器5、QQ浏览器6。2015年6月19日，QQ浏览器9.0版正式版发布。
+~~~
+
+- 360游览器
+
+~~~
+360安全浏览器是360安全中心推出一款(基于IE和Chrome的双核浏览器)，是世界之窗开发者凤凰工作室和360安全中心合作编写的软件，其沙盘安全技术是与Sandboxie合作并共同开发的
+~~~
+
+
+
+## 9.3、==window==对象
+
+> window代表：游览器
+
+![image-20210221110746261](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210221110746261.png)
+
+~~~javascript
+window.alert(1)			//弹窗显示
+		
+window.innerWidth		//游览器：内宽 
+630
+
+window.innerHeight		//游览器：内高 
+264
+
+window.outerWidth		//游览器：外宽
+645
+
+window.outerHeight		//游览器：外高 
+688
+~~~
+
+
+
+## 9.4、navigator对象
+
+> window.navigator建议不要使用：该对象（仅了解）
+
+~~~javascript
+navigator.appName			//返回游览器的名称：该属性并不一定能返回正确的（游览器名称）
+"Netscape"	
+navigator.appVersion		//该特性已经从 Web 标准中删除, 游览器未来将全部停止使用
+"5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.74"
+navigator.userAgent			//只读属性返回当前浏览器的 user agent 字符串，可修改，不可靠
+"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.74"
+navigator.platform
+"Win32"			//返回一个字符串,表示浏览器所在的系统平台类型.
+				//platform 可能是: "Win32", "Linux i686", "MacPPC","MacIntel", 等.
+~~~
+
+
+
+## 9.5、screen对象
+
+> window.screen代表：浏览器窗口可使用的（大小）， 不是（电脑屏幕大小）
+
+~~~javascript
+window.screen.height
+720
+window.screen.width
+1280
+screen.height
+720
+screen.width
+1280
+~~~
+
+
+
+## 9.6、==location==对象
+
+> location：代表当前页面的URL信息
+
+~~~javascript
+//host 属性是一个可读可写的字符串，可设置或返回当前 URL 的主机名称和端口号，但是现在设置会404
+//location.host 包含端口(端口是80的话，就不显示)
+location.host	
+"www.baidu.com"
+
+//href 属性是一个可读可写的字符串，可设置或返回当前显示的文档的完整 URL。
+location.href
+"https://www.baidu.com/"
+
+//protocol 属性是一个可读可写的字符串，可设置或返回当前 URL 的协议。
+location.protocol
+"https:"
+
+//重新加载：当前网页
+location.reload()
+
+//触发窗口加载并显示指定的URL的内容。
+location.assign('https://www.yangzaikongzhongfei.com')
+~~~
+
+
+
+## 9.6、document(属于DOM)
+
+> 此处只是提前预览：document 代表当前页面， HTML DOM文档树
+
+~~~javascript
+document.title					//获取文档标题。
+"新标签页"
+document.title="我的Chrome"	  //设置文档标题。
+"我的Chrome"
+~~~
+
+> 获取具体的文档树节点
+
+~~~javascript
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>BOM对象</title>
+
+        <script>
+            //通过DOM获取：类选择器标识的dl
+            var dl = document.getElementsByClassName("myPath");
+            console.log(dl);
+        </script>
+    </head>
+
+
+    <body>
+        <dl class="myPath">
+            <dt>学习路线</dt>
+            <dd>JavaSE</dd>
+            <dd>JavaEE</dd>
+        </dl>
+    </body>
+</html>
+~~~
+
+> 获取cookie
+
+~~~javascript
+//在b站上获取的cookie
+document.cookie
+"_uuid=EFDCC125-DE92-FABC-7344-EFA0BD47B77B05773infoc; buvid3=BBC2C82C-028F-43D5-9681-61F24B2BC7EE18544infoc; CURRENT_FNVAL=80; blackside_state=1; fingerprint=5d51502015936d2464e97073165d601f; buvid_fp=BBC2C82C-028F-43D5-9681-61F24B2BC7EE18544infoc; buvid_fp_plain=F8239F06-B667-4DED-8B8A-94381394B03B155825infoc; bili_jct=c1ebe92f7b2dd27b4078e367c90a2c80; DedeUserID=387189692; DedeUserID__ckMd5=ee0895c04ce02559; sid=4g5bs966; LIVE_BUVID=AUTO3716136392383596; rpdid=|(u~RRlk~m|k0J'uYuJYJmk~~; bp_video_offset_387189692=492144484087488406; finger=158939783"
+~~~
+
+## 9.7、history对象
+
+> window.history：代表游览器的历史记录， 不推荐使用
+
+~~~
+history.back();				//后退
+history.forward();			//前进
+~~~
+
