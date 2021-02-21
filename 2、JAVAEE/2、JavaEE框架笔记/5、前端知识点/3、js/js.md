@@ -1533,3 +1533,208 @@ history.back();				//后退
 history.forward();			//前进
 ~~~
 
+
+
+# 10、操作DOM对象（==重点==）
+
+> 游览器网页就是：一个（文档对象模型）树形结构
+
+## 10.1、==获取==：Dom节点
+
+~~~javascript
+<body>
+    <div id="father">
+        <h1>标题一</h1>
+        <p id="p1">p1</p>
+        <p class="p2">p2</p>
+    </div>
+
+    <!--如果script写在head里面：会出现（没加载完）页面标签
+   	 就执行了：选择器查询，并赋值操作，然后找不到father、h1、p1、p2变量的（情况）-->
+    <script>
+    var father = document.getElementById("father");     //通过：ID获取
+    var h1 = document.getElementsByTagName("h1");       //通过：标签获取
+    var p1 = document.getElementById("p1");             //通过：ID获取
+    var p2 = document.getElementsByClassName("p2");     //通过：类获取
+
+    var firstChild = father.firstElementChild;          //获取：第一个孩子
+    var lastChild = father.lastElementChild;            //获取：最后一个孩子
+
+	</script>
+</body>
+~~~
+
+
+
+
+
+## 10.2、==遍历==：Dom节点
+
+> 遍历节点是相对于：获取到的节点是（集合形式的）
+
+~~~javascript
+<body>
+    <div id="father">
+        <h1>标题一</h1>
+        <p id="p1">p1</p>
+        <p class="p2">p2</p>
+	</div>
+
+<!--如果script写在head里面：会出现（没加载完）页面标签
+就执行了：选择器查询，并赋值操作，然后找不到father、h1、p1、p2变量的（情况）-->
+    <script>
+        var father = document.getElementById("father");     //通过：ID获取
+        var oneChild = father.children[0];
+        var twoChild = father.children[1];
+        var threeChild = father.children[2];
+    </script>
+</body>
+~~~
+
+
+
+## 10.3、==更新==：Dom节点
+
+~~~javascript
+ <body>
+        <p id="p1">来更新我啊</p>
+
+        <script>
+            //通过ID获取到该元素
+            var p1 = document.getElementById("p1");
+
+            //属性用点.
+            //属性间的- 改为驼峰
+            //值用：字符串包裹
+            p1.style.color = 'red';                //修改颜色
+            p1.innerText = "你这么嚣张的嘛？"       //修改文本
+            p1.innerHTML = "<strong>我嚣张又咋地？</strong>"       //修改html加粗
+            
+        </script>
+</body>
+~~~
+
+
+
+## 10.4、==删除==：节点
+
+> 删除步骤：先找到（当前节点）记录下来， 并（找到其父节点）， 再（删除自己）
+
+~~~javascript
+<body>
+    <div id="father">
+        <h1>我是标题</h1>
+        <p id="p1">p1</p>
+        <p class="p2">p2</p>
+	</div>
+
+    <script>
+        //记录：要删除的节点
+        var delNode = document.getElementById("p1");
+
+        //获取：要删除节点的（父节点）
+        var father = delNode.parentElement;
+
+        //由父节点：删除（需要删除的）子节点
+        father.removeChild(delNode);
+    </script>
+</body>
+~~~
+
+
+
+## 10.5、==添加==：Dom结点
+
+~~~
+有2种方式
+	第一种: 追加一个（html）中已有的（元素）作为（新节点）
+    第二种：追加一个，js方式（手动创建）的（新元素）， 作为新节点
+~~~
+
+### 10.5.1、追加：已有元素
+
+~~~javascript
+<body>
+    <p id="js1">我是js1</p>
+    <p id="js2">我是js222222222</p>
+
+    <div id="father">
+        <h1>标题一</h1>
+        <p id="p1">p1</p>
+        <p class="p2">p2</p>
+    </div>
+
+<script>
+    //获取：div父类
+    var father = document.getElementById("father");
+
+    //获取：js1
+    var js1 = document.getElementById("js1");
+
+    //将js1追加到：div后面
+    father.appendChild(js1);
+
+    //获取p2
+    var p2 = document.getElementsByClassName("p2")[0];
+
+    //获取js2
+    var js2= document.getElementById("js2");
+
+    father.insertBefore(js2, p2);        //在father的孩子p2前面添加一个元素js
+
+    </script>
+</body>
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210221215858307.png" alt="image-20210221215858307" style="zoom: 67%;" />
+
+
+
+### 10.5.2、追加：新建元素
+
+> 首先：创建一个元素， 然后进行追加。
+
+~~~~javascript
+<body>
+        <div id="father">
+            <p id="p1">p1</p>
+            <p class="p2">p2</p>
+        </div>
+
+<script>
+
+    //1、创建一个：img标签，然后（设置属性）
+    var img = document.createElement("img");	
+    img.setAttribute("src", "1.png");				//给img设置属性（src）
+    img.setAttribute("alt", "图片显示不出来");		   //给img设置属性(alt)
+
+    //2、将img添加到：div中
+    var father = document.getElementById("father");	//获取div（father）
+    father.appendChild(img);						//给div添加img标签
+
+    //3、补充：给body添加背景
+    var myStyle = document.createElement("style");     //创建<style></style>标签
+    myStyle.innerHTML = 'body{background-color:red}';  //为<style>标签书写body{}
+    father.append(myStyle);                    //将<style>标签（添加到）div中
+	</script>
+</body>
+~~~~
+
+
+
+
+
+# 、待完成项
+
+~~~
+var del1 = document.getElementById("under_post_card1");
+
+var del2 = document.getElementById("under_post_card2");
+
+var f = del1.parentElement;
+
+f.removeChild(del1);
+
+f.removeChild(del2);
+~~~
+
