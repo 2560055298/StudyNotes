@@ -1720,11 +1720,288 @@ history.forward();			//前进
 </body>
 ~~~~
 
+# 11、获取表单信息
+
+## 11.1、操作文本框
+
+~~~javascript
+<body>
+    <form action="#">
+  		  <span>用户名：</span><input type="text" id="username">
+    </form>
+
+    <script>
+        //通过ID：获取到文本框对象
+        var username = document.getElementById("username");
+
+        //获取文本框：内容
+        var content = username.value;
+
+        //修改文本框内容
+        username.value = "天下归心";
+    </script>
+</body>
+~~~
 
 
 
+## 11.2、操作单选按钮
 
-# 、待完成项
+~~~javascript
+<body>
+    <form action="#">
+        男：<input type="radio" value="man" name="sex" checked="checked">
+        女：<input type="radio" value="woman" name="sex">
+    </form>
+
+    <script>
+        var input = document.getElementsByTagName("input"); //获取：文本框数组
+
+        var manChecked = input[0].checked;      //男士单选框：选中状态
+
+        var womanChecked = input[1].checked;    //女士单选框：选中状态
+
+        input[1].checked = "true";              //修改女士单选框：状态为true
+    </script>
+</body>
+~~~
+
+## 11.3、表单密码md5加密
+
+~~~javascript
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>md5表单提交</title>
+		<script src="js/md5.js"></script>
+	  </head>
+
+<body>
+   <form action="https://www.baidu.com/" method="post" onsubmit="func()">
+
+    <p>
+        <span>用户名：</span><input type="text" id="username" name="username">
+    </p>
+
+    <p>
+        <span>密码：</span><input type="password" id="input_password">
+
+    </p>
+
+    <input type="hidden" id="hidden" name="password">
+    <button type="submit">提交</button>
+</form>
+
+    <script>
+        function func(){
+        //1、获取：文本框输入的（真实密码）对象
+        var input_password = document.getElementById("input_password");
+
+        //2、获取：加密后（提交的密码）对象
+        var hidden = document.getElementById("hidden");
+
+        //3、将（文本框中）的（真实密码）加密后， 放到隐藏域，提到到表单（看似加密密码）
+        hidden.value = hex_md5(input_password.value);
+        return true;
+        }
+    </script>
+
+</body>
+
+</html>
+~~~
+
+
+
+# 12、Jquery
+
+## 12.1、什么Jquery ?
+
+~~~
+概念：
+	1、jQuery是一个JavaScript函数库。
+	2、jQuery是一个轻量级的"写的少，做的多"的JavaScript库。
+	3、jQuery库包含以下功能：
+		HTML 元素选取
+        HTML 元素操作
+        CSS 操作
+        HTML 事件函数
+        JavaScript 特效和动画
+        HTML DOM 遍历和修改
+        AJAX
+        Utilities
+~~~
+
+
+
+## 12.2、为什么要使用Jquery
+
+~~~
+原因：
+	1、目前网络上有大量开源的 JS 框架, 但是 jQuery 是目前最流行的 JS 框架，
+	   而且提供了大量的扩展。
+
+	2、很多大公司都在使用 jQuery， 例如:
+		Google
+        Microsoft
+        IBM
+        Netflix
+~~~
+
+
+
+## 12.3、如何==使用Jquery== ?
+
+> 首先 , 下载Jquery并引入（项目中）， 下载方式（2种）
+
+    1、Jquery官网：用（代理服务）访问较快
+    2、CDN Jquery (推荐)
+> 其次利用：Jquery公式   $(selector).action()
+
+~~~javascript
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="js/jquery-3.5.1.js"></script>
+    </head>
+
+    <body>
+        <a href="" id="myID">来点我啊！</a>
+    </body>
+
+    <script>
+        $('#myID').click(function(){
+            alert("点了你又咋样？");
+        })
+    </script>
+</html>
+~~~
+
+
+
+## 12.4、选择器使用
+
+> 选择器：与css使用方式样， 写在$('selector')即可
+>
+> 参考文档：https://jquery.cuishifeng.cn/
+
+~~~javascript
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="js/jquery-3.5.1.js"></script>
+    </head>
+
+    <body>
+        <p id="p1">p1</p>
+        <p class="p2">p2</p>
+        <p>p3</p>
+    </body>
+
+    <script>
+        $('#p1').click();       //ID选择器
+        $('.p2').click(function (){
+            alert(1);
+        });       //类选择器
+
+        //设置点击
+        $('p:nth-child(3)').click(function(){
+            alert(111);
+        })
+    </script>
+</html>
+~~~
+
+## 12.5、事件
+
+> 查文档：https://jquery.cuishifeng.cn/
+
+~~~javascript
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="js/jquery-3.5.1.js"></script>
+
+        <style>
+            #myDiv{
+                width: 300px;
+                height:300px;
+                border: 2px solid red;
+            }
+        </style>
+    </head>
+
+    <body>
+        <span></span>
+        <div id="myDiv"></div>
+    </body>
+
+    <script>
+        //当页面加载完以后：响应事件
+        //$(document).ready(function (){})      //等价于下面
+        $(function (){
+            $('#myDiv').mousemove(function (e){
+                $("span").text(e.pageX + ", " + e.pageY);
+            });
+        })
+    </script>
+
+</html>
+~~~
+
+
+
+## 12.6、操作DOM
+
+> 还是一句话：看文档 https://jquery.cuishifeng.cn/
+
+~~~javascript
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>操作DOM</title>
+
+        <script src="js/jquery-3.5.1.js"></script>
+    </head>
+
+    <body>
+        <ul>
+            <li>Java</li>
+            <li>C++</li>
+            <li>C#</li>
+        </ul>
+    </body>
+
+    <script>
+        //加载完页面后，响应事件
+        $(function (){
+            $('ul li:nth-child(1)').click(function (){
+                $(this).text('我学习Java已经学习几年了');     //点击：获取当前对象，修改
+            });
+
+            $('ul li:nth-child(2)').click(function (){
+                $(this).toggle();     //点击隐藏,点击显示
+            });
+
+            $('ul li:nth-child(3)').click(function (){
+                $(this).css({"color":"red"});           //点击：修改css
+            });
+        })
+    </script>
+</html>
+~~~
+
+
+
+# 13、(博客)待完成项
 
 ~~~
 var del1 = document.getElementById("under_post_card1");
