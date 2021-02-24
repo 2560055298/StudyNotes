@@ -1,4 +1,4 @@
-
+s
 
 # 1、Nodejs快速入门
 
@@ -331,7 +331,7 @@ console.log(input);
 
 
 
-`第五步：安装转换器`
+`第五步：（根目录下）安装转换器`
 
 ~~~
 cnpm install --save-dev babel-preset-es2015
@@ -347,6 +347,322 @@ babel src -d dist		//利用babel转换器，将src目录下的所有文件， �
 
 
 
-`补充：自定义脚本转换`
+`补充：自定义脚本转换（也需要安装：转换器）`
 
 ![](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210223233833502.png)
+
+
+
+
+
+
+
+# 4、模块化
+
+## 4.1、模块化产生的背景
+
+~~~
+1、时代趋势：
+	网站逐渐变成“互联网应用程序”， 嵌入网页的Javascript代码越来越庞大， 越来越复杂。
+
+2、产生需求：
+	JavaScript模块化编程， 已经成为了一个迫切的需求。
+
+3、其中阻碍：
+	理想条件下，开发者只需要实现（核心业务逻辑）， 其余可以加载别人的模块，但是JavaScript
+	不是一种（模块化编程语言）， 它不支持“类”class, "包"package概念， 也不支持“模块module.
+	
+4、最终结果：
+	产生了模块化规范：CommonJs模块化规范、ES6模块化规范
+~~~
+
+
+
+## 4.2、CommonJS规范
+
+> 导出（已写好的）模块： module.exports = {key:value}
+
+> 导入（已导出的）模块：const m = require("文件名");
+
+- `导出代码`：导出模块.js文件
+
+~~~javascript
+//加法
+const sum = function(a, b){
+    return a + b;
+}   
+
+//减法
+const sub = function(a, b){
+    return a - b;
+}
+
+
+//导出模块
+module.exports = {
+    sum,
+    sub
+}
+~~~
+
+
+
+- `导入代码：`导入模块.js文件
+
+~~~javascript    
+//导入模块
+const m = require("./导出模块");
+
+//调用：加法
+console.log(m.sum(1, 2));
+
+//调用：减法
+console.log(m.sub(1, 2));
+~~~
+
+
+
+## 4.3、ES6规范（推荐这种）
+
+`方法一：（传统方法）`
+
+![image-20210224114026769](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224114026769.png)
+
+
+
+`方法二：简写方法（推荐）`
+
+![image-20210224114056604](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224114056604.png)
+
+
+
+`注意：不支持ES6报错内容，需要转ES5`
+
+![image-20210224114944102](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224114944102.png)
+
+
+
+
+
+# 5、Webpack
+
+> 官方文档：https://www.webpackjs.com/concepts/
+
+## 5.1、简介
+
+![image-20210224121618844](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224121618844.png)
+
+
+
+
+
+## 5.2、Webpack安装
+
+1、全局安装
+
+> npm install -g webpack webpack-cli
+
+
+
+2、安装后查看版本号
+
+> webpack -v
+
+
+
+
+
+
+
+## 5.3、使用Webpack==打包js==
+
+- `总步骤:概括`
+
+~~~
+1、创建一个nodejs项目： npm init -y
+2、创建一个src目录
+3、在src存放两个需要合并的js文件：util.js、common.js   
+4、准备一个：入口文件main.js, 其实就是（将模块集中）引入
+5、JS打包：
+	在（根目录）下定义一个 webpack.config.js文件配置打包的规则
+	执行webpack查看效果：终端执行 webpack
+	webpack -w可以实现监听
+~~~
+
+![image-20210224154530001](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224154530001.png)
+
+---
+
+- `第一步：webpack文件夹下，构建nodejs项目`
+
+> 终端输入：npm init -y
+
+
+
+- `第二步：在src目录下，创建common、util、main 三个js文件`
+
+  > 注意：exports导出， require导入关键字
+
+  ![image-20210224161249841](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224161249841.png)
+
+  
+
+- `第三步：（根目录）下创建，webpack.config.js`
+
+![image-20210224161504007](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224161504007.png)
+
+- `第四步：根目录执行命令`
+
+> 打包：webpack
+>
+> 监听：webpack -w
+
+
+
+- `第五步：测试`
+
+> 创建一个html文件，引入打包好的js文件。
+
+
+
+
+
+## 5.4、使用Webpack==打包css==
+
+- `第一步：安装style-loader 和css-loader`
+
+![image-20210224162730508](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224162730508.png)
+
+> npm install --save-dev style-loader css-loader
+
+
+
+- `第二步：修改webpack.config.js文件`
+
+~~~javascript
+//导入path模块， path模块是nodejs的内置模块
+const path = require('path');
+
+//定义打包规则
+module.exports = {
+    //1、入口函数从哪里：开始打包编译
+    entry: "./src/main.js",
+    //2、编译成功后要把内容输出到哪里去
+    output:{
+        //2-1、定义输出的指定目录， __dirname是当前项目（根目录）
+        path:path.resolve(__dirname, "./dist"),
+        filename:"bundle.js"
+    },
+
+    //CSS打包规则：配置
+    module:{
+        rules:[
+            {
+                test:/\.css$/,      //打包规则应用到：所有css结尾的文件上(目录同上js目录)
+                use:['style-loader', 'css-loader']
+            }
+        ]
+    }
+}
+~~~
+
+
+
+- `第三步：src下创建style.css文件`
+
+~~~css
+body{
+    background: red;
+    font-size: 33px;
+}
+~~~
+
+
+
+- `第四步：main.js中引入style.js文件`
+
+~~~javascript
+//导入：common、util模块
+const common = require("./common.js");	
+const util = require("./util.js");
+
+//引入：style.css文件
+require("./style.css")              //主要是这里！！！！
+
+//先做100 + 200的加法， 然后显示到（控制台、游览器）
+common.info("最终的值：" + util.add(100, 200));
+common.info("最终的值：" + util.sub(200, 200));
+~~~
+
+
+
+- `第五步：根目录下打包, 监听`
+
+> webpack -w
+
+
+
+- `拓展：可用（脚本）代替webpack -w`
+
+> package.json中：添加key : value         例如：dev : "webpack -w"
+
+~~~javascript
+ "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"webpack -w"
+  },
+~~~
+
+> 配置好后终端输入：npm run dev
+
+
+
+
+
+# 6、Vue-Element-admin
+
+> 官网：https://panjiachen.gitee.io/vue-element-admin-site/zh/
+
+## 6.1、简介
+
+~~~
+vue-element-admin 是一个后台前端解决方案，它基于 vue 和 element-ui实现。它使用了最新的前端技术栈，内置了 i18 国际化解决方案，动态路由，权限验证，提炼了典型的业务模型，提供了丰富的功能组件，它可以帮助你快速搭建企业级中后台产品原型。相信不管你的需求是什么，本项目都能帮助到你。
+~~~
+
+
+
+## 6.2、下载该项目
+
+> google：Vue-Element-admin  （去gitHub下载）
+
+
+
+## 6.3、==切换中文==，运行
+
+- 第一步：git配置好（环境变量）
+- 第二步：VScode打开克隆好的（项目）
+- 第三步：切换到18i版本，就有中文版本
+
+> 终端执行：git checkout i18n
+
+
+
+- 第四步：npm包依赖下载
+
+> npm install 
+>
+> npm install --registry=https://registry.npm.taobao.org   阿里镜像
+
+
+
+- 启动项目：
+
+> npm run dev
+
+
+
+
+
+## 6.4、需要记住
+
+![image-20210224175523627](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224175523627.png)
