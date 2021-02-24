@@ -1,5 +1,3 @@
-s
-
 # 1、Nodejs快速入门
 
 ## 1.1、安装
@@ -558,7 +556,7 @@ module.exports = {
     module:{
         rules:[
             {
-                test:/\.css$/,      //打包规则应用到：所有css结尾的文件上(目录同上js目录)
+                test:/\.css$/, //打包规则应用到：所有css结尾的文件上(目录同上js目录)
                 use:['style-loader', 'css-loader']
             }
         ]
