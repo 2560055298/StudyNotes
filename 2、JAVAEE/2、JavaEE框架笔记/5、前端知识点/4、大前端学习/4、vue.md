@@ -131,9 +131,96 @@
 
 ## 3.1、数据与方法
 
+- `数据测试`
 
+~~~html
+	<body>
+        <div id="app">
+            {{a}}
+        </div>
+    </body>
+    
+    <script src="js/vue.js"></script>
+    <script>
+        //数据测试
+        var data = {
+            a:1
+        }
 
+        var vm = new Vue({
+            el:"#app",
+            data:data
+        });
 
+        //修改：
+        data.a = "666";         //视图：div中(数字1)变为666
+        vm.a = "777";           //视图: div中(数字666)变为 777
+        console.log(data.a === vm.a);        //为true
+    </script>
+~~~
+
+- `方法：测试一`
+
+> 对象.freeze()  这会（阻止修改）现有的 property，也意味着（响应系统）无法再*追踪*变化。
+
+~~~html
+    <body>
+        <div id="app">
+            {{a}}
+        </div>
+    </body>
+
+	<script src="js/vue.js"></script>
+    <script src="js/vue.js"></script>
+    <script>
+        //数据测试
+        var data = {
+            a:1
+        }
+
+        //阻止修改现有的 property，也意味着（响应系统)无法再追踪变化。
+        //div显示的内容为：{{a}} , 响应系统（无法再追踪变化）
+        data.freeze();
+
+        var vm = new Vue({
+            el:"#app",
+            data:data
+        });
+    </script>
+~~~
+
+- `方法：测试二`
+
+> Vue对象.$watch(属性, )
+
+~~~html
+    <body>
+        <div id="app">
+            {{a}}
+        </div>
+    </body>
+
+	<script src="js/vue.js"></script>
+    <script>
+        //数据测试
+        var data = {
+            a:1
+        }
+
+        var vm = new Vue({
+            el:"#app",
+            data:data
+        });
+
+        // 这个回调将在 `vm.a` 改变后调用
+        //注意：如果不加$报错
+        //$作用：标明是Vue的实例property与方法， 与用于定义的property区分开来
+        vm.$watch('a', function (newValue, oldValue) {
+            // 这个回调将在 `vm.a` 改变后调用
+            console.log(newValue, oldValue)
+        })
+    </script>
+~~~
 
 
 
