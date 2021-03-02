@@ -129,7 +129,61 @@
 
 # 3、语法学习
 
-## 3.1、数据与方法
+## 3.1、==声明式==熏染
+
+> 有两种方式：{{}},  v-build-字段:""
+>
+> 官网：https://cn.vuejs.org/v2/guide/index.html#%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%B8%B2%E6%9F%93
+
+~~~~html
+    <body>
+        <div id="app">
+            <!--{{}}声明熏染-->
+            {{name}}
+            {{amazeUI}}
+
+            <!--v-build声明熏染， v-bind attribute 被称为指令-->
+            <span v-bind:title="message">我们最好的时光</span>		
+        </div>
+    </body>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",				//注意：选中的是ID为app的div
+            data:{
+                name:"天下有我",
+                amazeUI:"MazeUi",
+                message: '页面加载于 ' + new Date().toLocaleString()
+            }
+        });
+    </script>    <body>
+        <div id="app">
+            <!--{{}}声明熏染-->
+            {{name}}
+            {{amazeUI}}
+
+            <!--v-build声明熏染， v-bind attribute 被称为指令-->
+            <span v-bind:title="message">我们最好的时光</span>		
+        </div>
+    </body>
+
+    <script>
+        var vm = new Vue({
+            el:"#app",				//注意：选中的是ID为app的div
+            data:{
+                name:"天下有我",
+                amazeUI:"MazeUi",
+                message: '页面加载于 ' + new Date().toLocaleString()
+            }
+        });
+    </script>
+~~~~
+
+
+
+
+
+## 3.2、数据与方法
 
 - `数据测试`
 
@@ -226,7 +280,7 @@
 
 
 
-## 3.2、生命周期
+## 3.3、生命周期
 
 - beforeCreate:function () {}				//在实例（初始化之后）调用
 - created:function (){}                           //在实例（创建完成后）立即调用
@@ -292,13 +346,13 @@
 
 ---
 
-## 3.3、模板语法
+## 3.4、模板语法
 
 > Vue.js 使用了基于 HTML 的模板语法，允许开发者声明式地将 DOM 绑定至底层 Vue 实例的数据。
 >
 > 所有 Vue.js 的模板都是合法的 HTML，所以能被遵循规范的浏览器和 HTML 解析器解析。
 
-### 3.3.1、插值
+### 3.4.1、插值
 
 - `文本`：插值
 
@@ -425,7 +479,7 @@
 
 
 
-### 3.3.2、指令
+### 3.4.2、指令
 
 > 指令 (Directives) 是带有 `v-` 前缀的特殊 attribute。
 >
@@ -477,11 +531,14 @@
 
 
 
-## 3.4、绑定 HTML Class
+## 3.4、绑定 属性
 
-> 绑定指令  v-bind:class
+> 绑定html属性有两种方法： 此处以绑定class为例， 其余style等等都可以绑定。
+> 	1、通过对象绑定		
+>
+> ​	2、通过数组绑定	
 
-### 3.4.1、对象形式绑定
+### 3.4.1、通过==对象==：绑定
 
 >  class="test"   v-bind:class="{active:isActive, activeGreen:isGreen}   一个test原生，两个动态绑定
 
@@ -517,66 +574,541 @@
 
 ---
 
-
-
-
-
-
-
-
-
-## 3.x、==声明式==熏染
-
-> 有两种方式：{{}},  v-build-字段:""
->
-> 官网：https://cn.vuejs.org/v2/guide/index.html#%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%B8%B2%E6%9F%93
+### 3.4.2、通过==数组==：绑定
 
 ~~~html
-    <body>
-        <div id="app">
-            <!--{{}}声明熏染-->
-            {{name}}
-            {{amazeUI}}
+<body>
+	<div id="app">
+		<!-- isActive为true时：class名称为active, 否则为'' -->
+		<div 
+			v-bind:class="[isActive? 'active':'', isGreen?'green':'']"
+			
+			style="width:200px; height:200px; text-align:center; line-height:200px; border: solid 1px;">
+			hi vue
+		</div>
+	</div>
+	
+    <script src="js/vue.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el : "#app",
+			data : {
+				isActive:true,			//设置：isActive的值
+				isGreen:true
+			}
+		});
+	</script>
+		
+		<style>
+			/* 设置：类active的样式 */
+			.active{
+				background: #FF0000;
+			}
+			
+			.green{
+				font-size: 40px;
+				color: aqua;
+			}
+		</style>
+	</body>
+~~~
 
-            <!--v-build声明熏染， v-bind attribute 被称为指令-->
-            <span v-bind:title="message">我们最好的时光</span>		
-        </div>
-    </body>
+### 3.4.3、对象==绑定样式==例子
 
-    <script>
-        var vm = new Vue({
-            el:"#app",				//注意：选中的是ID为app的div
-            data:{
-                name:"天下有我",
-                amazeUI:"MazeUi",
-                message: '页面加载于 ' + new Date().toLocaleString()
-            }
-        });
-    </script>
+~~~html
+<body>
+	<!-- 绑定html属性：只有两种方法（对象、数组） -->
+	<div id="app" :style="{border:border,color:color, width:w,height:h}">
+		hello
+	</div>
+	<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el : "#app",
+			data : {
+				color:"red",
+				w:"100px",
+				h:"100px",
+				border: '1px solid'
+			}
+		});
+	</script>
+</body>
 ~~~
 
 
 
-## 3.x、==条件==渲染
+## 3.5、==条件==渲染
 
 > 官网：https://cn.vuejs.org/v2/guide/conditional.html#v-else-if
 
 ~~~html
+	<body>
+		<div id="app">
+			<p v-if="type === 'A'">我就是A</p>
+			<p v-else-if="type === 'B'">我就是B</p>
+			<p v-else>我不是上诉内容</p>
+			<p v-show="status">如果为false，我就将：display 修改None, 否则看之前是块级还是行内</p>
+		</div>
+		
+		<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var vm = new Vue({
+				el:"#app",
+				data:{
+					type:'B',
+					status:false		//切记：不要写字符串， 要写bool类型
+				}
+			});
+		</script>
+	</body>
+~~~
+
+
+
+## 3.6、列表渲染
+
+~~~html	
+<body>
+		<div id="app">
+			<ul>
+				<li v-for="(content, index) in items">
+					{{index}} --- >>> {{content.message}}
+				</li>
+			</ul>
+			<ul>
+				<li v-for="(value, key) in object">
+					{{key}} --->>> {{value}}
+				</li>
+			</ul>
+		</div>
+	<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app",
+		data : {
+			items : [
+				{ message: 'Foo' },
+				{ message: 'Bar' }
+			],
+			object: {
+				title: 'How to do lists in Vue',
+				author: 'Jane Doe',
+				publishedAt: '2016-04-10'
+			}
+		}
+	});
+	</script>
+</body>
+~~~
+
+
+
+## 3.7、事件处理
+
+### 3.7.1、处理：属性、方法
+
+> 可以用 `v-on` 指令监听 DOM 事件，并在触发时运行一些 JavaScript 代码。
+
+~~~html
+<body>
+    <div id="app">
+        <!--监听事件是：vm的一个属性-->
+        <button v-on:click="sum += 1">sum的值：{{sum}}</button>
+
+        <!--监听事件是：vm的一个方法-->
+        <button v-on:click="skipText('剑客白丁', $event)">点击我：看看如何弹框</button>
+    </div>
+</body>
+
+<script src="js/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            sum:0
+        },
+
+        methods:{
+            skipText:function (str, e) {
+                alert(str);
+                console.log(e);
+            }
+        }
+    });
+</script>
+~~~
+
+### 3.7.2、事件修饰符
+
+> 看官网API
+
+~~~
+在事件处理程序中调用 event.preventDefault() 或 event.stopPropagation() 是非常常见的需求。尽管我们可以在方法中轻松实现这点，但更好的方式是：方法只有纯粹的数据逻辑，而不是去处理 DOM 事件细节。
+为了解决这个问题，Vue.js 为 v-on 提供了事件修饰符。之前提过，修饰符是由点开头的指令后缀来表示的。
+~~~
+
+- `.stop`
+- `.prevent`
+- `.capture`
+- `.self`
+- `.once`
+- `.passive`
+
+~~~html
+<!-- 阻止单击事件继续传播 -->
+<a v-on:click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form v-on:submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a v-on:click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form v-on:submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即内部元素触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div v-on:click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 --> 
+<!-- 即事件不是从内部元素触发的 -->
+<div v-on:click.self="doThat">...</div>
+~~~
+
+## 3.8、表单输入绑定
+
+~~~
+你可以用 v-model 指令在表单 <input>、<textarea>及 <select>元素上创建（双向数据）绑定。
+
+它会根据控件类型自动选取正确的方法来更新元素。尽管有些神奇，但 v-model本质上不过是语法糖。
+
+它负责监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理。
+
+v-model 会忽略所有表单元素的 value、checked、selected attribute 的初始值而总是将 Vue 实例的数据作为数据来源。
+~~~
+
+
+
+### 3.8.1、文本
+
+~~~Html
     <body>
         <div id="app">
-            <span v-if="seen === 'A'">A</span>
-            <span v-else-if="seen === 'B'">B</span>
-            <span v-else >什么都不是</span>
+     <!--文本框中：输入的内容，会同步到model, 然后再声明渲染，取出来就是：和文本框一样的-->
+            <input type="text" v-model="message" placeholder="来编辑我啊">
+            <p>Message is: {{ message }}</p>
         </div>
     </body>
 
+    <script src="js/vue.js"></script>
     <script>
         var vm = new Vue({
             el:"#app",
             data:{
-                seen:'A'
+                message:""
             }
         });
     </script>
 ~~~
 
+### 3.8.2、多行文本
+
+~~~html
+<body>
+    <div id="app">
+    <p>多行文本框输入的内容：如下</p>
+    <p>{{message}}</p>
+    <textarea v-model="message" cols="30" rows="10" placeholder="请输入....">		</textarea>
+    </div>
+</body>
+
+<script src="js/vue.js"></script>
+<script>
+    var vm = new Vue({
+    el:"#app",
+    data:{
+   		 message:""
+   		 }
+    });
+</script>
+~~~
+
+### 3.8.3、复选框
+
+~~~html	
+<body>
+    <div id="app">
+        <input type="checkbox" id="java" name="java" value="Java" v-model="myCheckbox"/>
+        <label for="java">Java</label>
+
+        <input type="checkbox" id="python" name="python" value="Python" v-model="myCheckbox"/>
+        <label for="python">Python</label>
+
+        <input type="checkbox" id="c++" name="c++" value="C++" v-model="myCheckbox"/>
+        <label for="c++">C++</label>
+
+        <p>看看我选了哪些：myCheckbox: {{myCheckbox}}</p>
+    </div>
+</body>
+
+<script src="js/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            myCheckbox:[]
+        }
+    });
+</script>
+~~~
+
+### 3.8.4、单选框
+
+~~~html
+    <body>
+        <div id="app">
+            <input type="radio" id="man" value="Man" v-model="sex">
+            <label for="man">男</label>
+            
+            <input type="radio" id="woman" value="Woman" v-model="sex">
+            <label for="woman">女</label>
+
+            <p>猜猜我是男还是女：sex = {{sex}}</p>
+        </div>
+    </body>
+
+    <script src="js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                sex:""
+            }
+        });
+    </script>
+~~~
+
+
+
+### 3.8.5、下拉框(单选)
+
+~~~html
+    <body>
+    <div id="app">
+        <select name="sel" v-model="value">
+            <option disabled selected="selected">请选择</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+
+        <p>我选择的为：{{value}}</p>
+    </div>
+    </body>
+
+    <script src="js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                value:"A"
+            }
+        });
+    </script>
+~~~
+
+- 用v-for实现
+
+~~~html
+<body>
+        <div id="app">
+            <select name="sel" v-model="mySelected">
+  <option v-for="item in select" v-bind:value="item.text">{{item.text}}</option>
+            </select>
+            <span>当前选择的为：{{mySelected}}</span>
+        </div>
+</body>
+
+	<script src="js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                mySelected:'A',
+
+                select:[
+                    {text:'A'},
+                    {text:'B'},
+                    {text:'C'}
+                ]
+            }
+        });
+    </script>
+~~~
+
+
+
+
+
+
+
+### 3.8.6、下拉框（多选）
+
+> select 标签中加一个属性：multiple
+
+~~~
+<select name="sel" multiple v-model="value">
+~~~
+
+
+
+## 3.9、组件基础
+
+- 全局注册
+
+~~~html
+<body>
+    <div id="app">
+        <!--可以进行：复用-->
+        <my-component></my-component>
+        <my-component></my-component>
+    </div>
+
+</body>
+
+<script src="js/vue.js"></script>
+<script>
+    //创建一个：全局组件， 参数为（组件名小写， 数据{起始函数）, 模板}）
+    Vue.component('my-component', {
+        //用函数的目的：是为了确保复用（组件时）初始值都是相同的
+        data:function () {
+            return {
+                //返回数字：0
+                count:0
+            }
+        },
+
+        template:'<button v-on:click="count++">你点我显示我的值：count = {{count}}</button>'
+    });
+
+    new Vue({
+        el:"#app"
+    });
+</script>
+~~~
+
+- 局部注册
+
+> 在new Vue({components:{}  })
+
+~~~html
+    <body>
+        <div id="app">
+            <!--可以进行：复用-->
+            <my-component></my-component>
+            <my-component></my-component>
+        </div>
+
+    </body>
+
+    <script src="js/vue.js"></script>
+    <script>
+
+        new Vue({
+            el:"#app",
+
+            //局部注册
+            components:{
+                //局部组件名
+                myComponent:{
+                    data:function () {
+                        return {
+                            //返回数字：0
+                            count:0
+                        }
+                    },
+
+     template:'<button v-on:click="count++">你点我显示我的值：count = {{count}}</button>'
+                }
+            }
+        });
+    </script>
+~~~
+
+
+
+
+
+# 4、单文件组件
+
+> 单文件组件：产生的原因
+
+在很多 Vue 项目中，我们使用 `Vue.component` 来定义全局组件，
+
+紧接着用 `new Vue({ el: '#container '})` 在每个页面内指定一个容器元素。
+
+这种方式在很多中小规模的项目中运作的很好，在这些项目里 JavaScript 只被用来加强特定的视图。但当在更复杂的项目中，或者你的前端完全由 JavaScript 驱动的时候，下面这些缺点将变得非常明显：
+
+- **全局定义 (Global definitions)** 强制要求每个 component 中的命名不得重复
+- **字符串模板 (String templates)** 缺乏语法高亮，在 HTML 有多行的时候，需要用到丑陋的 `\`
+- **不支持 CSS (No CSS support)** 意味着当 HTML 和 JavaScript 组件化时，CSS 明显被遗漏
+- **没有构建步骤 (No build step)** 限制只能使用 HTML 和 ES5 JavaScript，而不能使用预处理器，如 Pug (formerly Jade) 和 Babel
+
+文件扩展名为 `.vue` 的 **single-file components (单文件组件)** 为以上所有问题提供了解决方法，并且还可以使用 webpack 或 Browserify 等构建工具。
+
+> 如何构建？ 
+>
+> 1、安装依赖
+>
+> 2、进入vue 命令行
+>
+> 3、创建vue项目
+>
+> 4、拖入HbuildX
+>
+> 5、运行
+>
+> 6、查看终端本地网页
+
+- `第一步：安装依赖`
+
+~~~
+1、安装npm：需要node.js支持
+   查看版本：npm -v
+  
+2、安装vue-cli
+npm install -g @vue/cli					//如果想加速，可（先安装）淘宝镜像
+
+3、安装webpack
+npm install -g webpack					//webpack是JavaScript打包器
+~~~
+
+- `第二步：进入vue命令行`
+
+> cmd：vue ui
+
+
+
+- `第三步：创建vue项目`
+
+![image-20210302215816513](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210302215816513.png)
+
+- `第四步：拖入HbuildX`
+
+![image-20210302220400220](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210302220400220.png)
+
+- `第五步：选择App.vue运行`
+
+![image-20210302220435273](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210302220435273.png)
+
+
+
+- `第六步：查看终端本地网页`
+
+![image-20210302220501925](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210302220501925.png)
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210302220514254.png" alt="image-20210302220514254" style="zoom:50%;" />
+
+---
