@@ -1112,3 +1112,52 @@ npm install -g webpack					//webpack是JavaScript打包器
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210302220514254.png" alt="image-20210302220514254" style="zoom:50%;" />
 
 ---
+
+
+
+
+
+# 5、Vue的7大属性
+
+## 5.1、el属性
+
+> 用来指示vue编译器从什么地方开始解析 vue的语法，可以说是一个占位符。
+
+
+
+
+
+## 5.2、data属性
+
+> 用来组织从view中抽象出来的属性，可以说将视图的数据抽象出来存放在data中。
+
+
+
+## 5.3、template属性
+
+> 用来设置模板，会替换页面元素，包括占位符。
+
+
+
+## 5.4、methods属性
+
+> 放置页面中的业务逻辑，js方法一般都放置在methods中
+
+
+
+## 5.5、render属性
+
+> 创建真正的Virtual Dom
+
+
+
+## 5.6、computed属性
+
+> 用来计算
+
+
+
+## 5.7、watch属性
+
+> watch:function(new,old){} 监听data中数据的变化 两个参数，一个返回新值，一个返回旧值，
+
