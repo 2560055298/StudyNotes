@@ -896,24 +896,29 @@ v-model 会忽略所有表单元素的 value、checked、selected attribute 的�
 
 ~~~html
     <body>
-    <div id="app">
-        <select name="sel" v-model="value">
-            <option disabled selected="selected">请选择</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-        </select>
+        <div id="app">
+            <select name="" id="selected" v-model="message">
+                <option value="" selected disabled>---请选择---</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
 
-        <p>我选择的为：{{value}}</p>
-    </div>
+            <p>你选择了：{{message}}</p>
+
+        </div>
+
+
+
     </body>
 
     <script src="js/vue.js"></script>
+
     <script>
-        var vm = new Vue({
+        new Vue({
             el:"#app",
             data:{
-                value:"A"
+                message:""
             }
         });
     </script>
@@ -1037,7 +1042,40 @@ v-model 会忽略所有表单元素的 value、checked、selected attribute 的�
     </script>
 ~~~
 
+- 主键实例：自定义（li标签)组件
 
+> 注意：组件格式
+>
+> Vue.component('组件名', {props[组件外部传入参数],  template: '自定义组件标签html'})
+
+~~~html
+    <body>
+        <div id="app">
+            <my-li v-for="item in message" v-bind:content="item"></my-li>
+        </div>
+
+    </body>
+
+    <script src="js/vue.js"></script>
+
+    <script>
+        Vue.component('my-li',{
+            //外部组件：传参
+            props:['content'],
+            //模板
+            template: '<li>{{content}}</li>'
+        })
+
+
+        new Vue({
+            el:"#app",
+            data:{
+                message:['Java', 'Python', 'PHP']
+            }
+        });
+    </script>
+
+~~~
 
 
 
@@ -1160,4 +1198,224 @@ npm install -g webpack					//webpack是JavaScript打包器
 ## 5.7、watch属性
 
 > watch:function(new,old){} 监听data中数据的变化 两个参数，一个返回新值，一个返回旧值，
+
+
+
+
+
+# 6、axios异步通信
+
+## 6.1、什么是axios
+
+> axios不是一种新的技术。
+>
+> axios 是一个基于Promise 用于浏览器和 nodejs 的 HTTP 客户端，本质上也是对原生XHR的封装，只不过它是Promise的实现版本，符合最新的ES规范
+
+## 6.2、它有什么特点？
+
+- 从浏览器中创建 XMLHttpRequests
+- 从 node.js 创建 http 请求
+- 支持 Promise API
+- 拦截请求和响应
+- 转换请求数据和响应数据
+- 取消请求
+- 自动转换 JSON 数据
+- 客户端支持防御 XSRF
+
+
+
+## 6.3、哪些游览器支持？
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210304094020815.png" alt="image-20210304094020815" style="zoom: 50%;" />
+
+---
+
+
+
+## 6.4、axios原理基于什么？
+
+> 基于：创建Vue（）实例， 在mounted()前，实例内容已渲染， 
+>
+> 进而通过自身封装的（异步请求）实现，异步交互
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210304105015767.png" alt="image-20210304105015767" style="zoom: 33%;" />
+
+
+
+
+
+## 6.5、实战（模板）==必看==
+
+~~~
+1、需要一个：.json文件， 可以本地，也可以远程
+2、需要导入：vue、axios依赖
+3、书写axios交互：代码
+~~~
+
+- `my.json文件`
+
+~~~json
+{
+  "place": "新疆",
+  "info": {
+    "name": "剑客白丁",
+    "age": 18,
+    "sex": "man",
+    "hobby": {
+      "one": "sing",
+      "two": "skip"
+    }
+  },
+
+  "links": [
+    {
+      "name": "女书官网",
+      "url": "https://www.yangzaikongzhongfei.com/"
+    },
+
+    {
+      "name": "CSDN",
+      "url": "https://blog.csdn.net/weixin_44537669?spm=1000.2115.3001.5343"
+    },
+
+    {
+      "name": "博客园",
+      "url": "https://www.cnblogs.com/yangzaikongzhongfei/"
+    }
+  ]
+}
+~~~
+
+`代码模型`
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>学习axios</title>
+    </head>
+
+    <body>
+        <div id="app">
+            <!--此处：取出来是Model中（message数据）， 也就my.json中内容-->
+            <p>{{message}}</p>
+        </div>
+    </body>
+
+    <!-- CDN：vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- CDN：axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            //我们首先创建一个 data 里的 property 以最终放置信息，
+            // 然后将会在 mounted 生命周期钩子中获取数据并赋值过去
+            data () {
+                return {
+                    message: null		//view层需要显示什么，此处，就定义什么
+                }
+            },
+            mounted () {
+                axios
+                    //获取本地：my.json文件数据，封装在response对象里面
+                    .get('my.json')
+         //等价于：.then(function(response){this.message = response.data})
+         //注意：此处（如果不用）（箭头函数）， 不报错，但是不会显示出数据
+                    .then(response => (this.message = response.data))
+            }
+        })
+
+    </script>
+</html>
+~~~
+
+## 6.6、实战：去除{{内容}}
+
+> 因为：amount()时，页面已经（将声明渲染）显示， 但是，此时还没有数据， 所以通过v-cloak去除它
+
+- `myTwo.json文件`
+
+~~~json
+{
+  "name": "剑客白丁",
+  "age": 24,
+  "corporation": ["Ali", "Tenxun", "ZiJie"],
+  "address": {
+    "Ali" : "杭州",
+    "Tenxun" : "深圳"
+  }
+}
+~~~
+
+- `html代码`
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>axios测试</title>
+    </head>
+
+    <style>
+        div[v-cloak]{
+            display: none;
+        }
+    </style>
+
+    <body>
+        <!--通过v-cloak去掉：起初amount()还没有异步刷新时， 出现（声明渲染{}）的尴尬-->
+        <div id="app" v-cloak>
+           <p>姓名： {{message.name}}</p>
+           <p>年龄： {{message.age}}</p>
+           <p>公司： {{message.corporation}}</p>
+           <p>地点</p>
+           <ol>
+               <li v-for="item in message.address">{{item}}</li>
+           </ol>
+
+        </div>
+    </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data(){
+                return{
+                    message:{
+                        name:null,
+                        age:null,
+                        corporation: null,
+                        address: {
+                            Ali : null,
+                            Tenxun: null
+                        }
+                    }
+                }
+            },
+
+          mounted(){
+                axios
+                    .get("myTwo.json")
+                    .then((response)=>{this.message = response.data})
+          }
+
+        });
+    </script>
+</html>
+~~~
+
+- `效果图`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210304120517395.png" alt="image-20210304120517395" style="zoom:50%;" />
+
+---
+
+
 
