@@ -1419,3 +1419,54 @@ npm install -g webpack					//webpack是JavaScript打包器
 
 
 
+# 7、计算属性
+
+## 7.1、什么是计算属性？
+
+> 将：动态的（行为函数）， 转为（缓存的：静态属性）。 类比于mybatis的（缓存）
+
+
+
+
+
+## 7.2、代码测试
+
+> 动态函数：用methods:{}
+>
+> 计算属性：computed:{}
+
+~~~html
+    <body>
+        <div id="app">
+            <!--注意：调用动态函数要加（）-->
+            <p>我是currentDate1： {{currentDate1()}}</p>
+            <!--注意：调用（静态属性）， 不用加()-->
+            <p>我是currentDate2： {{currentDate2}}</p>
+        </div>
+    </body>
+
+    <script src="js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+
+            methods:{
+                //动态的函数：每一次调用， 都是新的时间戳
+                currentDate1:function () {
+                    return new Date().getTime();
+                }
+            },
+
+            computed:{
+                //静态的属性，如mybatis缓存， 每一次调用，如果没有修改：获取到的都是相同值
+                currentDate2:function () {
+                    return new Date().getTime();
+                }
+            }
+        });
+    </script>
+~~~
+
+> 展示结果如下：
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210304184319889.png" alt="image-20210304184319889" style="zoom: 67%;" />
