@@ -1470,3 +1470,177 @@ npm install -g webpack					//webpack是JavaScript打包器
 > 展示结果如下：
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210304184319889.png" alt="image-20210304184319889" style="zoom: 67%;" />
+
+
+
+
+
+# 8、插槽slot
+
+> 1、插槽也是一个组件
+>
+> 2、在Vue.js中， 使用<slot> 元素作为（承载）分发内容， 的出口， 可以应用在组件的场景中。
+
+~~~
+运用插槽开发流程：
+    1、创建：html展示数据（示例）
+    2、创建：父类插槽，替换原始代码
+    3、创建：填充插槽，组件模板
+    4、创建：Vue实例, 绑定（视图层）
+    5、用插槽模板：替换（原始数据）， 并绑定响应（组件原型：插槽）
+    6、绑定：插槽名，从data获取值 ，并且对（父类组件props 传参）
+~~~
+
+`实战代码`
+
+~~~html
+    <body>
+        <div id="app">
+                <!--1、创建：html展示数据（示例）-->
+<!--                <h1>如果人生有如果？</h1>-->
+<!--                <ol>-->
+<!--                    <li>每个人都要对自己的人生负责</li>-->
+<!--                    <li>如果你和自己开玩笑，人生也会对你开玩笑。</li>-->
+<!--                    <li>如果你觉得你可以改变自己的命运，那么，一定可以。</li>-->
+<!--                </ol>-->
+
+            <!--5、用插槽模板：替换（原始数据）， 并绑定响应（组件原型：插槽）-->
+            <father-slot>
+                <!--6、绑定：插槽名，从data获取值 ，并且对（父类组件props 传参） -->
+                <h1-slot slot="first-slot" v-bind:title="title"></h1-slot>
+                <li-slot slot="second-slot" v-for="content in contents" v-bind:content="content"></li-slot>
+            </father-slot>
+        </div>
+    </body>
+
+    <script src="js/vue.js"></script>
+    <script>
+        //2、创建：父类插槽，替换原始代码
+        Vue.component('father-slot', {
+            //name = "first-slot" 为自定义（插槽名）
+            template:"<div>\
+                        <slot name='first-slot'></slot>\
+                        <ol>\
+                            <slot name='second-slot'></slot>\
+                        </ol>\
+                      </div>"
+        });
+
+        //3、创建：填充插槽，组件模板
+        Vue.component('h1-slot', {
+            props:['title'],
+            template:'<h1>{{title}}</h1>'
+        });
+
+        Vue.component('li-slot', {
+            props:['content'],
+            template:'<li>{{content}}</li>'
+        });
+
+
+        //4、创建：Vue实例, 绑定（视图层）
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                title:'如果人生有如果？',
+                contents:['每个人都要对自己的人生负责', '如果你和自己开玩笑，人生也会对你开玩笑。', '如果你觉得你可以改变自己的命运，那么，一定可以。']
+            }
+        });
+
+    </script>
+~~~
+
+
+
+
+
+# 9、自定义内容分发
+
+> 自定义内容分发：就是可以（监听当前实例上的自定义事件， 并且可以对监听事件，进行回调）
+>
+> 关键字：this.$emit('自定义事件名', 回调传入参数)
+
+~~~
+功能实现图如下：
+~~~
+
+![image-20210305183951176](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210305183951176.png)
+
+`代码如下：`
+
+~~~html
+    <body>
+        <div id="app">
+                <!--1、创建：html展示数据（示例）-->
+<!--                <h1>如果人生有如果？</h1>-->
+<!--                <ol>-->
+<!--                    <li>每个人都要对自己的人生负责</li>-->
+<!--                    <li>如果你和自己开玩笑，人生也会对你开玩笑。</li>-->
+<!--                    <li>如果你觉得你可以改变自己的命运，那么，一定可以。</li>-->
+<!--                </ol>-->
+
+            <!--5、用插槽模板：替换（原始数据）， 并绑定响应（组件原型：插槽）-->
+            <father-slot>
+                <!--6、绑定：插槽名，从data获取值 ，并且对（父类组件props 传参） -->
+                <h1-slot slot="first-slot" v-bind:title="title"></h1-slot>
+                <li-slot slot="second-slot" v-for="(content, index) in contents"
+                         v-bind:content="content" v-bind:index="index" :key="index"
+                         v-on:remove="removeItem(index)"
+                    >
+                </li-slot>
+            </father-slot>
+        </div>
+    </body>
+
+    <script src="js/vue.js"></script>
+    <script>
+        //2、创建：父类插槽，替换原始代码
+        Vue.component('father-slot', {
+            //name = "first-slot" 为自定义（插槽名）
+            template:"<div>\
+                        <slot name='first-slot'></slot>\
+                        <ol>\
+                            <slot name='second-slot'></slot>\
+                        </ol>\
+                      </div>"
+        });
+
+        //3、创建：填充插槽，组件模板
+        Vue.component('h1-slot', {
+            props:['title'],
+            template:'<h1>{{title}}</h1>'
+        });
+
+        Vue.component('li-slot', {
+            props:['content', 'index'],
+            template:'<li>--- {{index}} ---->>>> {{content}}<button v-on:click="removeEle">删除</button></li>',// v-on:click="removeEle"
+            
+            methods: {removeEle:function (index) {
+                    this.$emit('remove', index)
+                }
+            }
+        });
+
+
+        //4、创建：Vue实例, 绑定（视图层）
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                title:'如果人生有如果？',
+                contents:['每个人都要对自己的人生负责', '如果你和自己开玩笑，人生也会对你开玩笑。', '如果你觉得你可以改变自己的命运，那么，一定可以。']
+            },
+
+            methods:{
+                //用来删除：li标签的方法
+                removeItem:function (index) {
+                    //删除当前：索引下标值
+                    //splice(删除元素起始索引， 删除几个元素， 添加新的数组（可缺省）)
+                    this.contents.splice(index, 1);
+                }
+
+            }
+        });
+
+    </script>
+~~~
+
