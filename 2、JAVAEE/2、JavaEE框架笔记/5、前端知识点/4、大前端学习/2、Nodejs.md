@@ -458,17 +458,17 @@ console.log(m.sub(1, 2));
 
 1、全局安装
 
-> npm install -g webpack webpack-cli
+> npm install  webpack -g  					//打包工具
+>
+> npm install  webpack-cli -g				//webpack客户端
 
 
 
 2、安装后查看版本号
 
-> webpack -v
-
-
-
-
+> webpack -v					//用这两个中的：谁都会显示（二者版本）
+>
+> webpack-cli -v
 
 
 
@@ -488,6 +488,10 @@ console.log(m.sub(1, 2));
 ~~~
 
 ![image-20210224154530001](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210224154530001.png)
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210306205743081.png" alt="image-20210306205743081" style="zoom:50%;" />
 
 ---
 
