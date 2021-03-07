@@ -1816,3 +1816,95 @@ npm run dev
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210306200209707.png" alt="image-20210306200209707" style="zoom:50%;" />
 
+---
+
+# 11、webpack打包
+
+> 去看：自己的node.js的笔记
+
+
+
+
+
+# 12、vue-router
+
+## 12.1、什么是：vue-router?
+
+
+
+## 12.2、它的作用：是什么？
+
+
+
+## 12.3、它如何使用？
+
+`第一步：安装vue-router模块`
+
+> --sava-dev的作用参考：
+>
+> https://www.cnblogs.com/limitcode/p/7906447.html
+
+~~~
+npm install vue-router  --save-dev
+~~~
+
+
+
+`第二步：导入vue-router模块, 并声明使用`
+
+- 1、情况1：当有new Vue()对象的文件中， 如==main.js==
+
+~~~javascript
+import Vue from 'vue'
+import App from './App'
+import VueRouter from "vue-router";			//导入模块
+
+Vue.config.productionTip = false
+Vue.use("VueRouter");					//声明模块， 因为有Vue对象，可以直接这样写
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  components: { App },
+  template: '<App/>'
+})
+
+~~~
+
+
+
+- 2、情况2：当没有new Vue()对象的文件中， 如==App.vue==
+
+~~~vue
+<template>
+  <div id="app">
+      <h1>剑客白丁</h1>
+  </div>
+</template>
+
+<script>
+
+//导入：组件
+import component from './components/component';			//引入component组件
+
+export default {
+  name: 'App',
+  comments:{
+    component		//声明component组件， 因为没有vue() 对象
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
+
+~~~
+
