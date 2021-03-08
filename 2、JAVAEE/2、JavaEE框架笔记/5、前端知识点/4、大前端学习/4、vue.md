@@ -1,3 +1,5 @@
+
+
 # 1、前端拓展视野
 
 ## 1.1、JavaScript框架
@@ -1830,15 +1832,34 @@ npm run dev
 
 ## 12.1、什么是：vue-router?
 
-
+~~~
+vue-router是Vue.js官方的路由插件，它和vue.js是深度集成的，适合用于构建单页面应用。
+vue的单页面应用是基于路由和组件的，路由用于设定访问路径，并将路径和组件映射起来。
+传统的页面应用，是用一些超链接来实现页面切换和跳转的。
+在vue-router单页面应用中，则是(路径之间)的切换，也就是(组件的切换)。
+~~~
 
 ## 12.2、它的作用：是什么？
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210308084029374.png" alt="image-20210308084029374" style="zoom: 67%;" />
+
+---
 
 
 
 ## 12.3、它如何使用？
 
-`第一步：安装vue-router模块`
+~~~
+1、安装vue-router模块
+2、在components目录中（创建组件）
+3、创建router目录， 建立index.js文件引入组件
+4、main.js中引入router文件下的所有配置  (切记：模块名必须为router)
+5、App.vue中：声明跳转
+~~~
+
+
+
+### 12.3.1、安装vue-router模块
 
 > --sava-dev的作用参考：
 >
@@ -1850,47 +1871,135 @@ npm install vue-router  --save-dev
 
 
 
-`第二步：导入vue-router模块, 并声明使用`
+### 12.3.2、在components目录中（创建组件）
 
-- 1、情况1：当有new Vue()对象的文件中， 如==main.js==
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210308112801610.png" alt="image-20210308112801610" style="zoom:50%;" />
 
-~~~javascript
-import Vue from 'vue'
-import App from './App'
-import VueRouter from "vue-router";			//导入模块
+----
 
-Vue.config.productionTip = false
-Vue.use("VueRouter");					//声明模块， 因为有Vue对象，可以直接这样写
+- myContentPage.vue
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  components: { App },
-  template: '<App/>'
-})
+~~~vue
+<template>
+  <div>内容页面</div>
+</template>
+
+<script>
+  export default {
+    name: "myContentPage"
+  }
+</script>
+
+<style scoped>
+
+</style>
+~~~
+
+- myMainPage.vue
+
+~~~vue
+<template>
+    <div>剑客主页</div>
+</template>
+
+<script>
+    export default {
+      name: "myMainPage"
+    }
+</script>
+
+<style scoped>
+
+</style>
 
 ~~~
 
 
 
-- 2、情况2：当没有new Vue()对象的文件中， 如==App.vue==
+### 12.3.3、创建router目录， 建立index.js文件引入组件
+
+~~~javascript
+/*路由：主配置文件*/
+
+
+//1、导入模块
+import Vue from 'vue';
+import VueRouter from "vue-router";
+
+
+//2、安装路由
+Vue.use(VueRouter)
+
+//3、导入组件
+import myMainPage from "../components/myMainPage";
+import myContentPage from "../components/myContentPage";
+
+//4、配置：导出路由
+export default new VueRouter({
+  routes:[
+    //配置：主页（路由信息）
+    {
+      path:"/myMainPage",
+      name:"myMainPage",
+      component:myMainPage
+    },
+
+    //配置：内容页（路由信息）
+    {
+      path:"/myContentPage",
+      name:"myContentPage",
+      component:myContentPage
+    }
+  ]
+});
+
+~~~
+
+
+
+### 12.3.4、main.js中引入router文件下的所有配置
+
+~~~javascript
+import Vue from 'vue'
+import App from './App'
+
+//导入：这里导入模块名， 只能起router， 因为
+import router from './router'
+
+Vue.config.productionTip = false
+
+new Vue({
+  el: '#app',
+  //使用路由：只能名称为router
+  router,
+  components: { App },
+  template: '<App/>'
+})
+~~~
+
+
+
+### 12.3.5、App.vue中：声明跳转
 
 ~~~vue
 <template>
   <div id="app">
       <h1>剑客白丁</h1>
+
+      <!--配置：跳转路由-->
+      <router-link to="/myMainPage">主页</router-link>
+      <router-link to="/myContentPage">内容页</router-link>
+
+        <!--显示内容-->
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
 
-//导入：组件
-import component from './components/component';			//引入component组件
-
 export default {
   name: 'App',
-  comments:{
-    component		//声明component组件， 因为没有vue() 对象
+  components: {
   }
 }
 </script>
@@ -1905,6 +2014,52 @@ export default {
   margin-top: 60px;
 }
 </style>
-
 ~~~
 
+
+
+### 12.3.6、效果如图
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/bandicam%202021-03-08%2011-34-00-508%2000_00_00-00_00_30.gif" alt="bandicam 2021-03-08 11-34-00-508 00_00_00-00_00_30" style="zoom:67%;" />
+
+---
+
+
+
+
+
+# 13、vue+element-ui学习
+
+## 13.1、安装element-ui
+
+> 看官网：https://element.eleme.io/#/zh-CN/component/installation
+
+~~~~javascript
+// 第一步：创建一个以webpack为模板的（vue工程：hello-vue） , 选择：一路no，自己安装模块。
+vue init webpack hello-vue
+
+// 第二步：进入工程目录
+cd hello-vue
+
+// 第三步：安装vue-router
+npm install vue-router --save-dev
+
+// 第四步：安装element-ui
+npm i element-ui -S
+
+// 第五步：安装依赖
+npm install 
+
+// 第六步：安装SASS加载器
+cnpm install sass-loader --save-dev
+cnpm install node-sass --save-dev
+
+// 第七步：启动测试
+npm run dev
+~~~~
+
+## 13.2、npm安装命令解释
+
+![image-20210308115628382](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210308115628382.png)
+
+---
