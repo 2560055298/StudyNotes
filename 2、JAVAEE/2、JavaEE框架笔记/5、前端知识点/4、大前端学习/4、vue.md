@@ -2063,3 +2063,352 @@ npm run dev
 ![image-20210308115628382](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210308115628382.png)
 
 ---
+
+
+
+# 14、路由嵌套、参数传递、重定向
+
+## 14.1、路由嵌套
+
+> 通过：index.js中书写children属性
+
+- router文件下的：index.js
+
+~~~javascript
+//4、配置：导出路由
+export default new VueRouter({
+  routes:[
+    //配置：主页（路由信息）
+    {
+      path:"/myMain",
+      name:"myMain",
+      component:Main,
+      children:[
+        {
+          path:'/user/profile/:id',         
+          component:MyProfile,
+        },
+        {path:'/user/list', component:MyList}
+      ]
+    },
+  ]
+});
+
+~~~
+
+- Main.vue文件下
+
+~~~vue
+<template>
+  <div>
+    <el-container>
+      <el-aside width="200px">
+        <el-menu :default-openeds="['1']">
+          <el-submenu index="1">
+            <template slot="title"><i class="el-icon-caret-right"></i>用户管理</template>
+            <el-menu-item-group>
+
+              <el-menu-item index="1-1">
+                <!--插入的地方-->
+                <router-link :to="{name:'MyProfile', params:{id:1} }">个人信息</router-link>
+              </el-menu-item>
+
+              <el-menu-item index="1-2">
+                <!--插入的地方-->
+                <router-link to="/user/list">用户列表</router-link>
+              </el-menu-item>
+
+              <el-menu-item index="1-3">
+                  <!--插入的地方-->
+                  <router-link to="/goHome">回到首页</router-link>
+            </el-menu-item>
+
+        <el-main>
+          <!--在这里展示视图-->
+          <router-view />
+        </el-main>
+      </el-container>
+
+  </div>
+</template>
+~~~
+
+
+
+
+
+## 14.2、参数传递
+
+~~~
+参数传递有两种方式：
+	方式一：通过{{$route.params.id}}
+	方式二：通过{{id}} , props
+~~~
+
+- 前端组件（展示）页面：Profile.vue
+
+~~~vue
+<template>
+  <!-- 所有元素：必须在根元素下， 也就是在一个标签中，否则报错-->
+  <div>
+    <h1>个人信息页面</h1>
+       <!--{{$route.params.id}}-->  <!--方式一：渲染值方式-->
+      {{id}}						<!--方式二：渲染方式-->
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "UserProfile",
+    props:['id']        //方式二：需要添加的
+  }
+</script>
+
+<style scoped>
+
+</style>
+~~~
+
+- 主页：main.vue
+
+~~~vue
+<template>
+    <el-menu-item index="1-1">
+     <!--插入的地方-->
+    <router-link :to="{name:'MyProfile', params:{id:1} }">个人信息</router-link>
+    </el-menu-item>
+</template>
+~~~
+
+- 路由：index.js
+
+~~~JavaScript
+//4、配置：导出路由
+export default new VueRouter({
+  routes:[
+    //配置：主页（路由信息）
+    {
+      path:"/myMain",
+      name:"myMain",
+      component:Main,
+      children:[
+        {
+          path:'/user/profile/:id',         //方式一：用:形式，耦合性过强
+          name:'MyProfile',
+          component:MyProfile,
+          props: true                       //方式二：在方式1的基础上，添加一个props
+        },
+        {path:'/user/list', component:MyList}
+      ]
+    },
+  ]
+});
+~~~
+
+
+
+## 14.3、重定向
+
+> Vue中的重定向作用在：路径不同（组件相同的情况下）
+>
+> 使用：redirect:'重定向路径'
+
+- router路由文件下的：index.js
+
+~~~javascript
+//配置：回到首页
+{
+    path:"/goHome",
+    redirect:"/myMain"
+}
+~~~
+
+- Main.vue组件中
+
+~~~vue
+<el-menu-item index="1-3">
+    <!--插入的地方-->
+    <router-link to="/goHome">回到首页</router-link>
+</el-menu-item>
+~~~
+
+> 总结：/goHome路径， 重定向到了/main路径
+
+
+
+
+
+## 14.4、实战代码
+
+> 注意前提webpack项目，已有vue-router模块
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210309112416207.png" alt="image-20210309112416207" style="zoom: 50%;" />
+
+> 1、view/user下的两个组件：List.vue 、 Profile.vue
+
+- List.vue
+
+~~~vue
+<template>
+  <h1>用户列表页</h1>
+</template>
+
+<script>
+  export default {
+    name: "UserList"
+  }
+</script>
+
+<style scoped>
+
+</style>
+~~~
+
+- Profile.vue
+
+~~~vue
+<template>
+  <!-- 所有元素：必须在根元素下， 也就是在一个标签中，否则报错-->
+  <div>
+    <h1>个人信息页面</h1>
+       <!--{{$route.params.id}}-->  <!--方式一：渲染值方式-->
+      {{id}}
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "UserProfile",
+    props:['id']        //方式二：需要添加的
+  }
+</script>
+
+<style scoped>
+
+</style>
+
+~~~
+
+> 2、router下的：index.js
+
+~~~javascript
+/*路由：主配置文件*/
+
+
+//1、导入模块
+import Vue from 'vue';
+import VueRouter from "vue-router";
+
+
+//2、安装路由
+Vue.use(VueRouter)
+
+//3、导入组件
+import Main from "../views/Main";
+import Login from "../views/Login";
+import MyList from "../views/user/List";
+import MyProfile from "../views/user/Profile";
+
+
+//4、配置：导出路由
+export default new VueRouter({
+  routes:[
+    //配置：主页（路由信息）
+    {
+      path:"/myMain",
+      name:"myMain",
+      component:Main,
+      children:[
+        {
+          // path:'/user/profile/:id',       //方式一：用:形式，耦合性过强
+          path:'/user/profile/:id',          //方式二：在方式1的基础上，添加一个props
+          name:'MyProfile',
+          component:MyProfile,
+          props: true
+        },
+        {path:'/user/list', component:MyList}
+      ]
+    },
+
+    //配置：内容页（路由信息）
+    {
+      path:"/myLogin",
+      name:"myLogin",
+      component:Login
+    },
+
+    //配置：回到首页
+    {
+      path:"/goHome",
+      redirect:"/myMain"
+    }
+  ]
+});
+~~~
+
+> 3、main.js
+
+~~~javascript
+import Vue from 'vue'
+import App from './App'
+
+//导入router配置
+import router from "./router"
+
+//导入element-ui组件
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+//声明使用
+Vue.use(ElementUI);
+
+
+Vue.config.productionTip = false
+
+new Vue({
+  el: '#app',
+  router,
+  components: { App },
+  render: h => h(App),
+  template: '<App/>'
+
+})
+
+~~~
+
+> 4、App.vue
+
+~~~vue
+<template>
+  <div id="app">
+      <router-view></router-view>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'App',
+  components: {
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
+
+~~~
+
+
+
+
+
+# 15、404和路由钩子
