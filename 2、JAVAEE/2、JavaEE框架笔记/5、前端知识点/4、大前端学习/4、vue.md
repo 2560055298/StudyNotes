@@ -2412,3 +2412,210 @@ export default {
 
 
 # 15、404和路由钩子
+
+## 15.1、路由模式
+
+> 路由模式分为（两种）：（hash模式）带#， 和（history模式）不带#号
+
+~~~javascript
+//router文件下的（index.js）路由模式：配置如下
+export default new VueRouter({
+  mode:'history',			//不带#号模式
+  routes:[]
+});
+~~~
+
+
+
+## 15.2、404页面配置
+
+> 第一步：定义 NotFind.vue组件
+
+~~~vue
+<template>
+  <div>
+    <h1>404, 您的页面走丢了。</h1>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "NotFind"
+}
+</script>
+
+<style scoped>
+
+</style>
+
+~~~
+
+> 第二步：在路由主配置，index.js中配置
+
+~~~javascript
+//配置：导出路由
+export default new VueRouter({
+  mode:'history',
+  routes:[
+    //配置：找不到404
+    {
+      path:"*",
+      component: MyNotFind
+    }
+});
+~~~
+
+> 第三步：书写跳转代码
+
+~~~javascript
+<router-link to="/goHome">回到首页</router-link>
+~~~
+
+
+
+
+
+## 15.3、路由钩子
+
+~~~
+beforeRouteEnter：在进入路由前执行
+beforeRouteLeave:在离开路由前执行
+~~~
+
+~~~javascript
+<script>
+  import axios from "axios";
+
+  export default {
+    name: "UserProfile",
+    props:['id'],        //方式二：需要添加的
+    beforeRouteEnter:(to, from, next)=>{
+      console.log("进入路由之前");
+      next();
+    },
+
+    beforeRouteLeave:(to, from, next)=>{
+      console.log("进入路由之后");
+      next();
+    }
+  }
+</script>
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210309164432691.png" alt="image-20210309164432691" style="zoom: 50%;" />
+
+---
+
+## 15.4、异步请求实例
+
+> 第一步：需要安装axios （推荐官网）
+
+~~~javascript
+npm install --save axios vue-axios
+~~~
+
+
+
+> 第二步：导入main.js入口文件
+
+~~~javascript
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
+~~~
+
+
+
+> 第三步：准备静态数据（放在static/mock）文件夹下， 此处取名为：my.json
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210309165209439.png" alt="image-20210309165209439" style="zoom: 50%;" />
+
+~~~json
+{
+  "place": "新疆",
+  "info": {
+    "name": "剑客白丁",
+    "age": 18,
+    "sex": "man",
+    "hobby": {
+      "one": "sing",
+      "two": "skip"
+    }
+  },
+
+  "links": [
+    {
+      "name": "女书官网",
+      "url": "https://www.yangzaikongzhongfei.com/"
+    },
+
+    {
+      "name": "CSDN",
+      "url": "https://blog.csdn.net/weixin_44537669?spm=1000.2115.3001.5343"
+    },
+
+    {
+      "name": "博客园",
+      "url": "https://www.cnblogs.com/yangzaikongzhongfei/"
+    }
+  ]
+}
+
+~~~
+
+
+
+> 第四步：运行webpack项目后， 输入my.json文件位置，查看是否能访问
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210309165357631.png" alt="image-20210309165357631" style="zoom:50%;" />
+
+---
+
+> 第五步：在组件中书写，axios获取异步内容。此处用在 Profile.vue组件中
+
+~~~vue
+<template>
+  <!-- 所有元素：必须在根元素下， 也就是在一个标签中，否则报错-->
+  <div>
+    <h1>个人信息页面</h1>
+       <!--{{$route.params.id}}-->  <!--方式一：渲染值方式-->
+      {{id}}
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "UserProfile",
+    props:['id'],        //方式二：需要添加的
+    beforeRouteEnter:(to, from, next)=>{
+      console.log("进入路由之前");
+      next(vm => {
+        vm.getData();
+      });
+    },
+
+    beforeRouteLeave:(to, from, next)=>{
+      console.log("进入路由之后");
+      next();
+    },
+
+    methods:{
+      getData:function () {
+          this.axios
+            //获取本地：my.json文件数据，封装在response对象里面
+            .get('http://localhost:8080/static/mock/my.json')
+            //等价于：.then(function(response){this.message = response.data})
+            //注意：此处（如果不用）（箭头函数）， 不报错，但是不会显示出数据
+            .then(response => (console.log(response.data)));
+        }
+      }
+  }
+</script>
+
+<style scoped>
+
+</style>
+~~~
+
