@@ -178,3 +178,23 @@ hexo d
 > hexo + gitHubPage + 阿里云：
 >
 > https://developer.aliyun.com/article/208375
+
+
+
+
+
+
+
+# 14、绑定阿里云后：找不到css
+
+> 没有绑定阿里云时：能显示页面；
+>
+> 绑定阿里云后，不能显示页面。原因是：域名代替的（内容是否对呢？）
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210311215301411.png" alt="image-20210311215301411" style="zoom:67%;" />
+
+此处：www.yangzaikongzhongfei.com
+
+代替的应该是：2560055298.gitHub.io==而不是== （我的：博客项目真实路径）
+
+==jinyangblog.github.io==
