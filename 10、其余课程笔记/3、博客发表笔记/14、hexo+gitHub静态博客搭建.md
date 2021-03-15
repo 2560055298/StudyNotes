@@ -121,7 +121,7 @@ hexo d
 
 
 
-# 11、不能出现：样式的问题
+# 11、不能出现：==样式==的问题
 
 > 第一步：修改配置文件_config.yml
 
@@ -198,3 +198,24 @@ hexo d
 代替的应该是：2560055298.gitHub.io==而不是== （我的：博客项目真实路径）
 
 ==jinyangblog.github.io==
+
+
+
+
+
+
+
+# 15、gitHub访问后显示：模板字符串
+
+![image-20210315102432837](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210315102432837.png)
+
+==解决方法==
+
+~~~
+npm install hexo-renderer-ejs --save
+npm install hexo-renderer-stylus --save
+npm install hexo-renderer-marked --save
+~~~
+
+
+
