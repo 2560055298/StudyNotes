@@ -24,7 +24,7 @@
     npm install hexo-renderer-stylus --save
     npm install hexo-renderer-marked --save
 
-2、修改hexo版本：改为4.0.2
+2、修改hexo版本：改为4.2.1
 
 3、删除：models
 
