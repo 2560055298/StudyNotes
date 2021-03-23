@@ -10,27 +10,11 @@
 
 
 
-# 3、SprintBoot学习
+# 3、SprintBoot原理学习
 
-## 3.1、SpringBoot是什么？
+## 3.1、微服务
 
-> Spring Boot 就是一个JavaWeb的开发框架， 和SpringMVC类似。
-
-
-
-## 3.2、SprintBoot的作用是什么？
-
-> 1、简化开发， 让配置更简化（约定大于配置）
->
-> 2、 能迅速的开发web应用， 几行代码开发一个http接口 
-
-
-
-
-
-## 3.3、微服务
-
-### 3.3.1、单体应用架构
+### 3.1.1、单体应用架构
 
 ~~~
 all in one （单体应用架构）， 是指将应用中（所有应用服务），都封装在（1个）应用中。
@@ -38,7 +22,7 @@ all in one （单体应用架构）， 是指将应用中（所有应用服务�
 这样：这样业务耦合过强， 维护困难。 例如：1个war包，虽然分布式存储很好，但是修改，需要整体服务停掉替换。
 ~~~
 
-### 3.3.2、微服务：概念
+### 3.1.2、微服务：概念
 
 > **微服务**（英语：Microservices）是一种[软件架构风格](https://zh.wikipedia.org/wiki/软件架构)
 >
@@ -48,7 +32,7 @@ all in one （单体应用架构）， 是指将应用中（所有应用服务�
 
 
 
-### 3.3.3、微服务：作用
+### 3.1.3、微服务：作用
 
 > 它们的规模小和相对隔离可以带来许多其他好处.
 >
@@ -62,7 +46,7 @@ all in one （单体应用架构）， 是指将应用中（所有应用服务�
 
 
 
-### 3.3.4、微服务程序的特征
+### 3.1.4、微服务程序的特征
 
 ~~~
 1、每个服务都容易被取代。
@@ -75,4 +59,281 @@ all in one （单体应用架构）， 是指将应用中（所有应用服务�
 ~~~
 
 
+
+
+
+## 3.2、SpringBoot概念
+
+> 官网：https://spring.io/projects/spring-boot
+
+~~~
+通过Spring Boot，可以轻松地创建独立的，基于生产级别的基于Spring的应用程序，您可以“运行”它们。
+
+对Spring平台和第三方库支持，可以以最小的代价开始使用。 大多数Spring Boot应用程序需要最少的Spring配置。
+~~~
+
+
+
+## 3.3、SprintBoot作用
+
+~~~
+1、创建独立的Spring应用程序
+
+2、直接嵌入Tomcat，Jetty或Undertow（无需部署WAR文件）
+
+3、提供自以为是的“入门”依赖项，以简化您的构建配置
+
+4、尽可能自动配置Spring和3rd Party库
+
+5、提供可用于生产的功能，例如指标，运行状况检查和外部化配置
+
+6、完全没有代码生成，也不需要XML配置
+~~~
+
+
+
+## 3.4、第一个SpringBoot程序
+
+### 3.4.1、官网创建（方式）
+
+`第一步：进入Spring官网，找到SpringBoot`
+
+> https://spring.io/projects/spring-boot#overview   拉到最底端：找到[Spring Initializr](https://start.spring.io/).
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323152818110.png" alt="image-20210323152818110" style="zoom: 33%;" />
+
+---
+
+`第二步：下载生成的文件，导入IEDA`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153044380.png" alt="image-20210323153044380" style="zoom:50%;" />
+
+---
+
+`第三步：将目录删除干净, 和Maven项目一样`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153159088.png" alt="image-20210323153159088" style="zoom:50%;" />
+
+---
+
+`第四步：运行测试`
+
+![image-20210323153329815](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153329815.png)
+
+---
+
+![image-20210323153401487](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153401487.png)
+
+---
+
+![image-20210323153421530](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153421530.png)
+
+---
+
+`最后：按照之前SSM框架书写，需要的内容即可， 打包方式如下`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153521390.png" alt="image-20210323153521390" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153757084.png" alt="image-20210323153757084" style="zoom: 50%;" />
+
+---
+
+`打包运行图`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323153907179.png" alt="image-20210323153907179" style="zoom:50%;" />
+
+---
+
+
+
+### 3.4.2、IDEA创建（方式）
+
+![image-20210323154542034](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323154542034.png)
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323154853233.png" alt="image-20210323154853233" style="zoom: 50%;" />
+
+---
+
+![image-20210323155221772](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323155221772.png)
+
+---
+
+
+
+### 3.4.3、程序中要注意的点
+
+- `1、pom.xml中配置讲解`
+
+~~~
+parent：继承spring-boot-starter-parent的依赖管理， 控制版本与打包等内容
+
+spring-boot-start-web 
+用于实现Http接口, 该依赖中， 包含了SpringMVC官网对它的描述是：使用SpringMVC构建Web（包括RESTful）应用程序的入门者使用Tomcat作为（默认嵌入式容器）
+
+spring-boot-starter-test：用于编写单元测试的（依赖包）
+
+spring-boot-maven-plugin 配合 spring-boot-maven-parent
+就可以把SprintBoot应用打包成JAR来直接运行
+~~~
+
+
+
+- `2、修改端口`
+
+> 在application.properties中修改
+
+~~~properties
+server.port=8081
+~~~
+
+
+
+- `3、自定义banner.txt`
+
+> 去google：找一个banner (标语) ， 然后在resource中添加  banner.txt,   重启即可出现
+
+![image-20210323161507408](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323161507408.png)
+
+
+
+## 3.5、SpringBoot原理
+
+### 3.5.1、pom.xml文件
+
+`1、spring-boot-starter-parent 父工程`
+
+> 内部包含：大量依赖， 所以导入只需要按照（spring-boot-starter-某某某）即可，不要写版本
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323162555942.png" alt="image-20210323162555942" style="zoom:50%;" />
+
+---
+
+
+
+`2、启动器：Starters`
+
+> 格式：spring-boot-starter-某某某 
+>
+> 作用：会去父工程文件中，将所需依赖导入，不需要写版本，父工程已指定版本。  
+
+例如：导入web
+
+~~~xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+~~~
+
+
+
+### 3.5.2、主程序
+
+~~~java
+@SpringBootApplication		 //标注这个类是一个springboot的应用, 启动类下的所有资源被导入
+public class Springboot01HelloworldApplication {
+    public static void main(String[] args) {
+        //将springboot应用启动
+        SpringApplication.run(Springboot01HelloworldApplication.class, args);
+    }
+}
+~~~
+
+
+
+`1、注解：@SpringBootApplication	`
+
+> 思维导图
+>
+> https://www.processon.com/mindmap/6059b50407912927bd75b871
+
+~~~
+总结：自动配置真正实现是classpath中搜寻所有的META-INF/spring.factories配置文件， 并将其中对应的org-springframework.boot.autoconfig 包下的配置，通过反射实例化为对应标注了@Configuration的JavaConfig形式的IOC容器配置，然后将这些都汇总成一个实例，并加载到IOC容器中
+~~~
+
+![image-20210323185824670](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323185824670.png)
+
+![image-20210323203959667](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323203959667.png)
+
+---
+
+
+
+`2、run`
+
+![image-20210323205529676](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323205529676.png)
+
+---
+
+`3、Application`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323205926905.png" alt="image-20210323205926905" style="zoom: 50%;" />
+
+---
+
+`3、Application流程图`
+
+![1231231](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/1231231.png)
+
+
+
+3.6、SpringBoot考点
+
+- 自动装配
+- run() 
+
+ 
+
+
+
+# 4、SpringBoot配置
+
+## 4.1、yaml
+
+> SpringBoot 推崇使用（.yaml）
+
+### 4.1.1、yaml概念
+
+~~~
+YAML 是一门语言
+YAML 的语法和其他高级语言类似，并且可以简单表达清单、散列表，标量等数据形态。它使用空白符号缩进和大量依赖外观的特色，特别适合用来表达或编辑数据结构、各种配置文件、倾印调试内容、文件大纲（例如：许多电子邮件标题格式和YAML非常接近）。
+~~~
+
+
+
+
+
+
+
+### 4.1.2、支持的数据类型
+
+~~~
+1、对象：键值对的集合，又称为映射（mapping）/ 哈希（hashes） / 字典（dictionary）
+2、数组：一组按次序排列的值，又称为序列（sequence） / 列表（list）
+3、纯量（scalars）：单个的、不可再分的值
+~~~
+
+
+
+### 4.1.3、用法
+
+
+
+
+
+
+
+### 4.1.x、注意点
+
+~~~
+1、大小写敏感
+2、使用缩进表示层级关系
+3、缩进不允许使用tab，只允许空格
+4、缩进的空格数不重要，只要相同层级的元素左对齐即可
+5、'#'表示注释
+~~~
 
