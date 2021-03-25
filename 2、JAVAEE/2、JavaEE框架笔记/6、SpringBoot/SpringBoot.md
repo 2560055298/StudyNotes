@@ -421,3 +421,78 @@ array1: [A, B, C]
 
 
 ## 4.4、JSR303校验
+
+> 使用注解：@Validated      //数据校验
+
+~~~
+JSR是Java Specification Requests的缩写，意思是Java 规范提案。是指向JCP(Java Community Process)提出新增一个标准化技术规范的正式请求。
+任何人都可以提交JSR，以向Java平台增添新的API和服务。JSR已成为Java界的一个重要标准。
+
+JSR-303 是JAVA EE 6 中的一项子规范，叫做Bean Validation，Hibernate Validator 是 Bean Validation 的参考实现 .
+Hibernate Validator 提供了 JSR 303 规范中所有内置 constraint 的实现，除此之外还有一些附加的 constraint。
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325204252705.png" alt="image-20210325204252705" style="zoom:50%;" />
+
+---
+
+`使用：邮箱验证例子`
+
+> @Email(message="不是邮箱")
+
+![image-20210325204444401](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325204444401.png)
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325205122874.png" alt="image-20210325205122874" style="zoom:50%;" />
+
+---
+
+
+
+
+
+## 4.5、config配置加载顺序
+
+> 可以配置：4个地方， 同一级别下, config优先
+
+![image-20210325214019325](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325214019325.png)
+
+
+
+## 4.6、多环境切换
+
+- `传统：application.properties 切换`
+
+> 使用：spring.profiles.active=dev
+
+![image-20210325215707074](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325215707074.png)
+
+---
+
+
+
+`appliction.yaml`
+
+> 其中用到了 --- 作为分割符
+
+~~~yaml
+server:
+  port: 8081
+spring:
+  profiles:
+    active: dev
+---
+server:
+  port: 8082
+
+spring:
+  profiles: dev
+
+---
+server:
+  port: 8083
+spring:
+  profiles: test
+~~~
+
