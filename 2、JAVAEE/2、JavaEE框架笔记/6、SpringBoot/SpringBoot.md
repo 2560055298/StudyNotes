@@ -501,3 +501,104 @@ spring:
 # 5、再次探讨：配置文件
 
 > yaml 或 properties配置文件中：到底能写什么呢？ 为什么这样写，就调用了呢？
+
+![image-20210327152947947](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327152947947.png)
+
+![image-20210327155057245](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327155057245.png)
+
+~~~
+1、在springboot-autoconfigure-xxx.jar包中
+2、spring.factories文件下存在：ActiveMQAutoconfiguration选项
+3、点进去：跳转到ActiveMQAutoconfiguration.java
+4、里面有@EnableAutoconfigurationProperties(ActiveMQProperties.class)
+5、点进去：有一个注解@ConfigurationProperties, 前缀是（spring.activemq）
+6、该类下有：brokerUrl属性
+~~~
+
+
+
+
+
+## 5.1、@Conditional拓展注解
+
+![image-20210327150442495](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327150442495.png)
+
+
+
+## 5.2、查看哪些配置生效了
+
+> 在application.yaml中
+
+~~~yml
+debug: true
+~~~
+
+
+
+
+
+# 6、SpringBoot Web
+
+## 6.1、学习前需要思考的问题
+
+~~~
+1、springboot用的是jar包， 不是war包， 如何进行webapp相关配置？
+	①、静态资源如何导入？
+	②、SpringMVC如何拓展？
+	③、拦截器、文件上传、json这些如何体现？
+
+2、springboot的自动装配，装配了哪些东西？ 能否二次开发？
+~~~
+
+
+
+
+
+## 6.2、分析web类
+
+> WebMvcAutoConfiguration.class
+>
+> addResourceHandlers()   方法
+
+~~~java
+@Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    super.addResourceHandlers(registry);
+    
+    //如果：配置了自定义路径， 那么源码路径将会被代替，直接return
+    if (!this.resourceProperties.isAddMappings()) {
+    	logger.debug("Default resource handling disabled");
+    	return;
+    }
+    ServletContext servletContext = getServletContext();
+    //当没有：自定义路径， 可以使用方式一：webjars的路径    
+    addResourceHandler(registry, "/webjars/**", "classpath:/META-INF/resources/webjars/");
+    addResourceHandler(registry, this.mvcProperties.getStaticPathPattern(), (registration) -> {
+ 	
+        //也可以使用：静态路径resources、static、public  都配置了按照源码数组顺序0开始   registration.addResourceLocations(this.resourceProperties.getStaticLocations());
+    if (servletContext != null) {
+    registration.addResourceLocations(new ServletContextResource(servletContext, SERVLET_LOCATION));
+    }
+    });
+}
+~~~
+
+`得出结论`
+
+~~~yaml
+1、如果在：application.properties中配置了(自定义路径)， 将走自定义路径，加载静态资源
+	spring.mvc.static-path-pattern="/hello"     # yaml中也是一样的
+	
+2、如果没有配置，静态资源，选择webjars的话，导入maven依赖后
+	   "/webjars/**" 等价于 "classpath:/META-INF/resources/webjars/")
+   例如：localhost/8080/webjars <==> localhost/8080/META-INF/resources/webjars/
+   
+3、如果没有配置，静态资源，选择resource/下的，   static、public、resources文件夹，也行
+	同名文件加载顺序：resources >  static > public   (是按源码的：数组顺序决定的)
+~~~
+
+
+
+> WebMvcAutoConfiguration  -->>  addResourceHandlers()  -->> getStaticLocations() 
+
+![image-20210327194228912](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327194228912.png)
