@@ -496,3 +496,8 @@ spring:
   profiles: test
 ~~~
 
+
+
+# 5、再次探讨：配置文件
+
+> yaml 或 properties配置文件中：到底能写什么呢？ 为什么这样写，就调用了呢？
