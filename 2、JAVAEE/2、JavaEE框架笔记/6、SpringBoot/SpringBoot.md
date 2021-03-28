@@ -1,3 +1,5 @@
+
+
 # 1、知识点：回顾
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210320183654000.png" alt="image-20210320183654000" style="zoom:50%;" />
@@ -554,7 +556,9 @@ debug: true
 
 
 
-## 6.2、分析web类
+## 6.2、静态资源导入
+
+### 6.2.1、分析web类
 
 > WebMvcAutoConfiguration.class
 >
@@ -583,7 +587,9 @@ debug: true
 }
 ~~~
 
-`得出结论`
+
+
+### 6.2.2、静态资源导入方式
 
 ~~~yaml
 1、如果在：application.properties中配置了(自定义路径)， 将走自定义路径，加载静态资源
@@ -602,3 +608,237 @@ debug: true
 > WebMvcAutoConfiguration  -->>  addResourceHandlers()  -->> getStaticLocations() 
 
 ![image-20210327194228912](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327194228912.png)
+
+
+
+
+
+## 6.3、首页和图标定制
+
+### 6.3.1、首页定制
+
+> 在resources文件夹下的：resources、static、public 文件夹下，写一个index.html即为主页
+
+`原因：看源码`
+
+![image-20210327205016951](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327205016951.png)
+
+---
+
+### 6.3.2、头像定制
+
+> 在springboot的新版本，被取消掉了， 因为：防止被识别使用了springboot框架，可不是我说的
+
+
+
+
+
+## 6.4、第一个==thymeleaf==程序
+
+`第一步：导入meaven依赖`
+
+> 官网找到gitHub地址：https://github.com/spring-projects/spring-boot/blob/v2.1.18.RELEASE/spring-boot-project/spring-boot-starters/spring-boot-starter-thymeleaf/pom.xml
+
+~~~xml
+<dependency>
+      <groupId>org.thymeleaf</groupId>
+      <artifactId>thymeleaf-spring5</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.thymeleaf.extras</groupId>
+    <artifactId>thymeleaf-extras-java8time</artifactId>
+</dependency>
+~~~
+
+`2、导入thymeleaf约束`
+
+~~~html
+<html xmlns:th="http://www.thymeleaf.org">
+~~~
+
+
+
+`3、第三步书写`
+
+- HelloController.java
+
+~~~java
+@Controller     //等价于：@Controller + @ResponseBody
+public class HelloController {
+    @RequestMapping("/hello")
+    public String hello(Model model){
+        model.addAttribute("msg", "hello SpringBoot thymeleaf");
+        return "index";
+    }
+}
+~~~
+
+
+
+- templates/index.html
+
+~~~html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+    <body>
+        我是正版的主页：<div th:text="${msg}"></div>
+    </body>
+</html>
+~~~
+
+
+
+## 6.5、探究thymeleaf
+
+### 6.5.1、thymeleaf概念
+
+~~~
+Thymeleaf是⾯向Web和独⽴环境的现代服务器端Java模板引擎，能够处理HTML，XML，JavaScript，CSS甚⾄纯⽂本。可以嵌入spring, 完全替代 JSP.
+~~~
+
+
+
+### 6.5.2、thymeleaf设计理念
+
+~~~
+Thymeleaf旨在提供⼀个优雅的、⾼度可维护的创建模板的⽅式。 
+为了实现这⼀⽬标，Thymeleaf建⽴在(⾃然模板)的概念上，将其逻辑注⼊到模板⽂件中，不会影响模板设计原型。 
+这改善了设计的沟通，弥合了设计和开发团队之间的差距。
+~~~
+
+
+
+### 6.5.3、thymeleaf与jsp区别
+
+~~~
+Thymeleaf与JSP的区别在于，不运行项目之前。Thymeleaf也是纯HTML（不需要服务端的支持）。
+而JSP需要进行一定的转换。
+~~~
+
+
+
+### 6.5.4、thymeleaf作用
+
+~~~
+1.Thymeleaf 在有网络和无网络的环境下皆可运行。
+
+2、支持浏览器查看页面的静态效果，也支持（动态页面效果）
+	支持静态效果原因：因为它支持 html 原型，然后在 html标签，嵌入模板
+	支持动态效果原因：存在动态效果时，会替换默认（静态效果）
+
+2.Thymeleaf 开箱即用的特性。它提供标准和spring标准两种方言，可以直接套用模板实现JSTL、 OGNL表达式效果，避免每天套模板、该jstl、改标签的困扰。同时开发人员也可以扩展和创建自定义的方言。
+
+3.Thymeleaf 提供spring标准方言和一个与 SpringMVC 完美集成的可选模块，可以快速的实现表单绑定、属性编辑器、国际化等功能。
+~~~
+
+==源码中可知：thymeleaf 还有SpringMVC中（视图解析器）的作用==
+
+![image-20210328075101557](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328075101557.png)
+
+
+
+### 6.5.2、thymeleaf用法
+
+> 查看官方文档：10 Attribute Precedence
+
+- `1、显示文本`
+
+~~~html
+<div th:text="${msg}"></div>
+~~~
+
+
+
+- `2、显示html`
+
+~~~html
+<div th:utext="${msg}"></div>
+~~~
+
+
+
+- `3、循环遍历`
+
+~~~html
+<h1 th:each="book:${books}" th:text="${book}"></h1>
+~~~
+
+
+
+
+
+## 6.6、集成SpringMVC
+
+
+
+### 6.6.1、MVC原理配置
+
+> 使用：@Configuration修饰类， 而不使用@EnableWebMvc
+
+~~~java
+@Configuration  //例如：自定义类
+public class MyConfigMVC implements WebMvcConfigurer {}
+~~~
+
+
+
+`1、视图解析器的添加`
+
+> 官方文档：
+>
+> https://docs.spring.io/spring-boot/docs/2.1.18.RELEASE/reference/html/boot-features-developing-web-applications.html#boot-features-spring-mvc-auto-configuration
+
+~~~
+官方文档提到：ContentNegotiatingViewResolver 类
+~~~
+
+![image-20210328102549264](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328102549264.png)
+
+---
+
+`2、添加自定义视图解析器：MyConfigMVC.java`
+
+~~~java
+@Configuration
+public class MyConfigMVC implements WebMvcConfigurer {
+    @Bean
+    public ViewResolver newViewResolver(){
+        return new myViewResolver();
+    }
+
+    public static class myViewResolver implements ViewResolver{
+
+        @Override
+        public View resolveViewName(String viewName, Locale locale) throws Exception {
+            return null;
+        }
+    }
+}
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328103038240.png" alt="image-20210328103038240" style="zoom:50%;" />
+
+---
+
+
+
+### 6.6.2、拓展SpringMVC
+
+`消息格式转换器`
+
+
+
+
+
+
+
+
+
+6.6.3、总结
+
+![image-20210328110222774](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328110222774.png)
