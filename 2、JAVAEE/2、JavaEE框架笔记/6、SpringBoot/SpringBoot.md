@@ -829,16 +829,40 @@ public class MyConfigMVC implements WebMvcConfigurer {
 
 ### 6.6.2、拓展SpringMVC
 
-`消息格式转换器`
+~~~
+ 拓展SpringMVC时， 仅使用@Configuration即可。
+
+ 若添加了  @EnableWebMvc， 会使WebMvcAutoConfiguration 配置所有失效
+ 最基本的体现就是：静态资源，无法通过 resources、static、public 直接在网站中url访问到了
+~~~
+
+`原因如下：`
+
+~~~java
+当在配置类中：
+  1-1、添加@EnableWebMvc时, 注解内导入了@Import(DelegatingWebMvcConfiguration.class)
+  1-2、并且：DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport
+    
+而在WebMvcAutoConfiguration自动配置类中：
+  2-1、存在注解：@ConditionalOnMissingBean(WebMvcConfigurationSupport.class)
+  2-2、该注解表示：当存在WebMvcConfigurationSupport.class，WebMvcAutoConfiguration失效
+ 
+由于：@EnableWebMvc中
+    DelegatingWebMvcConfiguration 继承了 WebMvcConfigurationSupport
+    所以：整个web配置失效。
+~~~
+
+![image-20210328150747609](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328150747609.png)
 
 
 
+### 6.6.3、总结
 
+~~~
+1、Springboot对大量（自动配置）都进行了封装， 需要观察底层源码，才能弄懂实现的原理。
+2、自动配置的内容，都是可以进行修改的， 如果不修改，使用默认的内容。
+3、配置文件：位于springboot-autoconfig下的spring.factories
+~~~
 
+![image-20210328151616904](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328151616904.png)
 
-
-
-
-6.6.3、总结
-
-![image-20210328110222774](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328110222774.png)
