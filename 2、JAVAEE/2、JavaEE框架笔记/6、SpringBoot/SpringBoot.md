@@ -866,3 +866,44 @@ public class MyConfigMVC implements WebMvcConfigurer {
 
 ![image-20210328151616904](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328151616904.png)
 
+
+
+
+
+# 7、实战：员工管理系统
+
+## 7.1、静态资源导入
+
+> 1、拿到前端的：代码， 将代码全部改为（Thymeleaf 模板）
+
+~~~html
+<html xmlns:th="http://www.thymeleaf.org">
+~~~
+
+
+
+> 2、超链接：用th:xxx   @{}替换
+
+~~~css
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+~~~
+
+
+
+> 3、若需要修改：虚拟项目名 （在配置文件：application.properties或 yaml）中修改
+
+~~~properties
+server.servlet.context-path=/yang
+~~~
+
+
+
+
+
+## 7.2、实现：国际化
+
+> 1、将file encoding 中全部设置为：utf-8
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328191450117.png" alt="image-20210328191450117" style="zoom: 33%;" />
+
+---
