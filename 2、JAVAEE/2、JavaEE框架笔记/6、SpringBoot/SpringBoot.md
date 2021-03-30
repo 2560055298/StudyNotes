@@ -233,6 +233,12 @@ server.port=8081
 
 
 
+`3、所有的依赖来自与：Dependency Management`
+
+> https://docs.spring.io/spring-boot/docs/2.1.18.RELEASE/reference/html/using-boot-build-systems.html#using-boot-dependency-management
+
+
+
 ### 3.5.2、主程序
 
 ~~~java
