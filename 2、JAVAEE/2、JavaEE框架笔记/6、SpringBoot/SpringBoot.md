@@ -1030,3 +1030,111 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 ## 7.3、登录页面
 
+> UserController.java中,  密码错误，则添加一条信息（msg = 用户密码错误 ）， 成功就重定向
+
+~~~java
+@Controller
+public class UserController {
+    @RequestMapping("/user/login")
+    public String login(
+                        @RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        Model model){
+        if(!username.equals("") && "123456".equals(password)){
+            return "redirect:/main";
+        }else{
+            model.addAttribute("msg", "用户名或密码错误");
+            return "index";
+        }
+    }
+}
+~~~
+
+> 再写一条：自定义url (跳转到/main)
+
+~~~java
+@Configuration      //注意：@Configuration 标注：这是拓展Springmvc的配置类
+public class MyMvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/main").setViewName("dashboard");
+    }
+
+    //转交Spring负责，自定义的国际化组件就生效了
+    @Bean
+    public LocaleResolver localeResolver(){
+        return new MyLocaleResolver();
+    }
+}
+~~~
+
+> html页面中：需要使用 th:if = ${ ! #strings.isEmpty(msg)}		//如果不为空，则执行th:text
+
+~~~html
+<p style="color: red" th:text="${msg}" th:if="${!#strings.isEmpty(msg)}"></p>
+~~~
+
+
+
+## 7.4、拦截器
+
+> 定义一个：拦截器类 , 实现 HandlerInterceptor接口
+
+~~~java
+public class MyInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        Object logUser = request.getSession().getAttribute("loginUser");
+
+        if(logUser != null){
+            //登录成功
+            return true;
+        }else{
+            //登录失败
+            request.setAttribute("msg", "没有权限，不能访问");
+            request.getRequestDispatcher("/index").forward(request, response);
+            return false;
+        }
+
+    }
+}
+~~~
+
+> Web拓展的配置类中：需要添加重写方法  addInterceptors(InterceptorRegistry registry)
+
+~~~java
+@Configuration      //注意：@Configuration 标注：这是拓展Springmvc的配置类
+public class MyMvcConfig implements WebMvcConfigurer {
+    //配置url路由
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/main").setViewName("dashboard");
+    }
+
+    //转交Spring负责，自定义的国际化组件就生效了
+    @Bean
+    public LocaleResolver localeResolver(){
+        return new MyLocaleResolver();
+    }
+
+    //配置：拦截器
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new MyInterceptor())
+        .addPathPatterns("/**")
+        .excludePathPatterns("/", "/index", "/user/login", "/css/**", "/js/**", "/img/**")
+        ;
+    }
+}
+~~~
+
+> 注意：thymeleaf的第二种取变量语法为   [[${变量名}]]
+
+~~~html
+<a href="http://getbootstrap.com/dashboard/#" > [[${session.loginUser}]]</a>
+~~~
+
