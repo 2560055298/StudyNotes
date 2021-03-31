@@ -881,6 +881,8 @@ public class MyConfigMVC implements WebMvcConfigurer {
 ## 7.1、静态资源导入
 
 > 1、拿到前端的：代码， 将代码全部改为（Thymeleaf 模板）
+>
+> https://gitee.com/sheep-are-flying-in-the-sky/i18n/tree/master/src/main/resources/templates
 
 ~~~html
 <html xmlns:th="http://www.thymeleaf.org">
@@ -908,8 +910,123 @@ server.servlet.context-path=/yang
 
 ## 7.2、实现：国际化
 
+### 7.2.1、设置：编码格式
+
 > 1、将file encoding 中全部设置为：utf-8
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328191450117.png" alt="image-20210328191450117" style="zoom: 33%;" />
 
 ---
+
+
+
+### 7.2.2、配置：语言
+
+> 需要建立一个：i18n的包，配置语言的.properties文件
+
+~~~properties
+创建中文properties：login_zh_CN.properites
+创建英文properties: login_en_US.properites
+~~~
+
+![image-20210331111144647](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331111144647.png)
+
+---
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331111405513.png" alt="image-20210331111405513" style="zoom: 33%;" />
+
+---
+
+
+
+### 7.2.3、绑定：语言位置
+
+> MessageSourceAutoConfiguration 类
+
+![image-20210331113549661](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331113549661.png)
+
+
+
+### 7.2.4、html获取配置内容
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331141350284.png" alt="image-20210331141350284" style="zoom:50%;" />
+
+----
+
+
+
+### 7.2.5、设置动态语言解析
+
+`1、查看：为什么能设置（动态语言解析的原因）`
+
+> 找到：LocaleResolver（）方法（查看）默认的本地解析类：AcceptHeaderLocaleResolver.class
+
+![image-20210331144137770](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331144137770.png)
+
+---
+
+![image-20210331152412844](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331152412844.png)
+
+---
+
+`2、定义：动态语言解析类`
+
+> 实现：LocaleResolver接口， 模仿AcceptHeaderLocaleResolver类
+
+~~~java
+public class MyLocaleResolver implements LocaleResolver {
+    @Override
+    public Locale resolveLocale(HttpServletRequest request) {
+        String l = request.getParameter("l");  //从request中获取：自己设置的解析语言
+        Locale locale = request.getLocale();     //获取：默认的本地语言解析
+
+        System.out.println(l);
+
+        if( l != null && l.length() != 0){       //如果自己的解析语言不为空，且长度不为0
+            String[] language = l.split("_");   //将其分割
+
+            System.out.println(language);              //显示：分割后的语言
+
+            //language[0]国家；  language[1]地区
+            locale = new Locale(language[0], language[1]);    //将分割后的：语言封装到locale类
+        }
+
+        return locale;                          //返回：需要显示（解析语言）
+    }
+
+    @Override
+    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
+
+    }
+}
+~~~
+
+
+
+`3、将语言解析类：添加到Springmvc配置中`
+
+> MyMvcConfig.class类
+
+~~~java
+@Configuration      //注意：@Configuration 标注：这是拓展Springmvc的配置类
+public class MyMvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
+    }
+
+    //转交Spring负责，自定义的国际化组件就生效了
+    @Bean
+    public LocaleResolver localeResolver(){
+        return new MyLocaleResolver();
+    }
+}
+~~~
+
+
+
+## 7.3、登录页面
+
