@@ -1138,3 +1138,51 @@ public class MyMvcConfig implements WebMvcConfigurer {
 <a href="http://getbootstrap.com/dashboard/#" > [[${session.loginUser}]]</a>
 ~~~
 
+
+
+## 7.5、组件化：静态页面
+
+`1、静态内容：组件化`
+
+> 使用：th:fragment="组件名"  构建组件
+
+~~~html
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" th:fragment="sidebar">
+~~~
+
+
+
+`2、引用组件`
+
+> 利用：th:replace 或 th:insert 代替 （静态文件块），  ~{位置 :: 页面（参数）}  引用
+
+~~~html
+<div th:replace="~{commons/commons :: sidebar(active='list.html')}"></div>
+~~~
+
+
+
+`3、判断点击语句`
+
+> ${表达式 == 内容  ? true内容 : false内容}
+
+~~~html
+<a th:class="${active=='main.html'?'nav-link active':'nav-link'}" th:href="@{/main}">
+~~~
+
+
+
+`4、遍历显示员工列表`
+
+~~~html
+<tbody>
+    <tr th:each="emp:${employees}">
+        <td th:text="${emp.getId()}"></td>
+        <td th:text="${emp.getLastName()}"></td>
+        <td th:text="${emp.getEmail()}"></td>
+        <td th:text="${emp.getDepartment()}"></td>
+        <td th:text="${emp.getBirth()}"></td>
+    </tr>
+</tbody>
+~~~
+
