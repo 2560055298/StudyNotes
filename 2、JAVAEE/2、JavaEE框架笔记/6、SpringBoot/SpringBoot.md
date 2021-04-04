@@ -1186,3 +1186,14 @@ public class MyMvcConfig implements WebMvcConfigurer {
 </tbody>
 ~~~
 
+
+
+## 7.6、添加员工信息
+
+~~~
+1、使用了：bootstrap的表单
+2、使用了：redirect、forward 控制器间的跳转
+3、使用了：restFul风格,同为跳转 th:href="/emps" 但是（get、post方式不同）跳转到不同的控制器
+4、使用了：spring.mvc.format.date=yyyy-MM-dd  修改日期格式
+~~~
+
