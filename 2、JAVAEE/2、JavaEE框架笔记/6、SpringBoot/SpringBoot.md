@@ -14,83 +14,31 @@
 
 # 3、SprintBoot原理学习
 
-## 3.1、微服务
-
-### 3.1.1、单体应用架构
-
-~~~
-all in one （单体应用架构）， 是指将应用中（所有应用服务），都封装在（1个）应用中。
-
-这样：这样业务耦合过强， 维护困难。 例如：1个war包，虽然分布式存储很好，但是修改，需要整体服务停掉替换。
-~~~
-
-### 3.1.2、微服务：概念
-
-> **微服务**（英语：Microservices）是一种[软件架构风格](https://zh.wikipedia.org/wiki/软件架构)
->
-> 它是以专注于单一责任与功能的小型功能区块 (Small Building Blocks) 为基础，利用模块化的方式组合出复杂的大型应用程序，各功能区块使用与语言无关 (Language-Independent/Language agnostic）的[API](https://zh.wikipedia.org/wiki/应用程序接口)集相互通信。
 
 
+## 3.1、前置知识：微服务
 
+![image-20210405151707148](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210405151707148.png)
 
+![image-20210405153543063](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210405153543063.png)
 
-### 3.1.3、微服务：作用
-
-> 它们的规模小和相对隔离可以带来许多其他好处.
->
-> 例如更容易维护，提高生产率，更大的容错能力，更好的业务调整等等。
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210320202913140.png" alt="image-20210320202913140" style="zoom: 67%;" />
-
----
-
-
-
-
-
-### 3.1.4、微服务程序的特征
-
-~~~
-1、每个服务都容易被取代。
-2、服务是以能力来组织的，例如用户界面、前端、推荐系统、账单或是物流等。
-3、由于功能被拆成多个服务，因此可以由不同的编程语言、数据库实现。
-4、架构是对称而非分层（即生产者与消费者的关系）。
-5、一个微服务框架：
-	适用于具持续交付（Continuous Delivery）的软件开发流程。
-	与服务导向架构（Service-Oriented Architecture）不同，后者是集成各种业务的应用程序，但微服务只属于一个应用程序。
-~~~
-
-
+> 参考必看博客：https://blog.csdn.net/dpf373521/article/details/102860444
 
 
 
 ## 3.2、SpringBoot概念
 
 > 官网：https://spring.io/projects/spring-boot
+>
+> 参考博客（必看）：https://blog.csdn.net/Delia_theme/article/details/88681722    SpringBoot概念
 
-~~~
-通过Spring Boot，可以轻松地创建独立的，基于生产级别的基于Spring的应用程序，您可以“运行”它们。
-
-对Spring平台和第三方库支持，可以以最小的代价开始使用。 大多数Spring Boot应用程序需要最少的Spring配置。
-~~~
+> Spring Boot是一个（简化Spring环境搭建和开发）为了微服务而生的Java web框架。
 
 
 
 ## 3.3、SprintBoot作用
 
-~~~
-1、创建独立的Spring应用程序
-
-2、直接嵌入Tomcat，Jetty或Undertow（无需部署WAR文件）
-
-3、提供自以为是的“入门”依赖项，以简化您的构建配置
-
-4、尽可能自动配置Spring和3rd Party库
-
-5、提供可用于生产的功能，例如指标，运行状况检查和外部化配置
-
-6、完全没有代码生成，也不需要XML配置
-~~~
+> 使用Spring Boot可以做到专注于Spring应用的开发，而无需过多关注XML的配置。
 
 
 
@@ -1196,4 +1144,66 @@ public class MyMvcConfig implements WebMvcConfigurer {
 3、使用了：restFul风格,同为跳转 th:href="/emps" 但是（get、post方式不同）跳转到不同的控制器
 4、使用了：spring.mvc.format.date=yyyy-MM-dd  修改日期格式
 ~~~
+
+
+
+## 7.7、修改员工信息
+
+~~~
+重要的是：画一个（流程图），把点击跳转到url 还是其他地方，这个关系弄清楚。
+~~~
+
+
+
+## 7.8、删除员工信息
+
+> 注意restFul风格中：总是跳号的问题， 普通传参不会出现这种问题。
+
+
+
+## 7.9、404和500处理
+
+> 只需要在templates下建立一个error文件夹， 放入404和500页面，会自动生效,springboot封装好了
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210405094511675.png" alt="image-20210405094511675" style="zoom:50%;" />
+
+---
+
+
+
+## 7.10、总结
+
+> 代码地址：
+
+~~~
+看老师视频固然重要, 但是前提是：自己练，发现错误，不能解决才去看。而不是一股脑只是看视频，跟着敲。
+~~~
+
+
+
+# 8、设计网站流程
+
+~~~
+1、确定：前端页面  （该页面的：布局）
+
+2、设计数据库
+
+3、前端：能自动运行
+
+4、前后端：对接json
+
+5、前后端：联调测试
+~~~
+
+> 作为一名后端：（最基本技能）
+>
+> ​			1、拥有：有自己熟悉的（1套）后台模板 ；  （推荐x-admin）, 后续掌握 layui
+>
+> ​			2、驾驭：前端的（某个框架）， 能够写出（前端页面） index, about、blog、post、user  
+>
+> ​			3、网站独立运行：也就部署到服务器。
+
+`计划如下：`
+
+> 学习完：springboot、springcloud、redis、docker 立马， 做一个
 

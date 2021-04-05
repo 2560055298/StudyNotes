@@ -24,3 +24,14 @@
 
 
 
+
+
+
+
+
+
+# 五、搭配软件使用
+
+> Snipaste
+
+![image-20210405072910235](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210405072910235.png)
