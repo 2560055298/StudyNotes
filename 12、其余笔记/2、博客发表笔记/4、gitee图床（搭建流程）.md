@@ -47,7 +47,7 @@
 
 
 
-### 2.13.、下载：snipaste
+### 2.1.3、下载：snipaste
 
 > 官网下载：https://zh.snipaste.com/
 
@@ -87,7 +87,7 @@
 
 
 
-### 2.3.1、新建仓库
+### 2.3.2、新建仓库
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210411083251655.png" alt="image-20210411083251655" style="zoom: 67%;" />
 
