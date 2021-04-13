@@ -1,0 +1,71 @@
+body {
+    /*设置背景：图片*/
+    background-image:url("http://img.pptjia.com/image/20181128/3cfdf503593d304b6da49dde522009ef.jpg");
+;
+    /*设置背景图片：大小*/
+    background-size:1300px 1000px;
+
+    /*设置背景：不平铺*/
+    background-repeat: no-repeat;
+}
+
+/*设置段落：样式*/
+p {
+    color: black;       /*设置字体为：黑色*/
+    margin: 11px;       /*设置：外边距（上、下、左、右）都为11px*/
+}
+
+
+/*设置h1标题样式*/
+h1 {
+    font-size: 22px;    /*设置：字体大小*/
+    margin: 0;          /*设置外边距为：0*/
+}
+
+/*设置：中间div （文本框）样式*/
+#app{
+    width: 300px;               /*设置div：宽度*/
+    height:570px;               /*设置div：高度*/
+    margin: auto;               /*设置div：居中*/
+    text-align: center;         /*div文本框：文字居中*/
+    border: 1px solid;          /*设置div：边框*/
+
+    /*设置div背景图片*/
+    background-image: url("https://th.bing.com/th/id/Raa876b0713d4b0125689769bc76077a4?rik=Uv8Lzj81sNNjAg&riu=http%3a%2f%2fimg.pptjia.com%2fimage%2f20191014%2faf5452e9b8c28e53b7ec5c0f1f34eecc.JPG&ehk=IGlYar8DSkfXvgX07BVoox4bsz8dzCt0O0FatQLvwiE%3d&risl=&pid=ImgRaw");
+    margin-top: -10px;
+}
+
+/* 为<div id="title"> 设置样式*/
+#title{
+    width: 300px;
+    display: inline-block;
+    letter-spacing: 3px;
+}
+
+/*为：<p id="title01">写给过去的诗</p>   设置样式*/
+#title01{
+    font-size: 18px;
+    margin: 0px;
+    margin-top: 10px;
+
+}
+
+/*为： <span id="title02">-- 老洋</span>  设置样式*/
+#title02{
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    width: 200px;
+    text-align: right;
+}
+
+
+/*为：<div id="content"> 设置样式*/
+#content{
+    display: inline-block;      /*即使内联元素、又是块级元素*/
+    font-size: 13px;            /*设置字体：大小*/
+    margin-top: -10px;
+}
+
+
+

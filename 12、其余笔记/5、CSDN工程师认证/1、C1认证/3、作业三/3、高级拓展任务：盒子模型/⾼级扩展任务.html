@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <link rel="stylesheet" href="my.style.css">
+    </head>
+
+
+    <body>
+        <!--父div-->
+        <div id="app">
+            <!--左边（孩子）div-->
+            <div id="one">
+                <div id="one_01">
+                    <!--1号-->
+                    1
+                </div>
+
+                <div id="one_02">
+                    <!--2号-->
+                    2
+                </div>
+
+            </div>
+
+            <!--右边（孩子）div-->
+            <div id="two">
+                <div id="two_01">
+                    <!--3号-->
+                    3
+                </div>
+
+                <!--右边：控制（4、5、6）下面孩子-->
+                <div id="two_02">
+                    <div id="two_son_01">
+                        <!--4号-->
+                        4
+                    </div>
+
+                    <!--控制5、6-->
+                    <div id="two_son_02">
+                        <div id="grandson01">
+                            <!--5号-->
+                            5
+                        </div>
+
+                        <div id="grandson02">
+                            <!--6号-->
+                            6
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
