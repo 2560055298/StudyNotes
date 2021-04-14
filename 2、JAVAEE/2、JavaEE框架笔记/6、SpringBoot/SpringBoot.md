@@ -190,7 +190,7 @@ server.port=8081
 ### 3.5.2、主程序
 
 ~~~java
-@SpringBootApplication		 //标注这个类是一个springboot的应用, 启动类下的所有资源被导入
+@SpringBootApplication	//标注这个类是一个springboot的应用, 启动类下的所有资源被导入
 public class Springboot01HelloworldApplication {
     public static void main(String[] args) {
         //将springboot应用启动
