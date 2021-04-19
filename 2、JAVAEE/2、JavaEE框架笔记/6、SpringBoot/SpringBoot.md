@@ -305,7 +305,7 @@ array1: [A, B, C]
 2、使用缩进表示层级关系
 3、缩进不允许使用tab，只允许空格
 4、缩进的空格数不重要，只要相同层级的元素左对齐即可
-5、'#'表示注释
+5、'#'表示注释 
 ~~~
 
 
@@ -533,9 +533,9 @@ debug: true
     addResourceHandler(registry, "/webjars/**", "classpath:/META-INF/resources/webjars/");
     addResourceHandler(registry, this.mvcProperties.getStaticPathPattern(), (registration) -> {
  	
-        //也可以使用：静态路径resources、static、public  都配置了按照源码数组顺序0开始   registration.addResourceLocations(this.resourceProperties.getStaticLocations());
+   //也可以使用：静态路径resources、static、public  都配置了按照源码数组顺序0开始   registration.addResourceLocations(this.resourceProperties.getStaticLocations());
     if (servletContext != null) {
-    registration.addResourceLocations(new ServletContextResource(servletContext, SERVLET_LOCATION));
+    registration.addResourceLocations(new ServletContextR esource(servletContext, SERVLET_LOCATION));
     }
     });
 }
@@ -553,7 +553,7 @@ debug: true
 	   "/webjars/**" 等价于 "classpath:/META-INF/resources/webjars/")
    例如：localhost/8080/webjars <==> localhost/8080/META-INF/resources/webjars/
    
-3、如果没有配置，静态资源，选择resource/下的，   static、public、resources文件夹，也行
+3、如果没有配置，静态资源，选择resource/下的，static、public、resources文件夹，也行
 	同名文件加载顺序：resources >  static > public   (是按源码的：数组顺序决定的)
 ~~~
 
@@ -618,7 +618,7 @@ debug: true
 - HelloController.java
 
 ~~~java
-@Controller     //等价于：@Controller + @ResponseBody
+@Controller     
 public class HelloController {
     @RequestMapping("/hello")
     public String hello(Model model){
