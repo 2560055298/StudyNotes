@@ -237,7 +237,7 @@ public class Springboot01HelloworldApplication {
 
 
 
-3.6、SpringBoot考点
+## 3.6、SpringBoot考点
 
 - 自动装配
 - run() 
