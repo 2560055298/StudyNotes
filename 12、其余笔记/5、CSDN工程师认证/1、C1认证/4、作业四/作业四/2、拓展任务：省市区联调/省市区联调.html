@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+            <!--省-->
+            <select name="myProvince" id="myProvince" onchange="showProvince(this)">
+                    <option hidden="hidden" value="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 省份 -</option>
+            </select>
+
+            <!--市-->
+            <select  name="myCity" id="myCity" onchange="showCity(this)">
+                <option  hidden="hidden" value="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 市 -</option>
+            </select>
+
+            <!--县-->
+            <select name="myCounty" id="myCounty" onchange="showCounty(this)">
+                <option hidden="hidden" value="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 区 -</option>
+            </select>
+
+        <!--数据：引入-->
+        <script src="data.js"></script>
+        <!--调用方法-->
+        <script src="method.js"></script>
+
+    </body>
+</html>
