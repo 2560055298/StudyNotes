@@ -217,15 +217,7 @@ public class Springboot01HelloworldApplication {
 
 ---
 
-
-
-`2、run`
-
-![image-20210323205529676](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323205529676.png)
-
----
-
-`3、Application`
+2、`Application`
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323205926905.png" alt="image-20210323205926905" style="zoom: 50%;" />
 
@@ -234,6 +226,16 @@ public class Springboot01HelloworldApplication {
 `3、Application流程图`
 
 ![1231231](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/1231231.png)
+
+---
+
+`4、run`
+
+![image-20210323205529676](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323205529676.png)
+
+---
+
+
 
 
 
@@ -358,6 +360,12 @@ array1: [A, B, C]
 
 ---
 
+`如何获取？`
+
+![image-20210423104429513](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210423104429513.png)
+
+
+
 ### 4.2.4、总结：yaml好处
 
 ![image-20210325153816647](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325153816647.png)
@@ -392,6 +400,17 @@ Hibernate Validator 提供了 JSR 303 规范中所有内置 constraint 的实现
 
 ---
 
+`需要添加：启动器`
+
+~~~xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+~~~
+
+
+
 `使用：邮箱验证例子`
 
 > @Email(message="不是邮箱")
@@ -410,7 +429,17 @@ Hibernate Validator 提供了 JSR 303 规范中所有内置 constraint 的实现
 
 ## 4.5、config配置加载顺序
 
+> 官方解释地址：
+>
+> https://docs.spring.io/spring-boot/docs/2.1.18.RELEASE/reference/htmlsingle/#boot-features-external-config 
+
+![image-20210423151740228](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210423151740228.png)
+
+
+
 > 可以配置：4个地方， 同一级别下, config优先
+>
+> 注意：改为properties也是（同样适用这4种方式的）
 
 ![image-20210325214019325](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325214019325.png)
 
