@@ -100,7 +100,32 @@ Integer.valueOf(1) 	//会使用缓存池中的对象，多次调用会取得同�
 
 
 
-### 1.3.3、隐式类型转换
+### 1.3.3、类型转换
+
+==隐式类型转换：Java不支持==
+
+~~~
+隐式类型转换： 就是没有加（类型关键字的转换）
+
+如：float = 1.2;			//报错
+
+short s1 = 1;     
+s = s + 1; 				//报错short = short + int  (不支持：隐式类型转换) 
+~~~
+
+
+
+==显示类型转换：Java支持==
+
+~~~java
+显示类型转换： 就是加了（类型关键字的转换）
+
+如：float f1 = (float)1.2;         //不报错
+
+short s = 1;
+
+s = (short)(s + 1)
+~~~
 
 
 
@@ -108,6 +133,7 @@ Integer.valueOf(1) 	//会使用缓存池中的对象，多次调用会取得同�
 
 ### 1.3.4、switch
 
+> 看gitHub作者：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#switch)
 
 
 
@@ -115,8 +141,23 @@ Integer.valueOf(1) 	//会使用缓存池中的对象，多次调用会取得同�
 
 
 
+## 1.4、关键字
 
-## 1.X、this和super关键字
+### 1.4.1、final
+
+![img](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/20200802095305191.png)
+
+
+
+### 1.4.2、static
+
+![img](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/20200802162823370.png)
+
+
+
+
+
+### 1.4.3、this和super关键字
 
 ![image-20210124171611323](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture6/image-20210124171611323.png)
 
@@ -128,7 +169,7 @@ Integer.valueOf(1) 	//会使用缓存池中的对象，多次调用会取得同�
 
 
 
-## 1.X、instanceof
+### 1.4.4、instanceof
 
 ~~~
 instanceof 是 Java 的一个二元操作符，类似于 ==，>，< 等操作符。
