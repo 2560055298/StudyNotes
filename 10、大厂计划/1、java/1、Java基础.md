@@ -469,19 +469,77 @@ public class Test {
 		* String getName:获取方法名
 ~~~
 
+
+
+## 1.8、异常
+
+> 参考：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#%E5%85%AB%E5%BC%82%E5%B8%B8)
+
 ~~~
-* 案例：
-	* 需求：写一个"框架"，不能改变该类的任何代码的前提下，可以帮我们创建任意类的对象，并且执行其中任意方法
-		* 实现：
-			1. 配置文件
-			2. 反射
-		* 步骤：
-			1. 将需要创建的对象的全类名和需要执行的方法定义在配置文件中
-			2. 在程序中加载读取配置文件
-			3. 使用反射技术来加载类文件进内存
-			4. 创建对象
-			5. 执行方法
+每当执行Java语句时（发生任何错误），都会创建一个（异常对象）。
+然后JRE尝试（查找）一个（异常处理程序）来处理该异常。
+如果（找到了）合适的（异常处理程序），则将异常对象传递到处理程序代码以处理异常，（称为捕获异常）。
+如果（未找到）处理程序，则应用程序将异常抛出给运行时环境，并且JRE终止程序。
+Java异常（处理框架）仅用于处理（运行时错误），异常处理框架（不处理）编译时错误。
 ~~~
+
+~~~java
+4个关键字：
+throw：有时我们明确地想要创建一个异常对象，然后将其抛出以停止程序的正常处理。该抛关键字用于抛出异常的运行时间来处理它。
+throws：写在方法上面， 谁调用，谁处理
+try-catch：try代码块中， 异常前的：能执行， 异常后的不执行。
+finally：是可选的，只能与try-catch块一起使用。finally一定会执行。
+~~~
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210427102643748.png" alt="image-20210427102643748" style="zoom:50%;" />
+
+---
+
+## 1.9、泛型
+
+> 参考：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#%E4%B9%9D%E6%B3%9B%E5%9E%8B)
+
+~~~java
+public class Box<T> {
+    // T stands for "Type"
+    private T t;
+    public void set(T t) { this.t = t; }
+    public T get() { return t; }
+}
+~~~
+
+
+
+## 1.10、注解
+
+> 注解（Annotation），也叫（元数据）， JDK1.5的新特性
+>
+> 参考博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#%E5%8D%81%E6%B3%A8%E8%A7%A3)
+
+~~~
+使用方法：@注解名称
+注解作用：起说明、配置的功能, 注解不是程序的一部分，可以理解为注解就是一个标签
+书写位置：包、类、字段、方法、局部变量、方法
+~~~
+
+
+
+## 1.11、拓展知识
+
+> 参考博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#%E5%8D%81%E4%B8%80%E7%89%B9%E6%80%A7)
+
+~~~
+内容：
+	1、Java 各版本的新特性
+	2、Java 与 C++ 的区别
+	3、JRE or JDK
+~~~
+
+
+
+
 
 
 
