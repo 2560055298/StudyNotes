@@ -541,7 +541,57 @@ public class Box<T> {
 
 # 2、Java容器
 
+## 2.1、根容器
 
+> 根容器：Collection（单列集合）、Map（双列集合）
+>
+> 参考博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%AE%B9%E5%99%A8.md#%E4%B8%80%E6%A6%82%E8%A7%88)
+
+![image-20210428171136911](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210428171136911.png)
+
+
+
+## 2.2、容器的设计模式
+
+> 参考博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%AE%B9%E5%99%A8.md#%E4%BA%8C%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
+
+~~~
+主要两种：
+	1、迭代器模式（Iterable）产生一个Iterator对象， 通过其forEach()迭代Collection中内容
+	2、适配器模式
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210428174507637.png" alt="image-20210428174507637" style="zoom:50%;" />
+
+
+
+## 2.3、容器源码分析
+
+> 来源博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%AE%B9%E5%99%A8.md#%E4%B8%89%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+
+### 2.3.1、ArrayList
+
+> 
+
+
+
+
+
+
+
+~~~java
+List(容器接口)
+	1、ArrayList  				 //（动态数组）
+	2、Vector					
+	3、CopyOnWriteArrayList
+	4、LinkedList
+
+Map(容器接口)
+	1、HashMap
+	2、ConcurrentHashMap
+	3、LinkedHashMap
+	4、WeakHashMap
+~~~
 
 
 
