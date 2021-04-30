@@ -568,10 +568,33 @@ public class Box<T> {
 ## 2.3、容器源码分析
 
 > 来源博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%AE%B9%E5%99%A8.md#%E4%B8%89%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+>
+> 参考视频：[韩顺平老师](https://www.bilibili.com/video/BV1YA411T76k?p=19) （超级详细）
 
-### 2.3.1、ArrayList
+~~~java
+Collection
+    //添加顺序，与取出顺序一致、可重复、可添加null、可使用(迭代器、增强for、普通for)遍历
+    一、List(容器接口)
+        1、ArrayList  		//（动态数组、线程不安全、扩容1.5倍）
+        2、Vector			//（动态数组、线程安全、扩容默认2倍， 也可以手动设置）
+        3、CopyOnWriteArrayList
+        4、LinkedList		//(双向链表、线程不安全)
 
-> 
+    二、Set（容器接口）
+    	1、hashSet
+    	2、TreeSet
+    
+    
+Map(容器接口)	
+	1、HashMap
+	2、ConcurrentHashMap
+	3、LinkedHashMap
+	4、WeakHashMap
+~~~
+
+
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210430202748293.png" alt="image-20210430202748293" style="zoom:50%;" />
 
 
 
@@ -580,17 +603,7 @@ public class Box<T> {
 
 
 ~~~java
-List(容器接口)
-	1、ArrayList  				 //（动态数组）
-	2、Vector					
-	3、CopyOnWriteArrayList
-	4、LinkedList
 
-Map(容器接口)
-	1、HashMap
-	2、ConcurrentHashMap
-	3、LinkedHashMap
-	4、WeakHashMap
 ~~~
 
 
