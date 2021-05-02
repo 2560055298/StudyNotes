@@ -387,7 +387,64 @@ public class Test {
 
 ---
 
-## 1.7、反射
+## 1.7、多态
+
+> 参考视频：[老韩视频](https://www.bilibili.com/video/BV1fh411y7R8?p=306)
+
+~~~java
+分类：
+	一、方法的多态 
+		重载方法：传入参数不同（调用方法不同）
+		对象调用相同方法：调用的是（自己类内重写的方法）
+		
+	二、对象的多态（核心）
+		1、多态的具体体现（必记）
+			(1) 一个对象的（编译类型）和（运行类型）可以不一致
+			(2)编译类型在（定义对象时），就确定了，不能改变
+			(3)运行类型是（可以变化）的
+			(4)编译类型看定义时=号的左边,运行类型看=号的右边
+			例如：Animal animal = new Dog();
+			分析：（编译类型）Aniaml，（运行类型）是Dog
+                  animal = new Cat() （运行类型，可以更换， 而编译类型不可以更换）
+                    
+		2、多态：注意事项（必记）
+            多态的前提是：两个对象（类）存在继承关系。
+                
+          2.1：多态的(向上转型)    
+            (1)本质：父类的引用指向了（子类）的对象  ==>> Animal animal = new Dog();
+            (2)语法：父类类型 引用名 = new 子类类型();
+			(3)特点：编译类型看（看左边）， 运行类型（看右边） ==>> Animal编译类型
+            		可以调用（父类中）所有的成员（但是：需要遵守访问权限）
+                	不能调用（子类中）的（特有成员） =>>因为编译阶段，调用成员（编译器决定）
+                    最终运行效果（看子类的具体实现） =>>调用方法时，从子类运行类型，向上查找
+          
+          2.2：多态的（向下转型）    
+            (1)语法：子类类型 引用名 = (子类类型）父类引用 =>Dog dog = new (Dog)Animal
+            (2)只能（强转父类）的引用， 不能强转父类的对象 => 内存中：始终是（小狗）不能换
+            (3)要求父类的引用必须指向的是（当前目标类的对象）=>Animal animal = new Dog()             (4)当向下转型后，可以调用（子类类型）中所有的成员：恢复身份了，不用装了。 
+         
+          2.3: 特别注意
+            (1) 属性（没有重写之说）， 属性的值，看成（编译类型）
+            (2) instanceOf 比较操作符： 用于判断（对象运行类型）是否是XXX类型.
+                                      或者是XXX子类型。
+          
+          2.4: Java的（动态绑定机制）
+            (1) 当调用（对象方法）时：（该方法）会和（该对象）（内存地址/也就是运行类型）绑定
+            (2) 当调用（对象属性）时：（没有）动态绑定机制， 哪里声明，哪里使用        
+                              
+                              
+          2.5: 应用
+            (1) 多态数组
+            (2) 多态参数                  
+~~~
+
+
+
+
+
+
+
+## 1.8、反射
 
 > 反射是：框架设计的灵魂
 
@@ -473,7 +530,7 @@ public class Test {
 
 
 
-## 1.8、异常
+## 1.9、异常
 
 > 参考：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#%E5%85%AB%E5%BC%82%E5%B8%B8)
 
@@ -499,7 +556,7 @@ finally：是可选的，只能与try-catch块一起使用。finally一定会执
 
 ---
 
-## 1.9、泛型
+## 1.10、泛型
 
 > 参考：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#%E4%B9%9D%E6%B3%9B%E5%9E%8B)
 
@@ -514,7 +571,7 @@ public class Box<T> {
 
 
 
-## 1.10、注解
+## 1.11、注解
 
 > 注解（Annotation），也叫（元数据）， JDK1.5的新特性
 >
@@ -528,7 +585,7 @@ public class Box<T> {
 
 
 
-## 1.11、拓展知识
+## 1.12、拓展知识
 
 > 参考博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%9F%BA%E7%A1%80.md#%E5%8D%81%E4%B8%80%E7%89%B9%E6%80%A7)
 
@@ -543,7 +600,7 @@ public class Box<T> {
 
 
 
-## 1.12、成员变量：访问修饰符
+## 1.13、成员变量：访问修饰符
 
 ![img](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/690292-20160923095944481-1758567758.png)
 
@@ -635,7 +692,15 @@ Map(容器接口)
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502094813750.png" alt="image-20210502094813750" style="zoom:67%;" />
 
+---
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502161211761.png" alt="image-20210502161211761" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502162622088.png" alt="image-20210502162622088" style="zoom:50%;" />
+
+---
 
 `1、HashMap`
 
@@ -664,6 +729,16 @@ public static void main(String[] args) {
     System.out.println(values.getClass());//class java.util.HashMap$Values
 }
 ~~~
+
+
+
+
+
+
+
+
+
+
 
 
 
