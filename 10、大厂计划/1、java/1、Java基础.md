@@ -310,13 +310,15 @@ public final void wait(long timeout, int nanos) throws InterruptedException
 public final void wait() throws InterruptedException
  ~~~
 
-> 特别注意：
-
 ### 1.5.1、hashcode() 和 equals（）区别
 
 > 两个值：hashcode（）相等，   equals（）不一定相等
 >
 > ​               equals()相等， hashcode（）一定相等,  ===>>> 但是重写了equals()一定要重写hashcode()
+
+==注意：String中equals（） 方法，是在（类型同一继承树）下，比较内容==
+
+
 
 ~~~java
 public class Test {
@@ -539,6 +541,14 @@ public class Box<T> {
 
 
 
+
+
+## 1.12、成员变量：访问修饰符
+
+![img](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/690292-20160923095944481-1758567758.png)
+
+
+
 # 2、Java容器
 
 ## 2.1、根容器
@@ -581,11 +591,12 @@ Collection
         4、LinkedList		//(双向链表、线程不安全)
 
     二、Set（容器接口）
-    	1、hashSet
+    	1、hashSet  			//底层是：HashMap (数组 + 链表 + 红黑树)
     	2、TreeSet
     
     
 Map(容器接口)	
+    //添加顺序，与取出顺序不一致、不可重复、可添加null、可使用(迭代器、增强for)遍历
 	1、HashMap
 	2、ConcurrentHashMap
 	3、LinkedHashMap
@@ -594,21 +605,65 @@ Map(容器接口)
 
 
 
+### 2.3.1、ArrayList
+
+![image-20210501205007102](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501205007102.png)
+
+---
+
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210430202748293.png" alt="image-20210430202748293" style="zoom:50%;" />
 
 
 
+### 2.3.2、HashSet
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501165458361.png" alt="image-20210501165458361" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501165539768.png" alt="image-20210501165539768" style="zoom:50%;" />
 
 
 
+### 2.3.3、LinkedHashSet
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501205336409.png" alt="image-20210501205336409" style="zoom:50%;" />
+
+---
+
+### 2.3.4、Map接口
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502094813750.png" alt="image-20210502094813750" style="zoom:67%;" />
+
+
+
+`1、HashMap`
+
+![image-20210502160715479](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502160715479.png)
 
 ~~~java
+public static void main(String[] args) {
+    Map map = new HashMap();				//创建：HashMap对象 == 数组 + 链表
+    map.put(new Car(), new Person());
+    map.put(new Car(), new Person());
 
+
+    Set set = map.entrySet();				//获取：EntrySet内部类对象
+    System.out.println(set.getClass());     //class java.util.HashMap$EntrySet
+
+    for(Object entry:set){
+        Map.Entry en = (Map.Entry) entry;
+        System.out.println(en.getKey());    //Entry中的key（存放的其实是Node的key地址）
+        System.out.println(en.getValue());
+    }
+
+    Set set1 = map.keySet();
+    Collection values = map.values();
+
+    System.out.println(set1.getClass());  //class java.util.HashMap$KeySet
+    System.out.println(values.getClass());//class java.util.HashMap$Values
+}
 ~~~
-
-
-
-
 
 
 
