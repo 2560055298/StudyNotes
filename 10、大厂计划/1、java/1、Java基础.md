@@ -707,9 +707,9 @@ Map(容器接口)
 
 ---
 
-`1、HashMap`
+### 2.3.5、==HashMap==
 
-![image-20210502160715479](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502160715479.png)
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502160715479.png" alt="image-20210502160715479" style="zoom:50%;" />
 
 ~~~java
 public static void main(String[] args) {
@@ -735,7 +735,34 @@ public static void main(String[] args) {
 }
 ~~~
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503074529332.png" alt="image-20210503074529332" style="zoom:50%;" />
 
+----
+
+`源码底层：机制`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503080115087.png" alt="image-20210503080115087" style="zoom:50%;" />
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503080213273.png" alt="image-20210503080213273" style="zoom:50%;" />
+
+---
+
+### 2.3.6、HashTable
+
+`1、概念`
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503095932092.png" alt="image-20210503095932092" style="zoom:67%;" />
+
+
+
+`2、底层`
+
+~~~java
+1、底层有数组： private transient Entry<?,?>[] table;    //初始化大小为：11
+2、临界值：    private int threshold;  	//初始化为： int(11 * 0.75) == 8
+3、数组扩容：	 >=阈值，int newCapacity = (oldCapacity << 1) + 1;  //旧容量 * 2 + 1
+4、添加元素：  addEntry(hash, key, value, index);
+~~~
 
 
 
