@@ -667,6 +667,10 @@ Map(容器接口)
 
 
 
+### ==Collection接口==
+
+
+
 ### 2.3.1、ArrayList
 
 ![image-20210501205007102](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501205007102.png)
@@ -691,9 +695,56 @@ Map(容器接口)
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501205336409.png" alt="image-20210501205336409" style="zoom:50%;" />
 
+
+
+### 2.3.4、HashSet
+
+~~~java
+一、 TreeSet底层实际是（TreeMap）
+    //1. 当我们使用无参构造器，创建 TreeSet 时，仍然是无序的
+    //2. 使用 TreeSet 提供的一个构造器，可以传入一个比较器(匿名内部类)
+    //3. 参数1 - 参数2 为升序， 反之降序
+    TreeSet treeSet = new TreeSet(new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            return ((String)o1).length() - ((String)o2).length();
+        }
+    });
+	
+	treeSet.add("laoyang");
+	treeSet.add("xx");
+
+    //4. 第一个添加结点：直接作为根
+    Entry<K,V> t = root;
+    if (t == null) {
+        compare(key, key); // type (and possibly null) check
+
+        root = new Entry<>(key, value, null);
+        size = 1;
+        modCount++;
+        return null;
+    }
+
+    //5. 后续添加结点：需要和树中的所有结点比较（相同则：不添加也不覆盖key）
+    do {
+        parent = t;
+        cmp = cpr.compare(key, t.key);
+        if (cmp < 0)
+            t = t.left;
+        else if (cmp > 0)
+            t = t.right;
+        else
+            return t.setValue(value);		//切记此处：若相等则直接返回，不覆盖key
+    } while (t != null);
+~~~
+
+
+
+
+
 ---
 
-### 2.3.4、Map接口
+### ==Map接口==
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502094813750.png" alt="image-20210502094813750" style="zoom:67%;" />
 
@@ -707,7 +758,7 @@ Map(容器接口)
 
 ---
 
-### 2.3.5、==HashMap==
+### 2.3.4、HashMap
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502160715479.png" alt="image-20210502160715479" style="zoom:50%;" />
 
@@ -745,9 +796,11 @@ public static void main(String[] args) {
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503080213273.png" alt="image-20210503080213273" style="zoom:50%;" />
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503112304966.png" alt="image-20210503112304966" style="zoom:50%;" />
+
 ---
 
-### 2.3.6、HashTable
+### 2.3.5、HashTable
 
 `1、概念`
 
@@ -763,6 +816,69 @@ public static void main(String[] args) {
 3、数组扩容：	 >=阈值，int newCapacity = (oldCapacity << 1) + 1;  //旧容量 * 2 + 1
 4、添加元素：  addEntry(hash, key, value, index);
 ~~~
+
+
+
+### 2.3.6、Properites
+
+> 始终记住：Properites继承了Hashtable,  Hashtable实现了Map, 实际还是：数组 + 链表
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503142503557.png" alt="image-20210503142503557" style="zoom:50%;" />
+
+~~~java
+常用方法: K-V不能为null, 和Hashtable一样
+
+	    Properties properties = new Properties();	//初始table：11, 加载因子：0.75
+	
+		//添加：底层addEntry(hash, key, value, index);
+        properties.put("john", 100);	
+
+		//删除：底层（Hashtable）public synchronized V remove(Object key) 链表删除
+		Object lucy = properties.remove("lucy");
+		
+		//修改：通过（添加方法中：hashcode, equals相等）覆盖旧值
+		properties.put("john", 666);
+
+		//查询：底层Hashtable的get()方法
+		Object yang = properties.get("yang");
+
+		//查询：底层调用（Hashtable）：Object oval = super.get(key);
+		String yang1 = properties.getProperty("yang"); 
+~~~
+
+
+
+### 2.3.7、TreeMap
+
+> 注意：TreeMap 添加值相同会（覆盖） value
+
+~~~java
+    //后续添加结点：需要和树中的所有结点比较（相同则：不覆盖key， 会覆盖value）
+    do {
+        parent = t;
+        cmp = cpr.compare(key, t.key);
+        if (cmp < 0)
+            t = t.left;
+        else if (cmp > 0)
+            t = t.right;
+        else
+            return t.setValue(value);		//切记此处：若相等会覆盖value
+    } while (t != null);
+~~~
+
+
+
+
+
+### ==选取总结==
+
+![image-20210503151515812](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503151515812.png)
+
+
+
+
+
+### ==Collection工具类==
 
 
 
@@ -786,9 +902,13 @@ public static void main(String[] args) {
 
 
 
-
-
 # 4、Java并发
+
+
+
+
+
+
 
 
 
