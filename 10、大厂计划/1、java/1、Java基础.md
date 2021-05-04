@@ -601,6 +601,17 @@ public class Box<T> {
 	3、JRE or JDK （看自己的：思维导图）
 ~~~
 
+~~~java
+JDK、JRE 和 JVM 的包含关系
+ 1、JDK = JRE +  开发工具集（例如 Javac,java 编译工具等)
+ 2、JRE = JVM + Java SE  标准类库（java 核心类库）
+ 3、如果只想运行开发好的 .class 文件 只需要 JRE
+~~~
+
+
+
+
+
 
 
 
@@ -878,15 +889,58 @@ public static void main(String[] args) {
 
 
 
-### ==Collection工具类==
+### ==Collections工具类==
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210504071358698.png" alt="image-20210504071358698" style="zoom:50%;" />
+
+---
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210504071418820.png" alt="image-20210504071418820" style="zoom:50%;" />
+
+~~~java
+public static void main(String[] args) {
+    List list = new ArrayList();
+
+    list.add(8);
+    list.add(-1);
+    list.add(-1);
+
+    Collections.sort(list);     //1、自然顺序：也就升序
+    Collections.sort(list, new Comparator<Object>() { //通过比较器：降序
+        @Override
+        public int compare(Object o1, Object o2) {
+            return ((Integer) o2) - ((Integer) o1) ;
+        }
+    });
+
+    Collections.shuffle(list);   //2、随机排序
+
+    Collections.reverse(list);   //3、翻转
+
+    Collections.swap(list, 1, 3);   //4、交换：索引处的值
+
+    System.out.println(Collections.max(list));  //5、获取最大值
+    System.out.println(Collections.min(list));  //6、获取最小值
+    System.out.println(Collections.frequency(list, -1));  //获取：某个数出现频率
+
+    //7、拷贝：源码（拷贝前）比较的是size(), 若小于源（抛异常）
+    //if (srcSize > dest.size())
+    //	throw new IndexOutOfBoundsException("Source does not fit in dest");
+    List list02 = new ArrayList();
+    for(int i = 0; i < list.size(); i++){
+        list02.add(0);
+    }
+    Collections.copy(list02, list);			  //拷贝
+
+    Collections.replaceAll(list, -1, 1024);   //8、指定某个数字，全部替换为
+}
+~~~
 
 
 
+### ==习题==
 
-
-
-
-
+![image-20210504104122088](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210504104122088.png)
 
 
 
