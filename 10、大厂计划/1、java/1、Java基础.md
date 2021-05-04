@@ -940,9 +940,17 @@ public static void main(String[] args) {
 
 ### ==习题==
 
+> 习题1
+
 ![image-20210504104122088](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210504104122088.png)
 
+> 习题2
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210504221413049.png" alt="image-20210504221413049" style="zoom:50%;" />
+
+> 习题3：追源码
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210504221445939.png" alt="image-20210504221445939" style="zoom:50%;" />
 
 
 
