@@ -620,95 +620,315 @@ JDK、JRE 和 JVM 的包含关系
 
 ![img](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/690292-20160923095944481-1758567758.png)
 
-
+---
 
 # 2、Java容器
 
-## 2.1、根容器
-
-> 根容器：Collection（单列集合）、Map（双列集合）
->
 > 参考博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%AE%B9%E5%99%A8.md#%E4%B8%80%E6%A6%82%E8%A7%88)
-
-![image-20210428171136911](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210428171136911.png)
-
-
-
-## 2.2、容器的设计模式
-
-> 参考博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%AE%B9%E5%99%A8.md#%E4%BA%8C%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
-
-~~~
-主要两种：
-	1、迭代器模式（Iterable）产生一个Iterator对象， 通过其forEach()迭代Collection中内容
-	2、适配器模式
-~~~
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210428174507637.png" alt="image-20210428174507637" style="zoom:50%;" />
-
-
-
-## 2.3、容器源码分析
-
-> 来源博客：[gitHub](https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%AE%B9%E5%99%A8.md#%E4%B8%89%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
 >
-> 参考视频：[韩顺平老师](https://www.bilibili.com/video/BV1YA411T76k?p=19) （超级详细）
+> 参考：[老韩笔记](https://pan.baidu.com/s/1QLCXCPtihg6o6DX0zNQ1tQ )  提取码：lmy9 
+
+
+
+## 2.1、思考
+
+> 为什么要学习容器？ 我们不是，有数组了吗？
 
 ~~~java
-Collection
-    //添加顺序，与取出顺序一致、可重复、可添加null、可使用(迭代器、增强for、普通for)遍历
-    一、List(容器接口)
-        1、ArrayList  		//（动态数组、线程不安全、扩容1.5倍）
-        2、Vector			//（动态数组、线程安全、扩容默认2倍， 也可以手动设置）
-        3、CopyOnWriteArrayList
-        4、LinkedList		//(双向链表、线程不安全)
-
-    二、Set（容器接口）
-    	1、hashSet  			//底层是：HashMap (数组 + 链表 + 红黑树)
-    	2、TreeSet
-    
-    
-Map(容器接口)	
-    //添加顺序，与取出顺序不一致、不可重复、可添加null、可使用(迭代器、增强for)遍历
-	1、HashMap
-	2、ConcurrentHashMap
-	3、LinkedHashMap
-	4、WeakHashMap
+原因：
+	1、数组：长度不可变， 添加、删除不方便。
+	2、容器：可以（动态的）长度变化，提供add()、remove()、get()、set()方法
+			而且容器（类型很多），类型的（数据结构）有各自的特点，可以根据不同的业务需求
+            切换到（合适的类型）， 那么能够提升开发效率。
 ~~~
 
 
 
-### ==Collection接口==
 
 
+## 2.2、集合框架图（和）特点
 
-### 2.3.1、ArrayList
+### 2.2.1、Collection
 
-![image-20210501205007102](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501205007102.png)
+#### ①、框架图
 
----
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210430202748293.png" alt="image-20210430202748293" style="zoom:50%;" />
-
-
-
-### 2.3.2、HashSet
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501165458361.png" alt="image-20210501165458361" style="zoom:50%;" />
+![image-20210505082537816](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505082537816.png)
 
 ---
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501165539768.png" alt="image-20210501165539768" style="zoom:50%;" />
+#### ②、特点
+
+> 单列集合：仅存放一个（key）
+
+~~~java
+1、实现了Collection接口的（实现类）都可以调用iterator()方法， 获取（迭代器对象）进行遍历
+2、遍历Collection接口的方法：
+    A、迭代器法
+    B、增强for循环 （底层走的还是：迭代器）
+    C、普通for循环
+    
+3、为什么Collection能使用（迭代器）， 子类能获取（迭代器对象）？
+    因为Collection（接口）继承了Iterable(接口)，Iterable（接口）中有返回迭代器对象的方法。
+    Iterator<T> iterator()		//该方法，返回一个迭代器对象
+
+4、注意：除了TreeSet 不能为null , 其余key可以添加null.
+    
+5、添加用add()方法， 移除用remove()方法, 获取用遍历方法 （或） get()方法
+~~~
+
+`1、Collection子类：能使用迭代器（遍历）的原因`
+
+![image-20210505091150953](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505091150953.png)
 
 
 
-### 2.3.3、LinkedHashSet
+`2、迭代器遍历：原理分析，代码展示`
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210501205336409.png" alt="image-20210501205336409" style="zoom:50%;" />
+![image-20210505092307461](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505092307461.png)
 
 
 
-### 2.3.4、HashSet
+---
+
+### 2.2.2、Map
+
+#### ①、框架图
+
+![image-20210505082720982](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505082720982.png)
+
+---
+
+#### ②、特点
+
+> 双列集合：存放的是（K-V）键值对
+
+~~~java
+1、Map中key（不允许）重复， value允许重复
+2、除了TreeMap 不能添加null, 其余K-V（都可）添加null
+3、Map中的K-V会封装到HashMap$Node类型中
+4、HashMap$Entry是HashMap$Node类型的一份引用， 存放在HashMap$EntrySet中
+~~~
+
+`1、Map的K-V键值对：封装成的HashMap$Node 解析`
+
+![image-20210505100657871](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505100657871.png)
+
+
+
+`2、 HashMap$Node 为什么可以转为：HashMap$Entry `
+
+> 因为：Node结点，实现了Entry接口。 为什么要去实现Entry接口？ 因为Entry提供了操作K-V的方法
+
+![image-20210505104522495](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505104522495.png)
+
+---
+
+![image-20210505104047855](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505104047855.png)
+
+---
+
+
+
+
+
+## 2.3、==Collection==集合讲解
+
+### 2.3.1、List
+
+#### ①、ArrayList
+
+~~~java
+一、特点：
+	1. ArrayList 底层是：（对象可变）数组， 可以重复添加元素， 添加元素包含：null
+	2. ArrayList 线程不安全， 所以效率相对Vector更高
+
+二、扩容原理
+	1、ArrayList 中维护了一个： transient Object[] elementData;  //不用序列化的数组
+	2、当创建ArrayList对象时：
+        A：用无参构造器， 初始elementData容量为0, 第一次添加则扩容elementData = 默认值10
+           再次扩容时，按1.5倍扩容
+        
+        B：走有参构造器, 初始elementData容量为（传入容量）， 如果需要扩容，按1.5倍扩容
+
+三、操作方法
+    1、boolean add(E e) 				//增
+    2、E remove(int index) 			//删
+    3、E set(int index, E element)   //改
+    4、E get(int index)				//查    
+    5、boolean contains(Object o)	//包含    
+~~~
+
+> ArrayList添加元素， 扩容解析：
+
+`1、（无参）扩容`
+
+![image-20210505114926233](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505114926233.png)
+
+
+
+`2、（有参）扩容`
+
+> 初始化容量后， 后续扩容规则， 与（无参构造）一样， 1.5倍扩容法。
+
+![image-20210505160504270](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505160504270.png)
+
+
+
+#### ②、Vector
+
+~~~java
+一、特点：
+	1. Vector 底层是：（对象可变）数组， 可以重复添加元素， 添加元素包含：null
+	2. Vector 线程安全， 比ArrayList低
+
+二、扩容原理
+	1、Vector 中维护了一个： protected Object[] elementData;	//注意是：受保护的
+	2、当创建Vector对象时：
+        A：用无参构造器 List vector = new Vector();
+        	初始elementData容量为10, 随后按照2倍扩容的原则
+        
+        B：走有参构造器1：List vector = new Vector(5);
+            初始elementData容量为（传入容量）， 如果需要扩容，按2倍扩容
+        
+        C：走有参构造器2： List vector = new Vector(5, 3);
+			初始elementData容量为（传入容量），如果需要扩容，按传人扩容值，此处扩容大小为3
+
+三、操作方法
+    1、synchronized boolean add(E e) 				//增 
+    2、synchronized E remove(int index)  			//删
+    3、synchronized E set(int index, E element)    	//改
+    4、synchronized E get(int index) 				//查    
+~~~
+
+
+
+`1、（无参）扩容`
+
+> 默认会初始化容量为：10， 后续按2倍扩容
+
+![image-20210505164844037](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505164844037.png)
+
+
+
+`2、（1个参数）扩容：当设置容量为0时`
+
+> 第一个次添加：容量变为1， 后续添加，按照2倍扩容。
+
+![image-20210505171010872](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505171010872.png)
+
+
+
+`3、（2个参数扩容）`
+
+> 除了设置了：增长容量外（其余）均与（1个参数一致）
+
+![image-20210505171349492](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505171349492.png)
+
+
+
+#### ③、LinkedList
+
+~~~java
+一、特点：
+	1. LinkedList 底层是：双向链表（和）双端队列， 可以重复添加元素， 添加元素包含：null
+	2. LinkedList 线程不安全， 删除、插入（效率高）
+
+二、底层机制
+	1、LinkedList 中维护了两个属性：first 和 last 分别指向（首节点、尾节点）
+	2、每个结点是一个：Node对象， 包含属性：prev、next、item （前驱、后继、元素值）
+
+三、操作方法
+    1、public void addFirst(E e)  			//前置添加：作为头
+    2、public void addLast(E e)   			//后置添加：作为尾
+    3、public E getFirst()    				//第一个元素：出队
+    4、public E getLast() 					//最后一个元素：出队
+    5、public E set(int index, E element) 	//根据索引，修改元素值
+~~~
+
+`1、底层机制图`
+
+![image-20210505173239943](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505173239943.png)
+
+
+
+`2、底层源码`
+
+![image-20210505185042194](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505185042194.png)
+
+
+
+#### ④、使用比较
+
+> ArrayList（对象动态数组）  和  LinkedList(双向链表 + 双端队列)   ==>>> 使用比较
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505185701836.png" alt="image-20210505185701836" style="zoom: 50%;" />
+
+
+
+### 2.3.2、Set
+
+> 注意：不允许重复元素， 底层是（HashMap） K-V键值对（V固定Object）， 无法用（索引获取）
+
+
+
+#### ①、HashSet
+
+~~~java
+一、特点：
+	1. HashSet 底层是：HashMap （数组 + 链表 + 红黑树） 
+	2. HashSet 线程不安全， （不可以）添加（重复元素），key只能添加一个null， Value固定
+ 	3. 它是（无序的）插入顺序， 和取出顺序不一致
+    
+二、扩容原理
+	1、HashSet 中维护了一个： protected Object[] elementData;	//注意是：受保护的
+	2、当创建HashSet对象时：
+        A：用无参构造器 HashSet set = new HashSet();
+        	初始table为null, 加载因子为：0.75, 阈值为：0， 
+            第一次添加元素：table = 16; 加载因子：0.75, 阈值为：16 * 0.75 = 12
+            容量、阈值都按（2倍扩容）
+        
+        B：走有参构造器：HashSet set = new HashSet(5, 0.8f);
+            第一次添加：容量会变为8, 装载因子还是0.8, 阈值 = 6.4
+
+
+三、操作方法 (没有修改：操作)
+    1、public boolean add(E e) 						//增 
+    2、boolean remove(Object o)   					//删
+    3、public boolean contains(Object o) 			//查    
+    4、public Iterator<E> iterator() 、增强for		  //进行遍历               
+~~~
+
+
+
+`1、原理图`
+
+![image-20210505192736590](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505192736590.png)
+
+
+
+
+
+`2、源码图（第一次扩容）`
+
+> 第一次添加：table被扩容到16， threshold（阈值）12， 装载因子：0.75
+
+![image-20210505194059966](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505194059966.png)
+
+
+
+`3、添加重复元素：和（数组头）相同时`
+
+> hash和（数组头结点相同）， key和（数组头结点相同）， 那么会直接返回（Object 的固定 value）
+
+![image-20210505195207880](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505195207880.png)
+
+
+
+`4、在同一链表上：添加元素时`
+
+![image-20210505210441330](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505210441330.png)
+
+#### ②、TreeSet
 
 ~~~java
 一、 TreeSet底层实际是（TreeMap）
@@ -753,25 +973,65 @@ Map(容器接口)
 
 
 
----
+ 
 
-### ==Map接口==
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502094813750.png" alt="image-20210502094813750" style="zoom:67%;" />
 
----
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502161211761.png" alt="image-20210502161211761" style="zoom:50%;" />
 
----
+#### ③、LinkedHashSet
+
+~~~java
+一、特点：
+	1. LinkedHashSet 底层是：LinkedHashMap, 底层维护了一个（数组 + 双向链表）
+	2、LinkedHashSet 是 HashSet的子类， 不允许添加（重复元素）
+
+二、底层机制
+	1、LinkedHashSet 根据元素的hashCode值来决定元素的（存储位置）
+    2、通过（双向链表）连接， 保证了（插入顺序）， 和（取出顺序）保持一致
+
+三、扩容原则：
+    无参构造方法：LinkedHashSet link = new LinkedHashSet();
+				第一次添加元素：容量16， 阈值12， 装载因子：0.75
+                和HashMap一样， 容量和阈值， 都按2倍扩容。
+    
+	
+四、操作方法
+    1、public boolean add(E e) 						//增 
+    2、boolean remove(Object o)   					//删
+    3、public boolean contains(Object o) 			//查    
+    4、public Iterator<E> iterator() 、增强for		  //进行遍历    
+~~~
+
+`底层图`
+
+![image-20210505214856064](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210505214856064.png)
+
+
+
+
+
+
+
+### 2.3.3、Queue
+
+
+
+
+
+
+
+## 2.4、==Map==集合讲解
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502162622088.png" alt="image-20210502162622088" style="zoom:50%;" />
 
 ---
 
-### 2.3.4、HashMap
+### 2.4.1、HashMap
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210502160715479.png" alt="image-20210502160715479" style="zoom:50%;" />
+
+---
 
 ~~~java
 public static void main(String[] args) {
@@ -797,21 +1057,31 @@ public static void main(String[] args) {
 }
 ~~~
 
+---
+
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503074529332.png" alt="image-20210503074529332" style="zoom:50%;" />
 
-----
+---
 
 `源码底层：机制`
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503080115087.png" alt="image-20210503080115087" style="zoom:50%;" />
 
+---
+
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503080213273.png" alt="image-20210503080213273" style="zoom:50%;" />
+
+---
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503112304966.png" alt="image-20210503112304966" style="zoom:50%;" />
 
 ---
 
-### 2.3.5、HashTable
+
+
+
+
+### 2.4.2、Hashtable
 
 `1、概念`
 
@@ -830,13 +1100,15 @@ public static void main(String[] args) {
 
 
 
-### 2.3.6、Properites
+
+
+### 2.4.3、Properties
 
 > 始终记住：Properites继承了Hashtable,  Hashtable实现了Map, 实际还是：数组 + 链表
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503142503557.png" alt="image-20210503142503557" style="zoom:50%;" />
 
-~~~java
+~~~
 常用方法: K-V不能为null, 和Hashtable一样
 
 	    Properties properties = new Properties();	//初始table：11, 加载因子：0.75
@@ -859,37 +1131,31 @@ public static void main(String[] args) {
 
 
 
-### 2.3.7、TreeMap
+
+
+
+
+### 2.4.4、TreeMap
 
 > 注意：TreeMap 添加值相同会（覆盖） value
 
 ~~~java
-    //后续添加结点：需要和树中的所有结点比较（相同则：不覆盖key， 会覆盖value）
-    do {
-        parent = t;
-        cmp = cpr.compare(key, t.key);
-        if (cmp < 0)
-            t = t.left;
-        else if (cmp > 0)
-            t = t.right;
-        else
-            return t.setValue(value);		//切记此处：若相等会覆盖value
-    } while (t != null);
+//后续添加结点：需要和树中的所有结点比较（相同则：不覆盖key， 会覆盖value）
+do {
+    parent = t;
+    cmp = cpr.compare(key, t.key);
+    if (cmp < 0)
+        t = t.left;
+    else if (cmp > 0)
+        t = t.right;
+    else
+        return t.setValue(value);		//切记此处：若相等会覆盖value
+} while (t != null);
 ~~~
 
 
 
-
-
-### ==选取总结==
-
-![image-20210503151515812](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503151515812.png)
-
-
-
-
-
-### ==Collections工具类==
+## 2.5、工具类：Collections
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210504071358698.png" alt="image-20210504071358698" style="zoom:50%;" />
 
@@ -938,7 +1204,7 @@ public static void main(String[] args) {
 
 
 
-### ==习题==
+## 2.6、习题
 
 > 习题1
 
@@ -954,21 +1220,19 @@ public static void main(String[] args) {
 
 
 
+## 2.7、总结
+
+![image-20210503151515812](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210503151515812.png)
+
+
+
+
+
 # 3、Java I/O
 
 
 
-
-
-
-
-
-
 # 4、Java并发
-
-
-
-
 
 
 
@@ -979,6 +1243,10 @@ public static void main(String[] args) {
 
 
 # 6、23种设计模式
+
+
+
+
 
 
 
