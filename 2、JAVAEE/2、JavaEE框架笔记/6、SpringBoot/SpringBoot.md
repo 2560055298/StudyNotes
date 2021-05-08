@@ -203,6 +203,21 @@ public class Springboot01HelloworldApplication {
 
 `1、注解：@SpringBootApplication	`
 
+~~~java
+@SpringBootApplication		//SpringBoot配置启动
+	@SpringBootConfiguration		//标志是一个配置类：也就是bean.xml
+		@Configuration
+			@Component
+	@EnableAutoConfiguration		//自动装配
+		@AutoConfigurationPackage				//自动配置：包
+			@Import(AutoConfigurationPackages.Registrar.class)	//自动配置包：注册
+		@Import(AutoConfigurationImportSelector.class)	//自动配置：导入选择器
+	@ComponentScan					//扫描包：设置（到哪里去扫描？）
+		@Repeatable(ComponentScans.class)
+~~~
+
+
+
 > 思维导图
 >
 > https://www.processon.com/mindmap/6059b50407912927bd75b871
@@ -217,7 +232,7 @@ public class Springboot01HelloworldApplication {
 
 ---
 
-2、`Application`
+2、`main方法中的：Application`
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210323205926905.png" alt="image-20210323205926905" style="zoom: 50%;" />
 
@@ -225,7 +240,7 @@ public class Springboot01HelloworldApplication {
 
 `3、Application流程图`
 
-![1231231](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/1231231.png)
+![1231231](C:\Users\Lenovo\Desktop\1231231.png)
 
 ---
 
