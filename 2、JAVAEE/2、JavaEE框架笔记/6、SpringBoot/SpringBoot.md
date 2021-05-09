@@ -1,5 +1,7 @@
 
 
+
+
 # 1、知识点：回顾
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210320183654000.png" alt="image-20210320183654000" style="zoom:50%;" />
@@ -500,20 +502,11 @@ spring:
 
 # 5、再次探讨：配置文件
 
-> yaml 或 properties配置文件中：到底能写什么呢？ 为什么这样写，就调用了呢？
-
 ![image-20210327152947947](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327152947947.png)
 
-![image-20210327155057245](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210327155057245.png)
+> 思考：yaml中能写什么？   写完后，为什么需要配置过springboot-starter-XXX的才能生效？
 
-~~~
-1、在springboot-autoconfigure-xxx.jar包中
-2、spring.factories文件下存在：ActiveMQAutoconfiguration选项
-3、点进去：跳转到ActiveMQAutoconfiguration.java
-4、里面有@EnableAutoconfigurationProperties(ActiveMQProperties.class)
-5、点进去：有一个注解@ConfigurationProperties, 前缀是（spring.activemq）
-6、该类下有：brokerUrl属性
-~~~
+![image-20210509163630408](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210509163630408.png)
 
 
 
@@ -542,21 +535,55 @@ debug: true
 ## 6.1、学习前需要思考的问题
 
 ~~~
-1、springboot用的是jar包， 不是war包， 如何进行webapp相关配置？
-	①、静态资源如何导入？
-	②、SpringMVC如何拓展？
-	③、拦截器、文件上传、json这些如何体现？
-
-2、springboot的自动装配，装配了哪些东西？ 能否二次开发？
+1、SpringBoot到底帮我配置了什么？ 我们能不能进行修改？ 修改哪些东西？ 能不能拓展？
+	1-1：XXXAutoConfiguration 向容器中自动配置组件， 我们也自己写配置
+	1-2：XXXProperties 自动配置类， 可以去自定义（默认配置的内容）
+	
+2、springboot用的是jar包， 不是war包， 如何进行webapp相关配置？
+	①、静态资源用什么来写？ 		以前用jsp
+	②、静态资源如何导入？			 以前导入通过：web-app
+	③、SpringMVC如何拓展？	    以前：通过xml
+	④、拦截器、文件上传、json这些已学过的知识，如果在SpringBoot中体现出来？		
 ~~~
 
 
 
 
 
-## 6.2、静态资源导入
+## 6.2、静态资源导入==必懂==
 
-### 6.2.1、分析web类
+> 以前的：静态资源写在web-app下可以访问到。
+>
+>  现在SpringBoot整合后MVC的静态资源，想要访问到 （而不是404） 如何实现呢？
+
+
+
+### 6.2.1、静态资源导入方式
+
+> https://blog.csdn.net/qq_44543508/article/details/103751733  参考博客
+
+~~~yaml
+方式一： 自定义（加载静态资源路径）， 设置后，默认的将被替换
+	spring:
+ 		 resources:
+   			static-locations: classpath:/
+
+方式二：通过静态资源的jar,  对应的maven进行导入
+	 网址：https://www.webjars.org/     或者 （百度：webjars）
+   
+方式三：默认配置
+	"classpath:/META‐INF/resources/", 
+    "classpath:/resources/",
+    "classpath:/static/",
+    "classpath:/public/"
+    "/":当前项目的根路径
+~~~
+
+
+
+
+
+### 6.2.2、分析静态资源原理
 
 > WebMvcAutoConfiguration.class
 >
@@ -584,24 +611,6 @@ debug: true
     });
 }
 ~~~
-
-
-
-### 6.2.2、静态资源导入方式
-
-~~~yaml
-1、如果在：application.properties中配置了(自定义路径)， 将走自定义路径，加载静态资源
-	spring.mvc.static-path-pattern="/hello"     # yaml中也是一样的
-	
-2、如果没有配置，静态资源，选择webjars的话，导入maven依赖后
-	   "/webjars/**" 等价于 "classpath:/META-INF/resources/webjars/")
-   例如：localhost/8080/webjars <==> localhost/8080/META-INF/resources/webjars/
-   
-3、如果没有配置，静态资源，选择resource/下的，static、public、resources文件夹，也行
-	同名文件加载顺序：resources >  static > public   (是按源码的：数组顺序决定的)
-~~~
-
-
 
 > WebMvcAutoConfiguration  -->>  addResourceHandlers()  -->> getStaticLocations() 
 
