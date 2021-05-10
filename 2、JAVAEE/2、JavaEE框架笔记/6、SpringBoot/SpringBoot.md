@@ -634,7 +634,7 @@ debug: true
 
 ### 6.3.2、头像定制
 
-> 在springboot的新版本，被取消掉了， 因为：防止被识别使用了springboot框架，可不是我说的
+> 在：public文件下， 加入favicon.ico 就可以修改
 
 
 
@@ -658,15 +658,26 @@ debug: true
 </dependency>
 ~~~
 
-`2、导入thymeleaf约束`
+
+
+`2、将前端的：html 复制到templates 目录下, 并且加上xmlns约束`
 
 ~~~html
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">		<!--约束-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+    <body>
+		<!--此时：并未使用thymeleaf获取（控制器传来的值）-->
+    </body>
+</html>
 ~~~
 
 
 
-`3、第三步书写`
+`3、在控制器中：传入要模板引擎thymeleaf（引入的值）`
 
 - HelloController.java
 
@@ -681,9 +692,7 @@ public class HelloController {
 }
 ~~~
 
-
-
-- templates/index.html
+`4、在html中：参考thymeleaf手册， 获取到控制器的值 `
 
 ~~~html
 <!DOCTYPE html>
@@ -693,10 +702,16 @@ public class HelloController {
     <title>Title</title>
 </head>
     <body>
-        我是正版的主页：<div th:text="${msg}"></div>
+        我是正版的主页：<div th:text="${msg}"></div> <!--此处就是：利用了获取变量值-->
     </body>
 </html>
 ~~~
+
+
+
+
+
+
 
 
 
@@ -708,48 +723,23 @@ public class HelloController {
 Thymeleaf是⾯向Web和独⽴环境的现代服务器端Java模板引擎，能够处理HTML，XML，JavaScript，CSS甚⾄纯⽂本。可以嵌入spring, 完全替代 JSP.
 ~~~
 
+> 原理图
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210510153629239.png" alt="image-20210510153629239" style="zoom:50%;" />
 
-### 6.5.2、thymeleaf设计理念
+---
 
-~~~
-Thymeleaf旨在提供⼀个优雅的、⾼度可维护的创建模板的⽅式。 
-为了实现这⼀⽬标，Thymeleaf建⽴在(⾃然模板)的概念上，将其逻辑注⼊到模板⽂件中，不会影响模板设计原型。 
-这改善了设计的沟通，弥合了设计和开发团队之间的差距。
-~~~
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210510153417916.png" alt="image-20210510153417916" style="zoom:50%;" />
 
+---
 
-
-### 6.5.3、thymeleaf与jsp区别
-
-~~~
-Thymeleaf与JSP的区别在于，不运行项目之前。Thymeleaf也是纯HTML（不需要服务端的支持）。
-而JSP需要进行一定的转换。
-~~~
-
-
-
-### 6.5.4、thymeleaf作用
-
-~~~
-1.Thymeleaf 在有网络和无网络的环境下皆可运行。
-
-2、支持浏览器查看页面的静态效果，也支持（动态页面效果）
-	支持静态效果原因：因为它支持 html 原型，然后在 html标签，嵌入模板
-	支持动态效果原因：存在动态效果时，会替换默认（静态效果）
-
-2.Thymeleaf 开箱即用的特性。它提供标准和spring标准两种方言，可以直接套用模板实现JSTL、 OGNL表达式效果，避免每天套模板、该jstl、改标签的困扰。同时开发人员也可以扩展和创建自定义的方言。
-
-3.Thymeleaf 提供spring标准方言和一个与 SpringMVC 完美集成的可选模块，可以快速的实现表单绑定、属性编辑器、国际化等功能。
-~~~
-
-==源码中可知：thymeleaf 还有SpringMVC中（视图解析器）的作用==
+==源码中可知：thymeleaf 有SpringMVC中（视图解析器）的作用==
 
 ![image-20210328075101557](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328075101557.png)
 
 
 
-### 6.5.2、thymeleaf用法
+### 6.5.3、thymeleaf用法
 
 > 查看官方文档：10 Attribute Precedence
 
@@ -785,30 +775,7 @@ Thymeleaf与JSP的区别在于，不运行项目之前。Thymeleaf也是纯HTML�
 
 ### 6.6.1、MVC原理配置
 
-> 使用：@Configuration修饰类， 而不使用@EnableWebMvc
-
-~~~java
-@Configuration  //例如：自定义类
-public class MyConfigMVC implements WebMvcConfigurer {}
-~~~
-
-
-
-`1、视图解析器的添加`
-
-> 官方文档：
->
-> https://docs.spring.io/spring-boot/docs/2.1.18.RELEASE/reference/html/boot-features-developing-web-applications.html#boot-features-spring-mvc-auto-configuration
-
-~~~
-官方文档提到：ContentNegotiatingViewResolver 类
-~~~
-
-![image-20210328102549264](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328102549264.png)
-
----
-
-`2、添加自定义视图解析器：MyConfigMVC.java`
+`1、添加自定义视图解析器：MyConfigMVC.java`
 
 ~~~java
 @Configuration
@@ -828,9 +795,26 @@ public class MyConfigMVC implements WebMvcConfigurer {
 }
 ~~~
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328103038240.png" alt="image-20210328103038240" style="zoom:50%;" />
+
+
+`2、分析视图解析器的：原理`
+
+> 官方文档：
+>
+> https://docs.spring.io/spring-boot/docs/2.1.18.RELEASE/reference/html/boot-features-developing-web-applications.html#boot-features-spring-mvc-auto-configuration
+
+~~~
+官方文档提到：ContentNegotiatingViewResolver 类， 该类实现了ViewResolver
+我们书写自己的：（视图解析器）， 可以通过模仿该类一样，去实现ViewResolver
+通过：debug 在 DispatcherServlet中的doDispatch()方法 ， 去游览器发送url进行访问
+就可以：验证我们（自定义的：视图解析器）是否已生效。
+~~~
+
+![image-20210328102549264](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210328102549264.png)
 
 ---
+
+
 
 
 
