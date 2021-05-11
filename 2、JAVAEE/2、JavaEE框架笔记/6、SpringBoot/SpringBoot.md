@@ -814,6 +814,17 @@ public class MyConfigMVC implements WebMvcConfigurer {
 
 ---
 
+`3、拓展：跳转功能`
+
+~~~
+比较以前：
+	我们使用Controller设置的ModelAndView （封装：视图、数据）
+
+SpringBoot也提供了一种：
+	@Configuration 实现@WebConfigurer  实现其：添加视图的方法， 即可设置视图
+	
+~~~
+
 
 
 
@@ -821,13 +832,13 @@ public class MyConfigMVC implements WebMvcConfigurer {
 ### 6.6.2、拓展SpringMVC
 
 ~~~
- 拓展SpringMVC时， 仅使用@Configuration即可。
+ 拓展SpringMVC时， 仅使用@Configuration， 实现WebMvcConfigurer 即可。
 
  若添加了  @EnableWebMvc， 会使WebMvcAutoConfiguration 配置所有失效
  最基本的体现就是：静态资源，无法通过 resources、static、public 直接在网站中url访问到了
 ~~~
 
-`原因如下：`
+`若在@configuration 拓展MVC时， 加入了@EnableWebMvc使默认失效原因`
 
 ~~~java
 当在配置类中：
@@ -883,19 +894,31 @@ public class MyConfigMVC implements WebMvcConfigurer {
 
 
 
-> 3、若需要修改：虚拟项目名 （在配置文件：application.properties或 yaml）中修改
+## 7.2、首页配置
 
-~~~properties
-server.servlet.context-path=/yang
+~~~java
+1、编写一个MyConfig类 实现 WebMvcConfigurer 
+2、实现：添加视图addViewControllers()方法 （设置：主页访问路径， 一般用/ , /index.html）
+	    返回视图：index 由thymeleaf， 解析为（index.html）
+
+3、检查一下index.html中是否：全部替换为thymeleaf 渲染
+
+4、关闭模板引擎缓存（防止：替换后不显示页面）        
+	spring.thymeleaf.cache = false
+    
+5、yaml中可以设置：虚拟项目名
+	server.servlet.context-path=/yang
 ~~~
 
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210511211744913.png" alt="image-20210511211744913" style="zoom: 67%;" />
 
 
 
 
-## 7.2、实现：国际化
 
-### 7.2.1、设置：编码格式
+## 7.3、实现：国际化
+
+### 7.3.1、设置：编码格式
 
 > 1、将file encoding 中全部设置为：utf-8
 
@@ -905,7 +928,7 @@ server.servlet.context-path=/yang
 
 
 
-### 7.2.2、配置：语言
+### 7.3.2、配置：语言
 
 > 需要建立一个：i18n的包，配置语言的.properties文件
 
@@ -926,7 +949,7 @@ server.servlet.context-path=/yang
 
 
 
-### 7.2.3、绑定：语言位置
+### 7.3.3、绑定：语言位置
 
 > MessageSourceAutoConfiguration 类
 
@@ -934,7 +957,7 @@ server.servlet.context-path=/yang
 
 
 
-### 7.2.4、html获取配置内容
+### 7.3.4、html获取配置内容
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331141350284.png" alt="image-20210331141350284" style="zoom:50%;" />
 
@@ -942,7 +965,7 @@ server.servlet.context-path=/yang
 
 
 
-### 7.2.5、设置动态语言解析
+### 7.3.5、设置动态语言解析
 
 `1、查看：为什么能设置（动态语言解析的原因）`
 
@@ -1013,7 +1036,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
-## 7.3、登录页面
+## 7.4、登录页面
 
 > UserController.java中,  密码错误，则添加一条信息（msg = 用户密码错误 ）， 成功就重定向
 
@@ -1063,7 +1086,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
-## 7.4、拦截器
+## 7.5、拦截器
 
 > 定义一个：拦截器类 , 实现 HandlerInterceptor接口
 
@@ -1125,7 +1148,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
-## 7.5、组件化：静态页面
+## 7.6、组件化：静态页面
 
 `1、静态内容：组件化`
 
@@ -1173,7 +1196,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
-## 7.6、添加员工信息
+## 7.7、添加员工信息
 
 ~~~
 1、使用了：bootstrap的表单
@@ -1184,7 +1207,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
-## 7.7、修改员工信息
+## 7.8、修改员工信息
 
 ~~~
 重要的是：画一个（流程图），把点击跳转到url 还是其他地方，这个关系弄清楚。
@@ -1192,13 +1215,13 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
-## 7.8、删除员工信息
+## 7.9、删除员工信息
 
 > 注意restFul风格中：总是跳号的问题， 普通传参不会出现这种问题。
 
 
 
-## 7.9、404和500处理
+## 7.10、404和500处理
 
 > 只需要在templates下建立一个error文件夹， 放入404和500页面，会自动生效,springboot封装好了
 
@@ -1208,7 +1231,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
-## 7.10、总结
+## 7.11、总结
 
 > 代码地址：
 
@@ -1243,4 +1266,10 @@ public class MyMvcConfig implements WebMvcConfigurer {
 `计划如下：`
 
 > 学习完：springboot、springcloud、redis、docker 立马， 做一个
+
+
+
+
+
+
 
