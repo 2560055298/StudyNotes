@@ -144,7 +144,7 @@ move
 
 
 
-### 2.2.1、加号：+ 
+### 2.1.1、加号：+ 
 
 
 
@@ -157,7 +157,7 @@ move
 
 
 
-### 2.3.2、数据类型
+### 2.1.2、数据类型
 
 ![image-20210510090434868](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210510090434868.png)
 
@@ -192,4 +192,58 @@ move
 
 #### ②、浮点数
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210510124207177.png" alt="image-20210510124207177" style="zoom: 50%;" />
+> 浮点数 = 符号位 + 指数位 + 尾数位			//尾数部分可能丢失， 造成精度损失
+
+~~~java
+使用细节：
+	1、Java的浮点类型也有（固定的范围和长度）， 不受具体的OS的影响。
+	2、float 4 字节， double 8 字节
+	3、Java 浮点型默认的：double ,  声明float类型时， 需加f 
+		例如： float f1 = 3.3f;	//不加f会报错， double 无法赋值给float
+	
+	4、浮点型（2种）表现形式
+    	十进制：5.12 (double)、 512.0f (float) 、 .512 (double) //必须有小数点
+    	科学计数法： 5.12e2 、 5.12E-2
+    	
+	5、double比float 精度更高
+    	例如： double f2 = 2.123456781;  	float f3 = 2.123456781;
+    	显示： f2 =>2.213456781 			f3 =>2.2134569
+    
+    6、浮点数使用陷阱：（切记：浮点数，带除法不要进行比较， 若比较要：用误差精度）
+        double f4 = 2.7;    double f5 = 8.1 / 3;  //计算机是：带精度存储的，8.100001
+        f4存放的是：2.7       f5存放的是：2.6999999999999997 
+        比较方法： if(Math.abs(f4 - f5) < 0.000001) )  //如误差分析， 自己设置误差
+            
+	7、结论：若直接赋值，可以进行比较， 若查询也可以进行比较， 做乘除法，则不能。
+            double f4 = 2.7;  double f5 = 2.7；  可以比较
+		
+~~~
+
+
+
+
+
+
+
+
+
+
+
+## 2.2、JavaAPI文档
+
+~~~java
+1、概念：API（Application Programming Interface） 应用程序接口，是Java提供的基本编程接口
+
+2、接口文档出现原因：Java语言提供了（大量的基础类）， 因此Oracle公司也为这些基础类，提供了相应的					的API文档， 用于告诉开发者（如何使用这些类）， 以及（类中包含的方法）
+
+3、中文在线文档：https://www.matools.com
+
+4、查看文档顺序：
+	方法一： 包 -> 类(OR)接口 -> 字段 -> 方法
+    方法二： 索引查找（类 OR 接口） -> 字段 -> 方法
+~~~
+
+> 接口文档：内部构造
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210512094812295.png" alt="image-20210512094812295" style="zoom:50%;" />
+

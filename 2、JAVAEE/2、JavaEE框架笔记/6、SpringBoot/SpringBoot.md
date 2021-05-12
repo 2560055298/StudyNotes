@@ -928,13 +928,13 @@ SpringBoot也提供了一种：
 
 
 
-### 7.3.2、配置：语言
+### 7.3.2、设置：语言形式
 
 > 需要建立一个：i18n的包，配置语言的.properties文件
 
 ~~~properties
-创建中文properties：login_zh_CN.properites
-创建英文properties: login_en_US.properites
+创建中文properties：login_zh_CN.properties
+创建英文properties: login_en_US.properties
 ~~~
 
 ![image-20210331111144647](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331111144647.png)
@@ -949,11 +949,18 @@ SpringBoot也提供了一种：
 
 
 
-### 7.3.3、绑定：语言位置
+### 7.3.3、绑定语言
+
+~~~
+绑定方法：（修改语言获取：基路径）
+	.properties （或）.yaml 中设置：spring.messages.basename=i18n.login
+~~~
 
 > MessageSourceAutoConfiguration 类
 
 ![image-20210331113549661](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331113549661.png)
+
+
 
 
 
@@ -965,23 +972,44 @@ SpringBoot也提供了一种：
 
 
 
+
+
 ### 7.3.5、设置动态语言解析
 
-`1、查看：为什么能设置（动态语言解析的原因）`
+`1、什么是语言动态解析？ 如何实现？`
 
-> 找到：LocaleResolver（）方法（查看）默认的本地解析类：AcceptHeaderLocaleResolver.class
+~~~java
+一、动态语言解析：
+	通过点击页面上：中文 （或）英文（语言按钮）， 通过url包含：显示（语言格式）实现语言切换。
 
-![image-20210331144137770](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331144137770.png)
+二、如何实现？
+    1、书写：index.html  通过 http 携带（语言）参数， 修改显示语言类型（Accept-Language）
+    	例如：<a class="btn btn-sm" th:href="@{/index.html(l='zh_CN')}">中文</a>
+		<a class="btn btn-sm" th:href="@{/index.html(l='en_US')}">English</a>
+                
+    2、创建自己的（本地Resolver）实现LocaleResolver接口， 重写其方法，获取（页面显示语言）
+          例如：public class MyLocaleResolver implements LocaleResolver      
+            
+    3、将该实现类：作为@Bean组件， 放入@Configuration配置类， 注意（返回值、方法名 固定）
+          例如： public LocaleResolver localeResolver() 	//切记：名称固定
+~~~
 
----
 
-![image-20210331152412844](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331152412844.png)
 
----
+`2、代码实现`
 
-`2、定义：动态语言解析类`
+- index.html 传参（语言类型）
 
-> 实现：LocaleResolver接口， 模仿AcceptHeaderLocaleResolver类
+~~~Html
+<a class="btn btn-sm" th:href="@{/index.html(l='zh_CN')}">中文</a>
+<a class="btn btn-sm" th:href="@{/index.html(l='en_US')}">English</a>
+~~~
+
+
+
+- 创建自己的：本地Resolver, 实现LocaleResolver接口
+
+> 模范WebMVCAutoconfig中的：AcceptHeaderLocaleResolver类
 
 ~~~java
 public class MyLocaleResolver implements LocaleResolver {
@@ -1013,9 +1041,9 @@ public class MyLocaleResolver implements LocaleResolver {
 
 
 
-`3、将语言解析类：添加到Springmvc配置中`
+- 将语言解析类：添加到Springmvc配置类 MyMvcConfig.java中
 
-> MyMvcConfig.class类
+> 注意：LocaleResolver localeResolver()  返回值 （和） 方法名固定才生效
 
 ~~~java
 @Configuration      //注意：@Configuration 标注：这是拓展Springmvc的配置类
@@ -1036,7 +1064,61 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 
 
+
+
+`3、查看：为什么能设置（动态语言解析的原因）`
+
+> 找到：LocaleResolver（）方法（查看）默认的本地解析类：AcceptHeaderLocaleResolver.class
+
+~~~java
+1、去WebMvcAutoConfiguration类中：找到其LocalResolver()方法
+2、可以发现该方法：
+	①、首先会去判断：Web中， 有没有配置LocaleResolver类， 如果有直接ruturn 该类
+	②、如果，Web中没有， 会继续判断WebMvc中有没有， 如果也直接 return
+    ③、如果web、webMvc都没有， 那么会去用默认实现了：LocaleResolver()的类
+    	AcceptHeaderLocaleResolver.java
+    
+    ④、该类通过Http的requst 获取到的头：getHead("Accept-Language")访问语言作为解析语言。
+    
+    ⑤、将解析语言：封装到new Locale("地区", "国家")  ==>> 变为 地区-国家    //形式显示
+    
+    ⑥、并将其locale设置为：解析语言， 封装到LocaleResolver中
+    
+    ⑦、通过获取该LocaleResolver对象， 注入到：配置文件@Configuration的@Bean中
+       这样， 解析语言方式，就会变成，其自定义实现了LocaleResolver类了。
+~~~
+
+
+
+
+
+![image-20210331144137770](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331144137770.png)
+
+---
+
+![image-20210331152412844](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210331152412844.png)
+
+
+
+
+
 ## 7.4、登录页面
+
+~~~java
+实现步骤：
+	1、创建一个：控制器，转发到（登录后的页面）  //注意：先认证，控制器（是否）能正常跳转
+    	例如： @RequestMapping("/user/login") 
+    
+    2、设置：index.html 主页的跳转（测试：能够正常跳转到， 控制器）
+    
+    3、控制器业务代码：（接收前端）用户名、密码。
+    	正确：跳转到（主页面）
+    	错误：跳转到（主页），并显示（错误提示）
+    
+ 	4、主页面（进行：域名掩藏）， 设置为main.html
+~~~
+
+
 
 > UserController.java中,  密码错误，则添加一条信息（msg = 用户密码错误 ）， 成功就重定向
 
@@ -1145,6 +1227,10 @@ public class MyMvcConfig implements WebMvcConfigurer {
 ~~~html
 <a href="http://getbootstrap.com/dashboard/#" > [[${session.loginUser}]]</a>
 ~~~
+
+
+
+
 
 
 
