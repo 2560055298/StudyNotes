@@ -1,7 +1,5 @@
 
 
-
-
 # 1、知识点：回顾
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210320183654000.png" alt="image-20210320183654000" style="zoom:50%;" />
@@ -870,6 +868,14 @@ SpringBoot也提供了一种：
 
 
 
+## 6.7、Thymeleaf的另一种取值方法
+
+> 注意：thymeleaf的第二种取变量语法为   [[${变量名}]]
+
+~~~html
+<a href="http://getbootstrap.com/dashboard/#" > [[${session.loginUser}]]</a>
+~~~
+
 
 
 # 7、实战：员工管理系统
@@ -911,6 +917,8 @@ SpringBoot也提供了一种：
 ~~~
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210511211744913.png" alt="image-20210511211744913" style="zoom: 67%;" />
+
+
 
 
 
@@ -1173,28 +1181,42 @@ public class MyMvcConfig implements WebMvcConfigurer {
 > 定义一个：拦截器类 , 实现 HandlerInterceptor接口
 
 ~~~java
-public class MyInterceptor implements HandlerInterceptor {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object logUser = request.getSession().getAttribute("loginUser");
-
-        if(logUser != null){
-            //登录成功
-            return true;
-        }else{
-            //登录失败
-            request.setAttribute("msg", "没有权限，不能访问");
-            request.getRequestDispatcher("/index").forward(request, response);
-            return false;
-        }
-
-    }
-}
+为什么要使用：拦截器？
+    因为直接输入了：main.html 就可以跳转到：登录后的页面， 这样是不对的。
+    正常的逻辑应该是：
+    	1、密码正确：才能跳转到main.html页面
+    	2、之前登录过，存在session记录： 可以跳转到main.html页面。
+    	3、不满足1、2如果直接输入：main.html页面
+    			将会被：拦截器栏下来， 添加msg（无权限，请登录）, 后转发到index.html首页   
 ~~~
 
-> Web拓展的配置类中：需要添加重写方法  addInterceptors(InterceptorRegistry registry)
-
 ~~~java
+如何实现：拦截器？
+	1、从结果入手： @Configuation配置类中， 实现的WebMvcConfigurer 接口
+				 提供了添加：自定义拦截器的方法
+				public void addViewControllers(ViewControllerRegistry registry)
+				
+	2、调用参数：registry， 可以看到：添加拦截器的方法			
+    	InterceptorRegistration registry.addInterceptor(自己的拦截器对象)
+    
+    3、通过链式法则：可以添加（拦截的路径、不拦截的路径）
+    	 registry.addInterceptor(自己的拦截器对象).
+         	addPathPatterns("/**").						//拦截的路径
+       		excludePathPatterns("/","/index.html");		//不拦截的路径
+
+	4、通过第2步，可以看到，自定义的拦截器， 返回值是：InterceptorRegistration
+        
+    5、那么：自定义拦截器（需要实现什么、或继承什么）就确定了
+        public class MyInterceptor implements HandlerInterceptor {拦截逻辑书写}
+	
+	6、将相应的：拦截逻辑书写好即可。
+~~~
+
+
+
+`代码一、@Configuation 中注册（自定义拦截器）`
+
+~~~
 @Configuration      //注意：@Configuration 标注：这是拓展Springmvc的配置类
 public class MyMvcConfig implements WebMvcConfigurer {
     //配置url路由
@@ -1222,19 +1244,56 @@ public class MyMvcConfig implements WebMvcConfigurer {
 }
 ~~~
 
-> 注意：thymeleaf的第二种取变量语法为   [[${变量名}]]
 
-~~~html
-<a href="http://getbootstrap.com/dashboard/#" > [[${session.loginUser}]]</a>
+
+`代码二、实现自定义拦截器的（业务逻辑）`
+
+~~~java
+public class MyInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        Object logUser = request.getSession().getAttribute("loginUser");
+
+        if(logUser != null){
+            //登录成功
+            return true;
+        }else{
+            //登录失败
+            request.setAttribute("msg", "没有权限，不能访问");
+            request.getRequestDispatcher("/index").forward(request, response);
+            return false;
+        }
+
+    }
+}
 ~~~
 
 
 
 
 
-
-
 ## 7.6、组件化：静态页面
+
+~~~java
+一、为什么要组件化？
+   代码的复用， 后端叫封装， 前端使用了一种（组件化思想）
+
+二、如何利用：Thymeleaf进行组件化？
+    1、先找到公共页面：比如（顶部、侧边栏）
+    2、然后：创建一个组件文件夹， components, 在组件文件夹下，写入.html组件 component
+    		组件创建方式：
+    			th:fragment="组件名"  
+                    
+    3、引用组件：在其余（公共代码）页面引入组件。
+             	组件引用方式：（插入、替换）此处用了替换
+                th:replace="~{commons/commons :: 组件名(参数，可选)}
+~~~
+
+> 注意路径是在：templates文件夹下
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210513193817641.png" alt="image-20210513193817641" style="zoom:33%;" />
+
+
 
 `1、静态内容：组件化`
 
@@ -1319,7 +1378,9 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 ## 7.11、总结
 
-> 代码地址：
+> MVC应始终参考，官方文档：
+>
+> https://docs.spring.io/spring-boot/docs/2.1.18.RELEASE/reference/html/boot-features-developing-web-applications.html#boot-features-spring-mvc-auto-configuration
 
 ~~~
 看老师视频固然重要, 但是前提是：自己练，发现错误，不能解决才去看。而不是一股脑只是看视频，跟着敲。

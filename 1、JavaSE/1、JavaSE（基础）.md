@@ -221,9 +221,49 @@ move
 
 
 
+#### ③、字符型
 
+`1、字符型：使用细节`
 
+~~~java
+字符型char使用细节：
+	1、字符常量是用 ''   (单引号，括起来的字符)  
+	2、Java中：char 本质是（1个整数）， 输出时是（unicode码）对应的（字符）。
+    3、char类型是可以进行（运算的）， 因为本质是一个（整数）
+~~~
 
+~~~java
+/**
+ * 字符型学习：char 底层是unicode数字， 输出是（字符）
+ */
+public class Char01{
+	public static void main(String[] args){
+		char c1 = 'a';		//可以存：字符
+		char c2 = '\t';		//可以存：制表符
+		char c3 = 97;		//ASCII码
+		char c4 = '中';		//char占2个字节， 因为要存放中文
+        //c1 + 2 会先将c1转为unicode数字， 加完后为99，若要存到char中，需要转回去
+		char sum = (char)(c1 + 2);	
+ 
+		System.out.println(c1); 		//输出97
+		System.out.println(c2); 		//输出：制表符占的空格
+		System.out.println(c3); 		//a     
+		System.out.println(c4); 		//输出的是：字符（中）
+		System.out.println(sum);		//因为底层是99， 输出时是unicode对应的字符c
+        //如果：直接写在输出，那么就会自动先将 c1 转换为 97， 然后再加2， 变为99，再输出字符
+		System.out.println(c1 + 2);		
+	}
+}
+~~~
+
+`2、字符类型：本质探讨`
+
+~~~java
+一、char本质探讨：
+	字符型（存储到计算机中）， 需要将（字符）对应的（码值：整数）找出来，比如：a
+	存储操作：  'a' ==>> 码值 ==>> 二进制（0110 0001） ==>> 存储
+    读取操作：  二进制(0110 0001) ==>> 97 ===> 'a' => 显示
+~~~
 
 
 
@@ -247,3 +287,47 @@ move
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210512094812295.png" alt="image-20210512094812295" style="zoom:50%;" />
 
+
+
+
+
+## 2.3、编码
+
+~~~java
+字符（和）码值,对应关系：是通过（字符编码）决定的    
+    1、ASCII码：
+    	ASCII编码表：1个字符（用）1个字节表示，实际上：
+    			   1个字节可以表示256个（字符），但是ASCII码表只使用了（128个）
+    2、Unicode
+    	Unicode编码表（固定大小编码）：字母（和）汉字都是占用（2字节）
+    
+    3、utf-8
+    	utf-8编码表：字母占用1个字节， 汉字占用3个字节
+    
+    4、gbk
+    	gbk编码表：字母占用1个字节， 汉字占用2个字节
+    
+    5、gb2312 
+    	可以表示汉字：gb2312 < gbk  （表示的汉字范围）
+    
+    6、big5码
+    	用来表示：繁体中文
+~~~
+
+
+
+### 2.3.1、ASCII码讲解
+
+![image-20210513125900764](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210513125900764.png)
+
+
+
+### 2.3.2、Unicode码讲解
+
+![image-20210513130013405](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210513130013405.png)
+
+
+
+### 2.3.3、UTF-8码讲解
+
+![image-20210513130103393](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210513130103393.png)
