@@ -4,7 +4,7 @@
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210320183654000.png" alt="image-20210320183654000" style="zoom:50%;" />
 
-# 2、新的学习大纲
+# 2、学习大纲
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210320183521316.png" alt="image-20210320183521316" style="zoom: 50%;" />
 
@@ -908,6 +908,7 @@ SpringBoot也提供了一种：
 	    返回视图：index 由thymeleaf， 解析为（index.html）
 
 3、检查一下index.html中是否：全部替换为thymeleaf 渲染
+    
 
 4、关闭模板引擎缓存（防止：替换后不显示页面）        
 	spring.thymeleaf.cache = false
@@ -1017,24 +1018,24 @@ SpringBoot也提供了一种：
 
 - 创建自己的：本地Resolver, 实现LocaleResolver接口
 
-> 模范WebMVCAutoconfig中的：AcceptHeaderLocaleResolver类
+> 模仿WebMVCAutoconfig中的：AcceptHeaderLocaleResolver类
 
 ~~~java
 public class MyLocaleResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
         String l = request.getParameter("l");  //从request中获取：自己设置的解析语言
-        Locale locale = request.getLocale();     //获取：默认的本地语言解析
+        Locale locale = request.getLocale();   //获取：默认的本地语言解析
 
         System.out.println(l);
 
-        if( l != null && l.length() != 0){       //如果自己的解析语言不为空，且长度不为0
-            String[] language = l.split("_");   //将其分割
+        if( l != null && l.length() != 0){    //如果自己的解析语言不为空，且长度不为0
+            String[] language = l.split("_"); //将其分割
 
-            System.out.println(language);              //显示：分割后的语言
+            System.out.println(language);     //显示：分割后的语言
 
             //language[0]国家；  language[1]地区
-            locale = new Locale(language[0], language[1]);    //将分割后的：语言封装到locale类
+            locale = new Locale(language[0], language[1]); //将分割后的：语言封装到locale类
         }
 
         return locale;                          //返回：需要显示（解析语言）
@@ -1076,10 +1077,10 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 `3、查看：为什么能设置（动态语言解析的原因）`
 
-> 找到：LocaleResolver（）方法（查看）默认的本地解析类：AcceptHeaderLocaleResolver.class
+> 找到：LocaleResolver（）方法（查看）默认的本地解析类：AcceptHeaderLocaleResolver.java
 
 ~~~java
-1、去WebMvcAutoConfiguration类中：找到其LocalResolver()方法
+1、去WebMvcAutoConfiguration类中：找到其localResolver()方法
 2、可以发现该方法：
 	①、首先会去判断：Web中， 有没有配置LocaleResolver类， 如果有直接ruturn 该类
 	②、如果，Web中没有， 会继续判断WebMvc中有没有， 如果也直接 return
@@ -1135,15 +1136,18 @@ public class MyMvcConfig implements WebMvcConfigurer {
 public class UserController {
     @RequestMapping("/user/login")
     public String login(
-                        @RequestParam("username") String username,
-                        @RequestParam("password") String password,
-                        Model model){
-        if(!username.equals("") && "123456".equals(password)){
-            return "redirect:/main";
-        }else{
-            model.addAttribute("msg", "用户名或密码错误");
-            return "index";
+            @RequestParam("username") String userName,
+            @RequestParam("password") String passWord,
+            HttpSession session
+            ){
+        //判断密码：是否正确   (用户名不为空， 密码为：123456 做为正确)
+        if(userName != null && !userName.isEmpty() && "123456".equals(passWord)){
+            session.setAttribute("loginUser", userName);
+            return "redirect:/main.html";       //重定向到：main.html这个控制器
+
         }
+        session.setAttribute("msg", "用户名或密码错误！！！");
+        return "redirect:/index.html";         //走Thymeleaf的视图解析器：到主页
     }
 }
 ~~~
@@ -1168,10 +1172,10 @@ public class MyMvcConfig implements WebMvcConfigurer {
 }
 ~~~
 
-> html页面中：需要使用 th:if = ${ ! #strings.isEmpty(msg)}		//如果不为空，则执行th:text
+> html页面中：需要使用 th:if = ${ ! #strings.isEmpty(session.msg)}		//如果不为空，则执行th:text
 
 ~~~html
-<p style="color: red" th:text="${msg}" th:if="${!#strings.isEmpty(msg)}"></p>
+<p style="color: red" th:if="${not #strings.isEmpty(session.msg)}" th:text="${session.msg}"></p>
 ~~~
 
 
@@ -1187,7 +1191,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
     	1、密码正确：才能跳转到main.html页面
     	2、之前登录过，存在session记录： 可以跳转到main.html页面。
     	3、不满足1、2如果直接输入：main.html页面
-    			将会被：拦截器栏下来， 添加msg（无权限，请登录）, 后转发到index.html首页   
+    		将会被：拦截器栏下来， 添加msg（无权限，请登录）, 后重定向到index.html首页   
 ~~~
 
 ~~~java
@@ -1216,7 +1220,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 `代码一、@Configuation 中注册（自定义拦截器）`
 
-~~~
+~~~java
 @Configuration      //注意：@Configuration 标注：这是拓展Springmvc的配置类
 public class MyMvcConfig implements WebMvcConfigurer {
     //配置url路由
@@ -1250,20 +1254,20 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 ~~~java
 public class MyInterceptor implements HandlerInterceptor {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object logUser = request.getSession().getAttribute("loginUser");
+    @RequestMapping("/user/login")
+    public String login(
+        @RequestParam("username") String userName,
+        @RequestParam("password") String passWord,
+        HttpSession session
+    ){
+        //判断密码：是否正确   (用户名不为空， 密码为：123456 做为正确)
+        if(userName != null && !userName.isEmpty() && "123456".equals(passWord)){
+            session.setAttribute("loginUser", userName);
+            return "redirect:/main.html";       //重定向到：main.html这个控制器
 
-        if(logUser != null){
-            //登录成功
-            return true;
-        }else{
-            //登录失败
-            request.setAttribute("msg", "没有权限，不能访问");
-            request.getRequestDispatcher("/index").forward(request, response);
-            return false;
         }
-
+        session.setAttribute("msg", "用户名或密码错误！！！");
+        return "redirect:/index.html";         //走Thymeleaf的视图解析器：到主页
     }
 }
 ~~~
@@ -1279,13 +1283,13 @@ public class MyInterceptor implements HandlerInterceptor {
    代码的复用， 后端叫封装， 前端使用了一种（组件化思想）
 
 二、如何利用：Thymeleaf进行组件化？
-    1、先找到公共页面：比如（顶部、侧边栏）
+    1、先找到公共页面：比如（顶部、侧边栏）  ===>>> 在游览器利用（视图）快速定位
     2、然后：创建一个组件文件夹， components, 在组件文件夹下，写入.html组件 component
     		组件创建方式：
     			th:fragment="组件名"  
                     
     3、引用组件：在其余（公共代码）页面引入组件。
-             	组件引用方式：（插入、替换）此处用了替换
+             	组件引用方式：（插入、替换）此处用了替换（根路径是：templates）
                 th:replace="~{commons/commons :: 组件名(参数，可选)}
 ~~~
 
@@ -1413,6 +1417,129 @@ public class MyInterceptor implements HandlerInterceptor {
 `计划如下：`
 
 > 学习完：springboot、springcloud、redis、docker 立马， 做一个
+
+
+
+
+
+
+
+
+
+# ==进阶学习大纲==
+
+~~~java
+1、JDBC
+2、Mybatis：重点
+3、Druid：重点
+4、Shiro（安全机制） ： 重点
+5、Spring Security（安全框架）： 重点
+6、异步任务：邮件发送、定时任务
+7、Swagger
+8、Dubbo + Zookeeper
+~~~
+
+
+
+
+
+# 9、JDBC整合
+
+## 9.1、JDBC引入方法
+
+~~~
+1、pom.xml中导入Jdbc、mysql依赖
+2、配置yaml：填充数据源
+3、获取JdbcTemplate 实例对象
+4、通过实例对象进行（CRUD）
+~~~
+
+
+
+## 9.2、代码如下
+
+### 9.2.1、pom.xml 导入依赖
+
+~~~xml
+<!--SpringJDBC-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<!--MySql-->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+~~~
+
+
+
+
+
+### 9.2.2、yaml中填充数据源
+
+~~~yaml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # 8以上mysql
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/mysql?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=true
+~~~
+
+
+
+
+
+### 9.2.3、获取JdbcTemplate
+
+> 若要使用@RestController需要导入：web依赖
+
+~~~java
+@RestController
+public class JDBCController {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;      //获取：JdbcTemplate实例对象
+
+    @RequestMapping("/laoyang")
+    public String test() throws SQLException {
+        //1、获取数据源
+        DataSource dataSource = jdbcTemplate.getDataSource();
+
+        //2、获取数据库：连接对象
+        Connection connection = dataSource.getConnection();
+
+        //3、查询
+        List<Map<String, Object>> listMap  = jdbcTemplate.queryForList("select * from mysql.jwt");
+
+        //4、删除
+        jdbcTemplate.update("delete from mysql.jwt where id = ?", 1);
+
+        //5、增加
+        jdbcTemplate.update("insert into mysql.jwt(id, name, password) values (?, ?, ?)", 666, "诗颖姑娘", "123456");
+
+        //6、更新
+        jdbcTemplate.update("update mysql.jwt set name = ? where id = ?", "雨欣", 2);
+
+        return "我成功了";
+    }
+}
+~~~
+
+
+
+
+
+## 9.3、原理探究
+
+![image-20210516193425582](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210516193425582.png)
 
 
 
