@@ -1545,5 +1545,541 @@ public class JDBCController {
 
 
 
+# 10、druid
+
+## 10.1、概念
+
+~~~java
+Druid是：阿里巴巴开发的一个数据库连接池。
+Druid的功能
+1、替换DBCP和C3P0。Druid提供了一个高效、功能强大、可扩展性好的数据库连接池。
+
+2、可以（监控数据库访问）性能，Druid内置提供了一个功能强大的StatFilter插件，能够详细统计SQL的执行性能，这对于线上分析数据库访问性能有帮助。
+
+3、数据库密码加密。直接把数据库密码写在配置文件中，这是不好的行为，容易导致安全问题。DruidDruiver和DruidDataSource都支持PasswordCallback。
+
+4、SQL执行日志，Druid提供了不同的LogFilter，能够支持Common-Logging、Log4j和JdkLog，你可以按需要选择相应的LogFilter，监控你应用的数据库访问情况。
+
+5、扩展JDBC，如果你要对JDBC层有编程的需求，可以通过Druid提供的Filter机制，很方便编写JDBC层的扩展插件。
+
+所以Druid可以：
+1、充当数据库连接池。
+2、可以监控数据库访问性能
+3、获得SQL执行日志
+~~~
+
+
+
+## 10.2、如何使用
+
+### 10.2.1、导入依赖
+
+~~~xml
+<!--druid依赖-->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.2.6</version>
+</dependency>
+
+<!--配置日志监控：用到了log4j-->
+<dependency>
+    <groupId>log4j</groupId>
+    <artifactId>log4j</artifactId>
+    <version>1.2.17</version>
+</dependency>
+~~~
+
+
+
+### 10.2.2、配置yaml
+
+~~~yaml
+spring:
+  datasource:
+    #   数据源基本配置
+    driver-class-name: com.mysql.cj.jdbc.Driver  # 8以上mysql
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/mysql?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=true
+    type: com.alibaba.druid.pool.DruidDataSource
+    #     配置初始化大小、最小、最大线程数
+    initialSize: 5
+    minIdle: 5
+    #     CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+    maxActive: 20
+    #     最大等待时间，内网：800，外网：1200（三次握手1s）
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    #     配置一个连接在池中最大空间时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1
+    testWhileIdle: true
+    #     设置从连接池获取连接时是否检查连接有效性，true检查，false不检查
+    testOnBorrow: true
+    #     设置从连接池归还连接时是否检查连接有效性，true检查，false不检查
+    testOnReturn: true
+    #     可以支持PSCache（提升写入、查询效率）
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+    #     保持长连接
+    keepAlive: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+~~~
+
+
+
+
+
+### 10.2.3、注入Bean
+
+~~~java
+@Configuration
+public class DruidConfig{
+	@ConfigurationProperties(prefix = "spring.datasource")
+    @Bean
+    public DruidDataSource druid(){
+        return new DruidDataSource();
+    }
+
+	//配置Druid监控
+	@Bean
+	public ServletRegistrationBean statViewServlet(){
+		ServletRegistrationBean bean=new ServletRegistrationBean(new StatViewServlet(),"/druid/*");
+
+		Map<String,String> initParams=new HashMap<>();
+		initParams.put("loginUsername","admin");
+		initParams.put("loginPassword","admin");
+		initParams.put("allow","");//默认允许所有访问
+
+		bean.setInitParameters(initParams);
+		return bean;
+	}
+
+	//配置一个web监控的filter
+	@Bean
+	public FilterRegistrationBean webStatFilter(){
+		FilterRegistrationBean bean=new FilterRegistrationBean();
+		bean.setFilter(new WebStatFilter());
+
+		Map<String,String> initParams=new HashMap<>();
+		initParams.put("exclusions","*.js,*.css,/druid/*");
+
+		bean.setInitParameters(initParams);
+		bean.setUrlPatterns(Arrays.asList("/*"));
+		return bean;
+	}
+}
+~~~
+
+
+
+## 10.3、原理
+
+### 10.3.1、配置Druid监控
+
+![image-20210517083230510](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210517083230510.png)
+
+
+
+
+
+### 10.3.2、配置web的filter
+
+![image-20210517084715998](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210517084715998.png)
+
+
+
+
+
+# 11、整合Mybatis
+
+## 11.1、导入依赖
+
+~~~xml
+<!--Mysql整合依赖-->
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.1.4</version>
+</dependency>
+
+<!--JDBC依赖-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+
+<!--Mysql依赖-->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+<!--lombok： 简化pojo层-->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+</dependency>
+~~~
+
+
+
+## 11.2、测试数据库连接
+
+- `Yaml`
+
+~~~yaml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/jwt?useTimezone=UTC&useUnicode=true&characterEncoding=utf8
+~~~
+
+
+
+- `测试类`
+
+~~~java
+    /**
+     * 测试：是否能连上数据库
+     * @throws SQLException
+     */
+    @Test
+    void contextLoads() throws SQLException {
+        DataSource dataSource = jdbcTemplate.getDataSource();
+        Connection connection = dataSource.getConnection();
+    }
+~~~
+
+
+
+
+
+## 11.3、创建pojo层
+
+~~~java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MyUser {
+    private int id;
+    private String name;
+    private String password;
+}
+~~~
+
+
+
+## 11.4、创建mapper接口
+
+~~~java
+@Repository
+@Mapper
+public interface MyUserMapper {
+    //1、查询
+    public List<MyUser> queryAllUser();
+    //2、添加
+    public int insertUser(MyUser user);
+    //3、更新
+    public int updUser(MyUser user);
+    //4、删除
+    public int delUser(int id);
+}
+~~~
+
+
+
+
+
+## 11.5、创建mapper.xml文件
+
+~~~xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yyy.mapper.MyUserMapper">
+    <!--1、查询-->
+    <select id="queryAllUser" resultType="MyUser">
+        select * from jwt.myuser;
+    </select>
+
+    <!--2、添加-->
+    <insert id="insertUser" parameterType="MyUser">
+        insert into jwt.myuser(id, name, password) values (#{id}, #{name}, #{password})
+    </insert>
+
+    <!--3、更新-->
+    <update id="updUser" parameterType="MyUser">
+        update jwt.myuser set name = #{name}, password = #{password} where id = #{id}
+    </update>
+
+    <!--4、删除-->
+    <delete id="delUser" parameterType="int">
+        delete from jwt.myuser where id = #{id}
+    </delete>
+
+</mapper>
+~~~
+
+
+
+## 11.6、绑定、别名yaml配置
+
+~~~yaml
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml   # 设置：接口绑定mapper路径 
+  type-aliases-package: com.yyy.pojo	      # 设置：实体类别名
+~~~
+
+
+
+
+
+## 11.7、测试CRUD
+
+~~~java
+@Test
+void test01(){
+    //1、查询
+    List<MyUser> myUsers = myUserMapper.queryAllUser();
+    System.out.println(myUsers);
+
+    //2、添加
+    int addResult = myUserMapper.insertUser(new MyUser(666, "诗颖姑娘", "123"));
+
+    //3、修改
+    int updResult = myUserMapper.updUser(new MyUser(4, "雨欣妹妹", "666"));
+
+    //4、删除
+    int delResult = myUserMapper.delUser(1);
+}
+~~~
+
+
+
+
+
+# 12、SpringSecurity
+
+> 官方文档：https://docs.spring.io/spring-security/site/docs/5.2.0.RELEASE/reference/htmlsingle/
+
+
+
+## 12.1、概念
+
+~~~
+Spring Security是一个侧重于为（Java应用程序）提供（身份验证）和（授权）的框架。
+Spring Security的真正强大之处在于（可以很容易地）扩展它以（满足定制需求）。
+~~~
+
+
+
+
+
+## 12.2、快速：身份认证、授权
+
+> 1、实现：WebSecurityConfigurerAdapterj抽象类， 以及添加@EnableWebSecurity注解
+>
+> 2、重写（身份验证）方法：protected void configure(HttpSecurity http) 
+>
+> 3、重写（授权）方法：protected void configure(AuthenticationManagerBuilder auth)
+
+~~~java
+@EnableWebSecurity
+public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+    /**
+         * 我们要通过：Security实现
+         *                 1、所有人都可以访问首页
+         *                 2、只有拥有权限的人：才能访问相应的level层级页面
+         * @param http
+         * @throws Exception
+         */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        //所有人都可以访问首页， 只有拥有权限，才能访问控制页
+        //antMatchers("/level1/**") 路径自己设置， 控制器的路径
+        http.authorizeRequests()
+            .antMatchers("/").permitAll()
+            .antMatchers("/level1/**").hasRole("vip1")
+            .antMatchers("/level2/**").hasRole("vip2")
+            .antMatchers("/level3/**").hasRole("vip3");
+
+
+        //没有权限，默认会跳转到登录页面：/login, 账号密码错误跳转到/login/error
+        //该页面是：SpringSecurity所写， 并未自己构建的
+        http.formLogin();
+    }
+
+    /**
+         * 开设用户，并添加角色
+         */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
+            .withUser("root").password(new BCryptPasswordEncoder().encode("123456")).roles("vip1", "vip2", "vip3")
+            .and()
+            .withUser("laoyang").password(new BCryptPasswordEncoder().encode("123456")).roles("vip1", "vip2")
+            .and()
+            .withUser("guess").password(new BCryptPasswordEncoder().encode("123456")).roles("vip1");
+    }
+}
+~~~
+
+
+
+## 12.3、查询数据库：进行授权
+
+> 官网：https://docs.spring.io/spring-security/site/docs/5.2.0.RELEASE/reference/htmlsingle/#jc-authentication-jdbc
+
+~~~java
+@Autowired
+private DataSource dataSource;
+
+@Autowired
+public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    // ensure the passwords are encoded properly
+    UserBuilder users = User.withDefaultPasswordEncoder();
+    auth
+        .jdbcAuthentication()
+            .dataSource(dataSource)
+            .withDefaultSchema()
+            .withUser(users.username("user").password("password").roles("USER"))
+            .withUser(users.username("admin").password("password").roles("USER","ADMIN"));
+}
+~~~
+
+
+
+## 12.4、注销、由权限显示内容
+
+~~~
+实现目标：
+	1、登录前：只显示 （登录按钮）
+	2、登录后：显示（姓名、注销按钮）
+	3、注销后：回到index 主页面
+	4、根据：拥有角色权限， 显示相应内容
+~~~
+
+==实现流程如下：==
+
+### 12.4.1、配置环境
+
+> Pom.xml中
+>
+> ​		1、导入：SpringSecurity整合thymeleaf 的依赖	
+>
+> ​		2、降级：springBoot的版本，否则无法实现注销
+
+~~~xml
+<!--降级版本-->
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.9.RELEASE</version>			
+    <relativePath/> 
+</parent>
+
+<!--springsecurity整合thymeleaf的-->
+<dependency>
+    <groupId>org.thymeleaf.extras</groupId>
+    <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+    <version>3.0.4.RELEASE</version>
+</dependency>
+~~~
+
+
+
+
+
+### 12.4.2、登录前、后
+
+> 登录前：只显示 （登录按钮）
+>
+> 登录后：显示（姓名、注销按钮）
+
+~~~html
+<!--头文件：加入sec-->
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+
+<!--利用：sec:authorize="isAuthenticated() 判断是否（已经登录）-->
+
+ <!--登录注销-->
+<div class="right menu">
+    <!--没有登录时：显示登录按钮-->
+    <a class="item" th:href="@{/toLogin}" sec:authorize="!isAuthenticated()">
+        <i class="address card icon"></i> 登录
+    </a>
+
+
+    <!--已登录：则显示名称-->
+    <button class="item"  sec:authorize="isAuthenticated()">
+        名称： <span sec:authentication = "name">	
+        </span>
+    </button>
+
+
+    <!--已登录了：显示注销按钮-->
+    <a class="item" th:href="@{/logout}" sec:authorize="isAuthenticated()">
+        <i class="sign-out icon"></i> 注销
+    </a>
+</div>
+~~~
+
+
+
+
+
+
+
+### 12.4.3、注销：跳转主页
+
+> 配置类中：使用http.logout() 注销
+
+~~~java
+@EnableWebSecurity
+public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+   	 //实现退出功能： 可以清除cookie, 并且销毁session
+    http.logout().logoutSuccessUrl("/")
+        .deleteCookies("remove").invalidateHttpSession(true);
+    
+    http.csrf().disable();	//Spring security CSRF 跨域访问限制问题， 不加404
+	}
+}
+~~~
+
+
+
+### 12.4.4、角色对应：内容
+
+> 根据拥有的：权限，显示相应的内容
+
+~~~~html
+<!--利用：sec:authorize="hasAnyRole(角色名)"  若拥有，代码执行， 反之不执行-->
+<div class="column" sec:authorize="hasAnyRole('vip1')">
+~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 12.X、探究原理
+
 
 

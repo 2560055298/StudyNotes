@@ -105,7 +105,7 @@
 </configuration>
 ~~~
 
-~~~
+~~~java
 jdbcConfig.properties文件名
 
 driver=com.mysql.cj.jdbc.Driver
