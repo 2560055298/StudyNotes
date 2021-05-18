@@ -2234,3 +2234,299 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
 
 
+## 13.3、初探原理
+
+~~~java
+三大对象：
+	1、Subject： 创建用户
+	2、SecurityManager： 管理用户
+	3、Realm：连接数据
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210518145351742.png" alt="image-20210518145351742" style="zoom:50%;" />
+
+----
+
+
+
+## 13.4、springBoot整合Shiro
+
+~~~java
+实现方法：
+    1、导入依赖
+    2、创建配置类：配置三大对象
+    	Subject：  			返回： ShiroFilterFactoryBean 对象
+    	SecurityManager：	返回： DefaultWebSecurityManager 对象
+    	Realm：				返回： Realm 实现类对象
+~~~
+
+
+
+### 13.4.1、导入依赖
+
+~~~xml
+<!--web-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<!--thymeleaf-->
+<dependency>
+    <groupId>org.thymeleaf</groupId>
+    <artifactId>thymeleaf-spring5</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.thymeleaf.extras</groupId>
+    <artifactId>thymeleaf-extras-java8time</artifactId>
+</dependency>
+
+<!--spring整合shiro-->
+<dependency>
+    <groupId>org.apache.shiro</groupId>
+    <artifactId>shiro-spring</artifactId>
+    <version>1.7.1</version>
+</dependency>
+~~~
+
+
+
+### 13.4.2、创建Realm实现
+
+> 继承：AuthorizingRealm 抽象类
+
+~~~java
+/**
+ * 用户认证、用户授权
+ */
+public class UserRealm extends AuthorizingRealm {
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        System.out.println("执行了（授权） ==>> doGetAuthorizationInfo");
+        return null;
+    }
+
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        System.out.println("执行了（认证） ==>> doGetAuthenticationInfo");
+        return null;
+    }
+}
+~~~
+
+
+
+### 13.4.3、配置3大对象
+
+> 创建配置类：ShiroConfig.java
+
+~~~java
+@Configuration
+public class ShiroConfig {
+    @Bean
+    public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultSecurityManager defaultSecurityManager){
+        ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();     //创建：Shiro链工厂对象
+        bean.setSecurityManager(defaultSecurityManager);   //设置：用户管理
+        return bean;
+    }
+
+
+    @Bean("securityManager")
+    public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("useRealm") Realm useRealm){
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();   //创建：默认用户管理对象
+        defaultWebSecurityManager.setRealm(useRealm);    //设置：数据连接
+        return defaultWebSecurityManager;                //返回：默认的用户管理对象
+    }
+
+    @Bean
+    public Realm useRealm(){
+        return new UserRealm();                       //创建：数据连接对象
+    }
+}
+~~~
+
+
+
+## 13.5、实现：登录拦截
+
+> 在上面整合的基础上：ShiroFilterFactoryBean   这个类添加：拦截（条件、路径）， 首页跳转页面
+
+~~~Java
+@Bean
+public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultSecurityManager defaultSecurityManager){
+    ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();     //创建：Shiro链工厂对象
+    bean.setSecurityManager(defaultSecurityManager);   //设置：用户管理
+
+    /*
+            添加shiro的内置过滤器
+                anon： 无需认证，就可以访问
+                authc：必须认证，才可以访问
+                user：必须（拥有记住我）， 才能访问
+                perms：拥有对某个资源权限才能访问
+                role：拥有某个角色权限才能访问
+         */
+    Map<String, String> filterMap = new LinkedHashMap<>();
+    filterMap.put("/usr/**", "authc");      //必须认证了：才能访问
+    bean.setFilterChainDefinitionMap(filterMap);
+
+    bean.setLoginUrl("/toLogin"); //自定义的：登录页面，拦截后跳转到（登录页面：控制器）
+
+    return bean;
+}
+~~~
+
+
+
+
+
+## 13.6、实现：用户认证
+
+~~~java
+如何实现？
+	1、控制器：@RequestMapping("/login") 获取到（登录页面提交的：账号密码）
+	2、获取到当前用户：SecurityUtils.getSubject();
+    3、将账号密码封装到token： new UsernamePasswordToken(username, password);
+	4、实现登录：currentUser.login(token);       //登录：token校验
+	5、登录操作：会执行UserRealm类中的（doGetAuthenticationInfo）认证方法
+    6、若认证方法：返回null则会调用 （自定义异常）UnknownAccountException
+    7、若认证方法：返回return new SimpleAuthenticationInfo(); 匹配上了，则会正常访问页面 
+~~~
+
+### 13.6.1、UserController代码
+
+~~~java
+ /**
+     * 表单提交页面：
+     */
+    @RequestMapping("/login")
+    public String login(String username, String password, Model model){
+        //获取到：当前用户
+        Subject currentUser = SecurityUtils.getSubject();	
+        System.out.println(username + password);
+        //账号密码加密：封装成token
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);   //封装令牌
+        try {
+            currentUser.login(token);       //登录：token校验, 注意此处会跳转Realm
+            return "index";                 //登录成功
+        } catch (UnknownAccountException e) {
+            model.addAttribute("msg", "用户不存在");
+            return "toLogin";
+        }catch (IncorrectCredentialsException e) {
+            model.addAttribute("msg", "密码错误");
+            return "toLogin";
+        }catch (LockedAccountException e) {
+            model.addAttribute("msg", "出错次数过多，已锁定");
+            return "toLogin";
+        }
+    }
+
+}
+~~~
+
+
+
+### 13.6.2、UserRealm代码
+
+~~~Java
+/**
+ * 用户认证、用户授权
+ */
+public class UserRealm extends AuthorizingRealm {
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        System.out.println("执行了（授权） ==>> doGetAuthorizationInfo");
+        return null;
+    }
+    
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        System.out.println("执行了（认证） ==>> doGetAuthenticationInfo");
+
+         //模拟数据库：账号密码
+        String username = "root";
+        String password = "123456";
+
+        //获取到：公共token
+        UsernamePasswordToken  useToken =  (UsernamePasswordToken)authenticationToken;
+
+        //利用token：比对用户名
+        if(!useToken.getUsername().equals(username)){
+            return null;        //会执行：异常UnknownAccountException
+        }
+
+
+        //Shiro（要求密码由它比对）：较为安全
+        return new SimpleAuthenticationInfo("", password, "");
+    }
+}
+~~~
+
+
+
+## 13.7、集成druid、mybatis
+
+> 只需要：导入相关依赖， 先看druid连接数据库是否有问题， 没有问题，就测试mybatis即可。
+>
+> 主要还是看：10 、11笔记
+
+~~~xml
+<dependencies>
+    <!--web-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!--thymeleaf-->
+    <dependency>
+        <groupId>org.thymeleaf</groupId>
+        <artifactId>thymeleaf-spring5</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.thymeleaf.extras</groupId>
+        <artifactId>thymeleaf-extras-java8time</artifactId>
+    </dependency>
+
+    <!--spring整合shiro-->
+    <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-spring</artifactId>
+        <version>1.7.1</version>
+    </dependency>
+
+    <!--druid依赖-->
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid</artifactId>
+        <version>1.2.6</version>
+    </dependency>
+
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+    </dependency>
+
+    <!--mybatis整合依赖-->
+    <dependency>
+        <groupId>org.mybatis.spring.boot</groupId>
+        <artifactId>mybatis-spring-boot-starter</artifactId>
+        <version>2.1.4</version>
+    </dependency>
+    
+     <!--JDBC依赖-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+   
+    <!--Mysql依赖-->
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+</dependencies>
+~~~
+
