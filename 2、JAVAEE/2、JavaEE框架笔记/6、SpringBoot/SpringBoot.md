@@ -1868,7 +1868,7 @@ void test01(){
 
 
 
-# 12、SpringSecurity
+# 12、SpringSecurity（安全）
 
 > 官方文档：https://docs.spring.io/spring-security/site/docs/5.2.0.RELEASE/reference/htmlsingle/
 
@@ -2071,6 +2071,77 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
 
 
+## 12.5、自定义登录页面
+
+> 实现 WebSecurityConfigurerAdapter 的配置类中：设置登录 loginPage（）
+
+~~~java
+@EnableWebSecurity
+public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        //没有权限，默认会跳转到登录页面：/login, 账号密码错误跳转到/login/error
+        //该页面是：SpringSecurity所写， 并未自己构建的
+        http.formLogin()                  //启动：登录页面路径，默认是/login
+            .loginPage("/toLogin")        //自定义：登录页面路径：/toLogin
+            .loginProcessingUrl("/login")//设置点击登录：处理页面
+            .usernameParameter("user")  //自定义：登录用户名（接受的参数）, 默认username
+            .passwordParameter("password");    //自定义：登录密码（接收的参数）, 默认password
+        }
+
+}
+~~~
+
+> 登录页面中：设置表单提交为/login (处理页面url), 注意提交的（name）与设置的Parameter一致
+
+~~~html
+<form th:action="@{/login}" method="post">
+    <div class="field">
+            <input type="text" name="user">
+    </div>
+    <div class="field">
+            <input type="password" name="password">
+        </div>
+    </div>
+
+    <input type="submit" class="ui blue submit button"/>
+</form>
+~~~
+
+
+
+
+
+## 12.6、添加记住我
+
+> 实现 WebSecurityConfigurerAdapter 的配置类中：添加http.rememberMe()
+
+~~~java
+@EnableWebSecurity
+public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+		  //设置：记住我，并且设置（接收的参数）
+          http.rememberMe().rememberMeParameter("remember");
+}
+~~~
+
+> 登录页面中：设置提交的（记住我）参数为（remember）
+
+~~~html
+<form th:action="@{/login}" method="post">
+    <div class="field">
+        <input type="checkbox" name="remember"> 记住我		<!--name为：remember-->
+    </div>
+    <input type="submit" class="ui blue submit button"/>
+</form>
+~~~
+
+
+
+## 12.7、探究原理
+
+> 点击方法：看源码，就很清楚了。
 
 
 
@@ -2078,8 +2149,88 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
 
 
+# 13、Shiro
 
-## 12.X、探究原理
+## 13.1、什么是Shiro
+
+> 官方介绍：http://shiro.apache.org/
+
+~~~
+1、Apache Shiro是一个功能强大且易于使用的Java安全框架。
+2、Shiro提供了应用程序安全API:
+	认证-证明用户身份，通常称为用户“登录”。
+	授权-访问控制
+	密码学-保护或隐藏数据不被窥探
+	会话管理-每个用户的时间敏感状态
+~~~
+
+
+
+## 13.2、Shiro快速入门
+
+### 13.2.1、Pom：导入依赖
+
+~~~xml
+<dependencies>
+    <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-core</artifactId>
+        <version>1.4.1</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.26</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.7.26</version>
+    </dependency>
+
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+    </dependency>
+    
+    <!--
+            shiro默认使用的日志是：commons-logging,
+            配置了log4j则使用log4j， 但是需要注意一下版本
+         -->
+    <!--        <dependency>-->
+    <!--            <groupId>commons-logging</groupId>-->
+    <!--            <artifactId>commons-logging</artifactId>-->
+    <!--            <version>1.2</version>-->
+    <!--        </dependency>-->
+</dependencies>
+~~~
+
+
+
+### 13.2.2、添加：Resources
+
+> log4j.properties、shiro.ini
+
+#### ①、log4j.properties
+
+> 代码地址：[gitHub](https://github.com/apache/shiro/blob/main/samples/quickstart/src/main/resources/log4j.properties)
+
+
+
+#### ②、shiro.ini
+
+> 代码地址：[gitHub](https://github.com/apache/shiro/blob/main/samples/quickstart/src/main/resources/shiro.ini)
+
+
+
+### 13.2.3、导入：Java类
+
+> Java根目录下添加：Quickstart.java 类， 相当于HelloWorld程序
+>
+> 代码地址：[gitHub](https://github.com/apache/shiro/blob/main/samples/quickstart/src/main/java/Quickstart.java) 
 
 
 

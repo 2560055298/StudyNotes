@@ -267,6 +267,36 @@ public class Char01{
 
 
 
+#### ④、布尔类型
+
+~~~
+概念：
+	1、布尔类型也叫：boolean类型， 占1个字节， 只有true和false
+	2、不能用0， 1代替 （这一点和：c、 php不一样）
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210517232318497.png" alt="image-20210517232318497" style="zoom:50%;" />
+
+
+
+
+
+### 2.1.3、基本数据类型转换
+
+#### ①、转换规则：==必记==
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210517233217486.png" alt="image-20210517233217486" style="zoom:50%;" />
+
+---
+
+
+
+
+
+
+
+
+
 
 
 ## 2.2、JavaAPI文档
