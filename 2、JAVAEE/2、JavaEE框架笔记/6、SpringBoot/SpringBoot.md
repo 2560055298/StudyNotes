@@ -2530,3 +2530,400 @@ public class UserRealm extends AuthorizingRealm {
 </dependencies>
 ~~~
 
+
+
+## 13.8、实现：授权
+
+~~~java
+实现步骤：
+	1、选择需要授权的方式：此处选择 perms (拥有对某个资源权限才能访问)
+    
+	2、在配置类的getShiroFilterFactoryBean() 方法中：添加授权url所需的（权限标识符）
+    			filterMap.put("/usr/add", "perms[usr:add]");
+
+	3、在配置类的getShiroFilterFactoryBean() 方法中：无权限跳转页面
+				bean.setUnauthorizedUrl("/noauth");  //设置：（没有权限）跳转页面
+	
+	4、在UserRealm的：认证方法中，获取到（用户的信息）传递到 （返回值的：principal）
+    
+    5、在UserRealm的: 授权方法中， 获取到当前用户currentUser, 再而通过用户获取到
+                     currentUser.getPrincipal();   //认证方法传来的（用户信息）
+
+	6、通过：解析用户信息中的（权限信息）添加到（simpleAuthorizationInfo 返回）			
+        			simpleAuthorizationInfo.addStringPermission(权限信息);	
+~~~
+
+
+
+==代码如下：==
+
+### 13.8.1、配置类：核心代码
+
+> 配置类：ShiroConfig 
+>
+> 关键：filterMap.put("/usr/upd", "perms[usr:upd]");
+
+~~~java
+@Configuration
+public class ShiroConfig {
+    @Bean
+    public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager") DefaultSecurityManager defaultSecurityManager){
+        /*
+            添加shiro的内置过滤器
+                anon： 无需认证，就可以访问
+                authc：必须认证，才可以访问
+                user：必须（拥有记住我）， 才能访问
+                perms：拥有对某个资源权限才能访问
+                role：拥有某个角色权限才能访问
+         */
+        Map<String, String> filterMap = new LinkedHashMap<>();
+  //设置：需拥有某个资源权限，才能访问 (注意如果和下面一行交换，就会无效，可能是读取方式的问题)
+        filterMap.put("/usr/add", "perms[usr:add]");
+        filterMap.put("/usr/upd", "perms[usr:upd]");
+        filterMap.put("/usr/**", "authc"); //必须认证了：才能访问
+        bean.setFilterChainDefinitionMap(filterMap);
+        bean.setLoginUrl("/toLogin"); //自定义的：登录页面，拦截后跳转到（登录页面）
+        bean.setUnauthorizedUrl("/noauth");  //设置：（没有权限）跳转页面
+        return bean;
+    }
+}
+~~~
+
+
+
+
+
+### 13.8.2、UserRealm核心代码
+
+> 核心代码：
+>
+> ​	return new SimpleAuthenticationInfo(myUser, myUser.getPassword(), "");	//传递用户信息
+>
+> ​	MyUser myUser = (MyUser)currentUser.getPrincipal();   									//获取到权限
+>
+> ​	simpleAuthorizationInfo.addStringPermission(split[i]);									  //添加用户权限
+
+~~~java
+/**
+ * 用户认证、用户授权
+ */
+public class UserRealm extends AuthorizingRealm {
+    @Autowired
+    private MyUserService myUserService;
+    
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        System.out.println("执行了（授权） ==>> doGetAuthorizationInfo");
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+
+        Subject currentUser = SecurityUtils.getSubject();     //获取到当前对象
+        MyUser myUser = (MyUser)currentUser.getPrincipal();   //获取到权限
+
+        //有的：可能拥有多条权限， 按照 ; 分割
+        String[] split = myUser.getPermit().split(";");
+
+        for(int i = 0; i < split.length; i++){
+            simpleAuthorizationInfo.addStringPermission(split[i]);
+        }
+
+        return simpleAuthorizationInfo;
+    }
+
+    @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        System.out.println("执行了（认证） ==>> doGetAuthenticationInfo");
+        //获取到：公共token
+        UsernamePasswordToken  useToken =  (UsernamePasswordToken)authenticationToken;
+
+        MyUser myUser = myUserService.selUserByName(useToken.getUsername());
+
+        //利用token：比对用户名
+        if(myUser == null){
+            return null;        //会执行：异常UnknownAccountException
+        }
+
+        //Shiro（要求密码由它比对）：较为安全
+        return new SimpleAuthenticationInfo(myUser, myUser.getPassword(), "");
+    }
+}
+~~~
+
+
+
+## 13.9、Shiro整合Thymeleaf
+
+~~~java
+实现方法：
+	1、导入shiro和整合thymeleaf的依赖
+	2、配置类ShiroConfig中：注入ShiroDialect对象
+	3、html中添加：shiro头文件
+	4、通过：shiro:hasPermission = "权限名"  判断是否显示（相应内容）
+	5、添加登录按钮
+	6、添加注销按钮
+~~~
+
+
+
+### 13.9.1、导入依赖
+
+> 导入thymeleaf整合依赖
+
+~~~xml
+<dependency>
+    <groupId>com.github.theborakompanioni</groupId>
+    <artifactId>thymeleaf-extras-shiro</artifactId>
+    <version>2.0.0</version>
+</dependency>
+~~~
+
+
+
+### 13.9.2、注入ShiroDialect
+
+> 配置类：ShiroConfig中注入ShiroDialect
+
+~~~java
+@Configuration
+public class ShiroConfig {
+    @Bean
+    ShiroDialect shiroDialect(){			//切记：如果不注入，则不会生效
+        return new ShiroDialect();
+    }
+}
+~~~
+
+
+
+### 13.9.3、添加：头文件
+
+> html中添加：shiro头文件
+
+~~~html
+xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+~~~
+
+
+
+
+
+### 13.9.4、shiro判断
+
+~~~html
+<div th:if="${session.currentUser == null}">
+    <a th:href="@{/toLogin}">登录</a>
+</div>
+
+<div th:if="${session.currentUser != null}">
+    <a th:href="@{/logout}">注销</a>
+</div>
+
+<!--选择：跳转页面-->
+<div shiro:hasPermission="usr:add">
+    <a href="/usr/add">跳转（添加）页面</a>
+</div>
+
+<div shiro:hasPermission="usr:upd">
+    <a href="/usr/upd">跳转（更新）页面</a>
+</div>
+~~~
+
+
+
+### 13.9.5、user存session
+
+> 登录成功后：将currentUser存入 session中 （核心代码）
+
+~~~java
+Subject currentUser = SecurityUtils.getSubject();	//获取：当前用户对象
+currentUser.login(token);       					//登录：token校验
+Session session = currentUser.getSession();			//获取：session对象
+session.setAttribute("currentUser", currentUser);	//将（当前）用户信息，存入session
+
+return "index";                						//登录成功
+~~~
+
+​	
+
+
+
+### 13.9.6、注销实现
+
+~~~java
+@Controller
+public class UserController {
+    /**
+     * 注销
+     */
+    @RequestMapping("/logout")
+    public String logout(){
+        //获取到：当前用户
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();		//注销会：清空cookie和session
+        return "toLogin";			//跳转到登录页面
+    }
+}
+~~~
+
+
+
+# 14、Swagger
+
+> 官网：https://swagger.io/
+
+
+
+
+
+## 14.1、什么是Swagger?
+
+> 说白了：就是写接口文档（工具）， 方便（前后端分立项目） 协调
+>
+> 参考博客：https://www.jianshu.com/p/349e130e40d5
+
+
+
+
+
+## 14.2、HelloWorld：跑起来
+
+> SpringBoot集成Swagger的HelloWorld项目
+
+### 14.2.1、导入依赖
+
+~~~java
+<!--注意：3.0不支持该页面了， 要寻求其他方法-->
+    <dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger-ui</artifactId>
+    <version>2.9.2</version>
+    </dependency>
+
+    <dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.9.2</version>
+</dependency>
+~~~
+
+
+
+### 14.2.2、配置类
+
+~~~java
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+
+}
+~~~
+
+
+
+
+
+### 14.2.3、效果图
+
+> 访问地址：http://localhost:8080/swagger-ui.html
+
+![image-20210519191241125](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210519191241125.png)
+
+
+
+
+
+## 14.3、Swagger配置基本信息
+
+> 在配置类中：注入Docket对象
+
+
+
+### 14.3.1、代码
+
+~~~java
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+    @Bean
+    public Docket docket(){
+        return new Docket(DocumentationType.SWAGGER_2).apiInfo(getApiInfo());
+    }
+
+    private ApiInfo getApiInfo(){
+        Contact contact = new Contact("老洋", "https://www.yangzaikongzhongfei.com" ,"2560055298@qq.com");
+        return new ApiInfo(
+                "老洋之家",
+                "这是作者老洋：谈吐心中抱负, 挥洒岁月青春的地方",
+                "Version_2.0",
+                "jiankebaiding",
+                contact,
+                "Terms",
+                "https://www.cnblogs.com/yangzaikongzhongfei/p/14446418.html",
+                new ArrayList<VendorExtension>()
+        );
+    }
+}
+~~~
+
+
+
+### 14.3.2、效果图
+
+![image-20210519203153317](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210519203153317.png)
+
+
+
+
+
+## 14.4、配置扫描接口及开关
+
+### 14.4.1、扫描接口
+
+> 核心代码是：Docket注入中的，select() 下面的内容
+
+~~~java
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+    @Bean
+    public Docket docket(){
+        return new Docket(
+                DocumentationType.SWAGGER_2)
+                .apiInfo(getApiInfo())
+                .select()
+                /*1、apis(RequestHandlerSelectors)配置要扫描接口的方式: 有如下方法
+                        1.1：basePackage("包路径")：指定要扫描的包
+                        1.2：any()：扫描任何位置
+                        1.3：none()：不扫描
+                        1.4：withClassAnnotation(注解名.class) ：扫描类上的注解
+                        1.5：withMethodAnnotation(注解名.class)：扫描方法上的注解
+
+                  2、paths(PathSelectors) 配置要过滤掉的路径
+                  	    过滤所有路径， 也就是所有路径下存在（@GetMapping）的方法都显示
+                        2.1：any() 
+                        2.2：ant("路径")  过滤掉该路径下的（所有类）
+                        2.3: none() 所有都不过滤，那么（任何）都（不会显示）
+                        2.4：regex() 通过正则表达式，拦截下（响应的内容）
+                 */
+                		.apis(RequestHandlerSelectors.withMethodAnnotation(GetMapping.class))
+                .paths(PathSelectors.any())
+                .build()
+                ;
+
+    }
+
+    private ApiInfo getApiInfo(){
+        Contact contact = new Contact("老洋", "https://www.yangzaikongzhongfei.com" ,"2560055298@qq.com");
+        return new ApiInfo(
+                "老洋之家",
+                "这是作者老洋：谈吐心中抱负, 挥洒岁月青春的地方",
+                "Version_2.0",
+                "jiankebaiding",
+                contact,
+                "Terms",
+                "https://www.cnblogs.com/yangzaikongzhongfei/p/14446418.html",
+                new ArrayList<VendorExtension>()
+        );
+    }
+}
+~~~
+
