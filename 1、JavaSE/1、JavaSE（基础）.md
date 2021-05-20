@@ -293,7 +293,25 @@ public class Char01{
 
 #### ②、转换细节
 
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210518233511277.png" alt="image-20210518233511277" style="zoom:50%;" />
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210518233511277.png" alt="image-20210518233511277" style="zoom: 80%;" />
+
+~~~java
+public class AutoConvert01{
+	public static void main(String[] args){
+		byte b1 = 1;
+		char c1 = 5;
+		short s1 = 7;
+		boolean flag = 1;
+
+		byte b2 = b1 + b1;		//报错：(byte、char、short)会先转为int再计算
+		char c2 = b1;			//报错：byte和char不能互转
+		short s2 = c1; 			//报错：short和char也不能互转
+
+		System.out.println(flag + 1);		//报错：boolean不参与运算
+
+	}
+}
+~~~
 
 
 

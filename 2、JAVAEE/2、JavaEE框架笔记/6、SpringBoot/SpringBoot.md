@@ -2927,3 +2927,480 @@ public class SwaggerConfig {
 }
 ~~~
 
+
+
+
+
+### 14.4.2、设置：swagger初始化开关
+
+> 注意：dev和test是yaml文件， application-dev.yaml ,  application-test.yaml
+
+~~~java
+public class SwaggerConfig {
+    @Bean
+    public Docket docket(Environment environment){
+        //关键代码：设置配置文件的（标识）
+        Profiles profile = Profiles.of("dev", "test");		
+        //关键代码：获取到yaml、properties环境中（满足）profile文件的（标识）
+        boolean flag = environment.acceptsProfiles(profile);	
+
+        return new Docket(
+                DocumentationType.SWAGGER_2)
+                .apiInfo(getApiInfo())
+            	//实现：swagger 自动初始化(true为开启；false为关闭，无法使用游览器访问)
+                .enable(flag)  
+                .select()
+                .paths(PathSelectors.any())
+                .build()
+                ;
+}
+~~~
+
+
+
+## 14.5、swagger分组配置
+
+> 一个Docket对应一个组： groupName("组名");    //该方法：设置组名
+
+~~~java
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+    @Bean
+    public Docket docket1(){
+        return new Docket(
+                DocumentationType.SWAGGER_2)
+                .groupName("A");
+    }
+
+    @Bean
+    public Docket docket2(){
+        return new Docket(
+                DocumentationType.SWAGGER_2)
+                .groupName("B");
+    }
+}
+~~~
+
+==效果图==
+
+![image-20210520104539853](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210520104539853.png)
+
+---
+
+
+
+
+
+## 14.6、Model添加
+
+> 原理：通过controller返回（对象）， 该对象就可以被swagger监听到
+
+
+
+### 14.6.1、pojo书写
+
+> 定义：User类
+
+~~~java
+@ApiModel("用户类")                //Model注释：非必须  （写了为了：便于阅读）
+public class User {
+    @ApiModelProperty("用户名")    //Model属性注释：非必须
+    private String username;
+    @ApiModelProperty("密码")     //Model属性注释：非必须
+    private String password;
+
+    public String getUsername() {   //私有成员，不写get无法被swagger监听到属性
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+}
+~~~
+
+
+
+### 14.6.2、返回Model
+
+> Controller 返回User对象， 作为Model, 被swagger监听到， Model本质就是pojo
+
+~~~java
+@RestController
+public class HelloController {
+    @GetMapping("/hello")
+    public String hello(){
+        return "老洋之家, 专注于把小事做好";
+    }
+
+    //通过Controller ： 返回对象， 被监听到
+    @PostMapping("/user")
+    public User user(){
+        return new User();
+    }
+}
+~~~
+
+
+
+### 14.6.3、效果图
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210520111654911.png" alt="image-20210520111654911" style="zoom:50%;" />
+
+
+
+
+
+
+
+## 14.7、接口添加
+
+> 接口本质就是：Controller中的（跳转方法）
+
+### 14.7.1、代码
+
+~~~Java
+@RestController
+public class HelloController {
+    @GetMapping("/hello")
+    public String hello(){
+        return "老洋之家, 专注于把小事做好";
+    }
+
+    //通过Controller ： 返回对象， 被监听到
+    @PostMapping("/user")
+    public User user(){
+        return new User();
+    }
+
+
+    @PostMapping("/user1")			//该接口：可以进行调试
+    @ApiParam("返回用户信息")
+    public User user1(@ApiParam("用户信息") User user){
+        return user;
+    }
+
+}
+~~~
+
+
+
+### 14.7.2、效果图
+
+> 可以利用swagger进行：请求、响应 作为调试
+
+![image-20210520144039291](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210520144039291.png)
+
+---
+
+![image-20210520144142482](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210520144142482.png)
+
+---
+
+![image-20210520144245172](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210520144245172.png)
+
+---
+
+
+
+## 14.8、总结Swagger
+
+~~~
+功能：
+	1、通过Swagger可以给一些（较难理解的属性）或者（接口） 添加注释信息
+	2、接口文档：实时更新
+	3、可以在线测试
+~~~
+
+
+
+
+
+
+
+# 15、异步任务
+
+~~~java
+原理：
+	就是开启多线程模式， 延时任务后台处理
+
+实现
+	1、业务上标注：		 @Async     //异步
+	2、（主入口）上开启异步： @EnableAsync        //开启：异步处理
+~~~
+
+
+
+## 15.1、创建：延时业务
+
+> 业务层
+
+~~~java
+@Service
+public class SynchroService {
+    @Async      //异步处理：标志
+    public void synchroStop(){    //停止3s钟
+        try {
+            Thread.sleep(3000);
+
+            System.out.println("我正在处理数据啊.....");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+~~~
+
+
+
+
+
+## 15.2、创建：调用接口
+
+~~~java
+@RestController
+public class HelloSync {
+    @Autowired
+    private SynchroService synchroService;
+
+    @RequestMapping("/hello")
+    public String showHello(){
+        synchroService.synchroStop();       //异步停止3秒， 开启一个线程
+        return "hello";
+    }
+}
+~~~
+
+
+
+## 15.3、开启异步
+
+~~~java
+@EnableAsync        //开启：异步处理
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+}
+~~~
+
+
+
+# 16、邮件任务
+
+~~~java
+原理
+	通过将MailProperties.yaml配置，绑定到  注入类 JavaMailSenderImpl
+	JavaMailSenderImpl拥有两个方法：
+    	1、send(SimpleMailMessage simpleMessage)  		//发送：简单邮件
+    	2、send(MimeMessage mimeMessage)  				//发送: 复杂邮件
+~~~
+
+
+
+
+
+
+
+## 16.1、简单邮件发送
+
+### 16.1.1、导入依赖
+
+> 注意是：springboot项目
+
+~~~xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+~~~
+
+
+
+### 16.1.2、配置yaml
+
+~~~yaml
+spring:
+  mail:
+    username: 2560055298@qq.com    #邮件：用户名
+    password: hdmipsdmsdvydifh	   #邮件：密码（加密）
+    host: smtp.qq.com			   #SMTP服务器主机， 此处用的是qq
+#    properties:
+#      mail:
+#       smtp:
+#        starttls:
+#         enable: true
+~~~
+
+
+
+### 16.1.3、发送代码
+
+> 此代码书写在：测试类中
+
+~~~java
+@SpringBootTest
+class DemoApplicationTests {
+    //JavaMailSender (接口) extends MailSender（接口）
+    //JavaMailSenderImpl（实现了）JavaMailSender（接口）
+    //该实现类：里面包含了我们配置的yaml
+    @Autowired
+    JavaMailSender mailSender;
+
+    @Test
+    void contextLoads() {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setSubject("老洋家书");                 //设置发送主题
+        mailMessage.setText("讲述：老洋这一生的种种经历");    //设置发送内容
+
+        mailMessage.setFrom("2560055298@qq.com");           //设置：发送方邮箱
+        mailMessage.setTo("laoyangzhijia@aliyun.com");      //设置：接收方邮箱
+        mailSender.send(mailMessage);                       //发送：邮件
+    }
+}
+~~~
+
+
+
+
+
+## 16.2、复杂邮件发送
+
+> 可以发送：html + 图片 + 附件  
+>
+> 依赖配置、yaml配置 （与简单邮件一致）
+
+
+
+==复杂邮件：代码==
+
+~~~java
+@SpringBootTest
+class DemoApplicationTests {
+    @Test
+    void contextLoads1() {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        try {
+            //参数（复杂邮件对象， 是否支持多文件, 编码格式）
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+            mimeMessageHelper.setSubject("老洋家书");
+            //第二个参数为：true  (开启html解析)
+            mimeMessageHelper.setText("<p style='color:red'>讲述：老洋这一生的种种经历<p>", true);
+
+
+            //添加附件：参数（发送附件名称， File文件路径）
+            mimeMessageHelper.addAttachment("生活图.jpg", new File("C:\\Users\\Lenovo\\Desktop\\1.jpg"));
+
+
+            mimeMessageHelper.setFrom("2560055298@qq.com");		 //发送方邮箱
+            
+            mimeMessageHelper.setTo("laoyangzhijia@aliyun.com");  //接收方邮箱
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        mailSender.send(mimeMessage);
+    }
+}
+
+~~~
+
+
+
+
+
+# 17、定时器
+
+~~~
+开启定时器方法：
+	1、在主入口上使用：@EnableScheduling   
+	2、需要定时的方法上使用：@Scheduled(cron = "0/2 * * * * *")
+~~~
+
+> cron概念：https://help.aliyun.com/document_detail/64769.html
+>
+> cron表达式测试：https://tool.lu/crontab/
+
+
+
+
+
+## 17.1、主方法代码
+
+~~~java
+@EnableScheduling   //开启定时功能的注解
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+}
+~~~
+
+
+
+## 17.2、定时方法代码
+
+~~~java
+@Service
+public class ScheduledService {
+    @Scheduled(cron = "0/2 * * * * *")				//每隔2s执行一次
+    public void timeCall(){
+        System.out.println("您的定时：生效了");
+    }
+}
+~~~
+
+
+
+
+
+# 18、Dubbo
+
+> 官网：https://dubbo.apache.org/zh/
+
+
+
+## 18.1、什么是Dubbo
+
+~~~
+Apache Dubbo 是一款高性能、轻量级的开源 Java 服务框架
+Apache Dubbo提供了六大核心能力：
+	1、面向接口代理的高性能RPC调用
+	2、智能容错和负载均衡
+	3、服务自动注册和发现
+	4、高度可扩展能力
+	5、运行期流量调度
+	6、可视化的服务治理与运维。	
+~~~
+
+
+
+
+
+
+
+
+
+# 19、Zookeeper
+
+## 19.1、什么是Zookeeper
+
+
+
+
+
+## 19.2、安装Zookeeper
+
+
+
+
+
+
+
+## 19.3、快速入门
