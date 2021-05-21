@@ -3369,7 +3369,7 @@ public class ScheduledService {
 ## 18.1、什么是Dubbo
 
 ~~~
-Apache Dubbo 是一款高性能、轻量级的开源 Java 服务框架
+Apache Dubbo 是一款高性能、轻量级的开源 Java 服务框架  （封装成一个jar包）
 Apache Dubbo提供了六大核心能力：
 	1、面向接口代理的高性能RPC调用
 	2、智能容错和负载均衡
@@ -3379,9 +3379,28 @@ Apache Dubbo提供了六大核心能力：
 	6、可视化的服务治理与运维。	
 ~~~
 
+![image-20210521083541106](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521083541106.png)
+
+---
 
 
 
+## 18.2、安装dubbo-admin
+
+> dubbo-admin：是一个监控管理后台， 查看我们注册了哪些服务，哪些服务被消费了。 （可选）
+>
+> 地址：https://github.com/apache/dubbo-admin/tree/master
+>
+> 使用下载：zip （反之git不下来）
+
+~~~java
+在项目目录下打包：
+	mvn clean package -Dmaven.test.skip=true
+~~~
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521154351987.png" alt="image-20210521154351987" style="zoom: 33%;" />
+
+---
 
 
 
@@ -3389,18 +3408,321 @@ Apache Dubbo提供了六大核心能力：
 
 # 19、Zookeeper
 
+> 官网：https://zookeeper.apache.org/
+
+
+
 ## 19.1、什么是Zookeeper
 
-
+> zookeeper是一个注册中心
+>
+> 参考博客：https://www.runoob.com/w3cnote/zookeeper-tutorial.html
 
 
 
 ## 19.2、安装Zookeeper
 
+> https://www.runoob.com/w3cnote/zookeeper-setup.html
 
 
 
 
 
 
-## 19.3、快速入门
+
+# 20、springboot整合Dubbo、zookeeper
+
+
+
+## 20.1、原理
+
+~~~
+实现原理：
+	1、zookeepr做为注册中心：打开服务端
+	2、创建一个springboot的项目：创建一个service作为（提供者）
+		2.1：导入dubbo、zkclient（zookeeper客户端）等jar包
+		2.2：提供者需要（配置：提供者名、zookeeper注册中心地址、需要提供的服务）
+		2.3: 启动该项目后，会将扫描的的服务，注册到（注册中心）
+	
+	3、创建一个springboot的项目：创建一个service作为（消费者）
+		2.1：导入dubbo、zkclient（zookeeper客户端）等jar包
+		2.2：提供者需要（配置：消费名、zookeeper注册中心地址）
+		2.3: 通过定义相同的（服务接口） 利用@Reference获取到（注册中心：提供的服务）
+~~~
+
+![image-20210521165134630](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521165134630.png)
+
+---
+
+
+
+
+
+## 20.2、实现
+
+
+
+### 20.2.1、开启zookeeper服务器
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521165801667.png" alt="image-20210521165801667" style="zoom:50%;" />
+
+---
+
+
+
+
+
+### 20.2.2、提供者
+
+#### ①、导入依赖
+
+~~~xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.dubbo</groupId>
+    <artifactId>dubbo-spring-boot-starter</artifactId>
+    <version>2.7.8</version>
+</dependency>
+
+<dependency>
+    <groupId>com.github.sgroschupf</groupId>
+    <artifactId>zkclient</artifactId>
+    <version>0.1</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-recipes</artifactId>
+    <version>5.1.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-framework</artifactId>
+    <version>5.1.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.zookeeper</groupId>
+    <artifactId>zookeeper</artifactId>
+    <version>3.7.0</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+~~~
+
+
+
+#### ②、配置yaml
+
+~~~yaml
+server:
+  port: 8001
+  
+dubbo:
+  application:
+    name: provider-server                # 服务应用的名字
+  registry:
+    address: zookeeper://127.0.0.1:2181  # 注册中心的地址
+  scan:
+    base-packages: com.yyy.service       # 需要扫描注册的：包
+~~~
+
+
+
+#### ③、创建service接口
+
+> TicketService接口
+
+~~~java
+public interface TicketService {
+    public String getTicket();
+}
+~~~
+
+
+
+#### ④、创建service实习类
+
+~~~java
+@Service		// 注意包dubbo：org.apache.dubbo.config.annotation.Service;
+@Component		// 注意包：org.springframework.stereotype.Component;
+public class TicketServiceImpl implements TicketService {
+    @Override
+    public String getTicket() {
+        return "老洋之家";
+    }
+}
+~~~
+
+
+
+
+
+#### ⑤、开启主入口服务
+
+> springboot主程序：运行
+
+
+
+
+
+
+
+
+
+### 20.2.3、消费者
+
+#### ①、导入依赖
+
+~~~xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.dubbo</groupId>
+    <artifactId>dubbo-spring-boot-starter</artifactId>
+    <version>2.7.8</version>
+</dependency>
+
+<dependency>
+    <groupId>com.github.sgroschupf</groupId>
+    <artifactId>zkclient</artifactId>
+    <version>0.1</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-recipes</artifactId>
+    <version>5.1.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-framework</artifactId>
+    <version>5.1.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.zookeeper</groupId>
+    <artifactId>zookeeper</artifactId>
+    <version>3.7.0</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+~~~
+
+
+
+#### ②、配置yaml
+
+~~~yaml
+server:
+  port: 8002
+  
+dubbo:
+  application:
+    name: provider-server                # 服务应用的名字
+  registry:
+    address: zookeeper://127.0.0.1:2181  # 注册中心的地址
+~~~
+
+
+
+#### ③、创建service接口
+
+> TicketService接口
+
+~~~java
+public interface TicketService {
+    public String getTicket();
+}
+~~~
+
+
+
+#### ④、创建service实习类
+
+~~~java
+@Service					//org.springframework.stereotype.Service;
+public class UserService {
+    //想拿到：提供者提供的票
+    //应用：Pom坐标， 可以定义路径相同的接口名
+    @Reference			//注意包：com.alibaba.dubbo.config.annotation.Reference;
+    TicketService ticketService;
+
+    public void buyTicket(){
+        String ticket = ticketService.getTicket();
+        System.out.println("在注册中心拿到我们的票：" + ticket);
+    }
+}
+
+~~~
+
+
+
+
+
+#### ⑤、运行测试类
+
+~~~java
+class DemoApplicationTests {
+    @Autowired
+    UserService userService;
+    
+    @Test
+    void contextLoads() {
+        userService.buyTicket();
+    }
+}
+
+~~~
+
+
+
+# 21、听老师聊未来
+
+![image-20210521175226377](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521175226377.png)
+
+---
+
+![image-20210521175327241](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521175327241.png)
+
+---
+
+![image-20210521175347925](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521175347925.png)
+
+---
+
+![image-20210521175416919](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521175416919.png)
+
+---
+
+![image-20210521175438206](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210521175438206.png)
+
