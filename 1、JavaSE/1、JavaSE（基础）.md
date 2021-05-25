@@ -317,6 +317,59 @@ public class AutoConvert01{
 
 
 
+### 2.1.4、强制类型转换
+
+> 强制类型转换，需要小心， 会造成（精度丢失、溢出问题）
+
+~~~java
+int a = (int)1.9;   //a = 1, 精度丢失
+byte b = 2000;		//溢出， 变成垃圾值
+~~~
+
+
+
+==强制转换：细节==
+
+<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210523232838647.png" alt="image-20210523232838647" style="zoom:67%;" />
+
+
+
+
+
+
+
+## 2.1.5、字符串和基本类型（互转）
+
+~~~java
+一、基本类型（转）字符串String
+	基本类型 + ""    //字符串的：拼接
+    
+    
+二、字符串String (转) 基本类型
+    基本类型 = 基本类型（包装类）.parseXXX(字符串)
+    
+三、String字符串 转为 char 字符
+    String.charAt(索引：从0开始)
+~~~
+
+==代码如下：==
+
+~~~java
+public class Transform{
+    public static void main(String[] args){
+        String str = "123";
+        int a = Integer.parseInt(str);
+        float b = Float.parseFloat(str);
+        double c = Double.parseDouble(str);
+        byte d = Byte.parseByte(str);
+        short e = Short.parseShort(str);
+        boolean f = Boolean.parseBoolean("true");
+        char g = str.charAt(0);
+
+    }
+}
+~~~
+
 
 
 
