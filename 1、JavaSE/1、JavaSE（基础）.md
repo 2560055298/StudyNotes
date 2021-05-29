@@ -334,16 +334,11 @@ byte b = 2000;		//溢出， 变成垃圾值
 
 
 
-
-
-
-
 ## 2.1.5、字符串和基本类型（互转）
 
 ~~~java
 一、基本类型（转）字符串String
 	基本类型 + ""    //字符串的：拼接
-    
     
 二、字符串String (转) 基本类型
     基本类型 = 基本类型（包装类）.parseXXX(字符串)
@@ -365,10 +360,17 @@ public class Transform{
         short e = Short.parseShort(str);
         boolean f = Boolean.parseBoolean("true");
         char g = str.charAt(0);
-
     }
 }
 ~~~
+
+
+
+
+
+
+
+
 
 
 
