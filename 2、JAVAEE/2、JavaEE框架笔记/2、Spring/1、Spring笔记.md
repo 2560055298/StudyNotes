@@ -868,6 +868,18 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 
 
 
+## 5.4、注意点
+
+### 5.4.1、request.getRequestURL()
+
+> https://blog.csdn.net/kaikaixinxiyiwannian/article/details/78732410#commentBox
+
+![image-20210604144406487](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210604144406487.png)
+
+
+
+
+
 # 6、Spring整合Mybatis（原理方法）
 
 ~~~
@@ -1077,8 +1089,3 @@ AOP (Aspect Oriented Programming)意为:面向切面编程，
 > 9、声明式事务
 >
 > https://mp.weixin.qq.com/s/mYOBJdygHDcXPYBls7cxUA   
-
-
-
-> 今日天气
-
