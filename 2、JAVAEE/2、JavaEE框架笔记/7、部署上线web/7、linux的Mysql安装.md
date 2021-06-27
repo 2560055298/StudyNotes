@@ -6,9 +6,17 @@
 
 
 
+# 2、mysql安装到的目录
+
+~~~
+cd /var/lib/
+~~~
 
 
-# 2、查看mysql原始密码
+
+
+
+# 3、查看mysql原始密码
 
 ~~~linux
 grep 'password' /var/log/mysqld.log
@@ -16,7 +24,7 @@ grep 'password' /var/log/mysqld.log
 
 
 
-# 3、登录mysql
+# 4、登录mysql
 
 ~~~
 mysql -uroot -p
@@ -25,4 +33,8 @@ mysql -uroot -p
 
 
 
+
+# 5、修改密码为123456 
+
+> Mysql8版本：https://zhuanlan.zhihu.com/p/140029677
 
