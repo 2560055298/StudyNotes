@@ -329,55 +329,15 @@ array1: [A, B, C]
 
 ## 4.2、给（对象属性）赋值
 
-### 4.2.1、法一：@value注解
-
-<img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325140225724.png" alt="image-20210325140225724" style="zoom:50%;" />
-
----
-
-
-
-### 4.2.2、法二：properties
-
-> 其中使用了：@PropertiesSource（value=" "） 注解
->
-> 并且使用了：SPEL表达式@Value("") 或者 #{}
-
-![image-20210325151936443](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325151936443.png)
-
-
-
-
-
-### 4.2.3、法三：通过yaml
-
-> 在实体类上：标注@ConfigurationProperties
-
 ~~~
-@configurationProperties
-
-作用：
-	1、将配置文件中配置的（每一个属性的值），都映射到这个组件中告诉SpringBoot将本类中（所有的属		性）和（配置文件）相关的配置，进行绑定。
-	2、支持：SpEL表达式， 也就是 ${表达式} 
-	
-注意：只有这个组件是（容器中的组件）， 才能使用容器提供的@ConfigurationProperties功能
+component、controller都是组件的，@Value都可以获取到yaml中的值
 ~~~
 
-`例一：无SpEL表达式`
+> 参考博客：https://blog.csdn.net/lafengwnagzi/article/details/74178374
 
-![image-20210325142623010](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325142623010.png)
 
----
 
-`例二：带表达式的写法`
 
-![image-20210325153642161](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture8/image-20210325153642161.png)
-
----
-
-`如何获取？`
-
-![image-20210423104429513](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/image-20210423104429513.png)
 
 
 

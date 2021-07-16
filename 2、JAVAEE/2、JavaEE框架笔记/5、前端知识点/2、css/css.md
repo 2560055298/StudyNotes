@@ -1,3 +1,7 @@
+![155](https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture9/155.png)
+
+
+
 # 1、如何学习CSS
 
 <img src="https://gitee.com/sheep-are-flying-in-the-sky/my-picture/raw/master/picture7/image-20210212091227339.png" alt="image-20210212091227339" style="zoom:50%;" />
